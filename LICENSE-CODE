@@ -1,0 +1,69 @@
+MIT License
+
+Copyright (c) 2026 Raúl Ibáñez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+Qué archivos cubre esta licencia
+
+Solo el código propio del curso:
+- assets/cdc.js y assets/cdc.css
+- simulacro/simulacro.js y simulacro/simulacro.css
+- los programas de herramientas/
+- el CSS y el JavaScript escritos dentro de las páginas index.html (portada,
+  temas y simulacro)
+
+No cubre:
+- assets/deck-stage.js: no es código propio. Está copiado de la plantilla
+  «omelette starter», como dice su cabecera.
+- assets/img/logo-centro-didactico.webp: es la marca de Centro Didáctico y no
+  se licencia.
+- Los datos de la demo de tuCertiCyL (Junta de Castilla y León): preguntas,
+  imágenes, archivos de los retos, pantallas y zonas de clic (simulacro/demo/ y
+  los archivos de los temas que citan la demo). La demo se usa sin fines
+  comerciales, citando la fuente.
+- Los contenidos (textos, preguntas e imágenes). Los contenidos propios tienen
+  licencia CC BY-NC-SA 4.0 (ver LICENSE). El material de CyL Digital tiene
+  licencia Creative Commons, uso no comercial, citando la fuente.
+
+-------------------------------------------------------------------------------
+
+Traducción al español (no oficial, solo como referencia; vale el texto en
+inglés de arriba):
+
+Se concede permiso, de forma gratuita, a cualquier persona que obtenga una
+copia de este software y de los archivos de documentación asociados (el
+"Software"), a utilizar el Software sin restricción, incluyendo sin limitación
+los derechos a usar, copiar, modificar, fusionar, publicar, distribuir,
+sublicenciar y/o vender copias del Software, y a permitir a las personas a las
+que se les proporcione el Software a hacer lo mismo, sujeto a las siguientes
+condiciones:
+
+El aviso de copyright anterior y este aviso de permiso se incluirán en todas
+las copias o partes sustanciales del Software.
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUYENDO PERO NO LIMITADA A GARANTÍAS DE COMERCIALIZACIÓN,
+IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS
+AUTORES O TITULARES DEL COPYRIGHT SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN,
+DAÑO U OTRA RESPONSABILIDAD, YA SEA EN UNA ACCIÓN CONTRACTUAL, EXTRACONTRACTUAL
+O DE OTRO TIPO, QUE SURJA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTRO TIPO
+DE ACCIONES EN EL SOFTWARE.

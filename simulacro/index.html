@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulacro del examen · Competencias digitales para la ciudadanía</title>
+<meta name="description" content="Simulacro no oficial del examen de competencias digitales para la ciudadanía (nivel básico) de tuCertiCyL: la demo oficial y un simulacro de 63 preguntas con las preguntas del curso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<link rel="stylesheet" href="simulacro.css">
+</head>
+<body class="sm">
+
+<header class="sm-cab">
+  <div class="sm-cab-in">
+    <a class="sm-marca" href="../"><img src="../assets/img/favicon.svg" alt="" width="40" height="40"><span>Competencias digitales para la ciudadanía <small>Nivel básico</small></span></a>
+    <span class="sm-no-oficial">Simulacro no oficial</span>
+    <button type="button" class="sm-salir" id="sm-salir" hidden>Salir</button>
+  </div>
+</header>
+<div class="sm-barra" id="sm-barra">Simulacro del examen</div>
+
+<main class="sm-main">
+
+  <!-- ============ Portada del simulacro ============ -->
+  <div class="sm-vista sm-portada" id="v-portada">
+    <h1>Simulacro del examen</h1>
+    <p class="sm-entrada">Practica con una pantalla como la del examen de tuCertiCyL. El simulacro tiene 2 partes. Haz primero la demo oficial.</p>
+
+    <div class="sm-partes">
+      <div class="sm-parte">
+        <p class="sm-parte-n">Parte 1</p>
+        <h2>Demo oficial</h2>
+        <p>Las 20 preguntas de la demo de tuCertiCyL, en el mismo orden. Tiene 2 simulaciones y 3 retos.</p>
+        <ul class="sm-datos"><li>20 preguntas</li><li>90 minutos</li><li>Preguntas de las 5 áreas</li></ul>
+        <p class="sm-ultimo" id="sm-ultimo-demo"></p>
+        <button type="button" class="sm-btn" id="sm-empieza-demo">Empezar la demo</button>
+      </div>
+      <div class="sm-parte">
+        <p class="sm-parte-n">Parte 2</p>
+        <h2>Simulacro largo</h2>
+        <p>63 preguntas, como el examen real: 3 por cada competencia (2 de conocimientos y 1 de habilidades). Salen al azar de los temas del curso.</p>
+        <ul class="sm-datos"><li>63 preguntas</li><li>90 minutos</li><li>Distinto en cada intento</li></ul>
+        <p class="sm-ultimo" id="sm-ultimo-largo"></p>
+        <button type="button" class="sm-btn" id="sm-empieza-largo">Empezar el simulacro largo</button>
+      </div>
+    </div>
+
+    <h2 class="sm-h2">Cómo funciona la pantalla</h2>
+    <ol class="sm-pasos">
+      <li>Responde y pulsa <b>Guardar</b> en cada pregunta. Si no pulsas <b>Guardar</b>, la respuesta no cuenta.</li>
+      <li>Puedes ir a cualquier pregunta con el panel de la derecha. Las preguntas respondidas salen en color.</li>
+      <li>La estrella <b>Marcar</b> te sirve para recordar las preguntas que quieres revisar.</li>
+      <li><b>Simulación</b> (icono <span class="sm-ico-txt" data-ico="sim"></span>): haz la tarea en la pantalla. Puedes fallar 1 clic. El segundo fallo anula la pregunta. Cuando la terminas, ya no puedes repetirla.</li>
+      <li><b>Reto</b> (icono <span class="sm-ico-txt" data-ico="reto"></span>): pulsa <b>Descargar</b> y resuelve el reto con el ordenador. No cierres el navegador.</li>
+      <li>Las respuestas se corrigen al final, cuando pulsas <b>Finalizar examen</b>. Después ves la respuesta correcta de cada pregunta.</li>
+      <li>Superas el simulacro si aciertas al menos el 75 % de las preguntas de cada área. Es la regla de la demo. El examen real pide el 50 % de cada área y el 75 % del total.</li>
+    </ol>
+
+    <div class="sm-caja">Simulacro no oficial. Preguntas de la demo de tuCertiCyL (Junta de Castilla y León) y del curso. El último resultado de cada parte se guarda en este navegador.</div>
+    <p class="sm-volver"><a href="../">Volver a la portada del curso</a></p>
+  </div>
+
+  <!-- ============ Carga del simulacro largo ============ -->
+  <div class="sm-vista sm-carga" id="v-carga" hidden>
+    <h1>Simulacro largo</h1>
+    <p class="sm-entrada">Se cargan las preguntas de los temas del curso.</p>
+    <ul class="sm-temas" id="sm-temas"></ul>
+    <div id="sm-carga-resumen"></div>
+    <div class="sm-botones">
+      <button type="button" class="sm-btn" id="sm-carga-empieza" disabled>Empezar</button>
+      <button type="button" class="sm-btn sec" id="sm-carga-volver">Volver</button>
+    </div>
+  </div>
+
+  <!-- ============ Examen ============ -->
+  <div class="sm-vista sm-examen" id="v-examen" hidden>
+    <div class="sm-col">
+      <div class="sm-preg-cab">
+        <h2 id="sm-num">Pregunta 1</h2>
+        <button type="button" class="sm-marcar" id="sm-marcar" aria-pressed="false">Marcar <span class="sm-ico-txt" data-ico="estrella"></span></button>
+      </div>
+      <div id="sm-preguntas"></div>
+      <div class="sm-nav">
+        <button type="button" class="sm-enlace" id="sm-ant">« Anterior</button>
+        <button type="button" class="sm-enlace" id="sm-sig">Siguiente »</button>
+      </div>
+    </div>
+    <aside class="sm-panel" aria-label="Panel del examen">
+      <div class="sm-tiempo" id="sm-tiempo"><span class="sm-ico-txt" data-ico="reloj"></span><span id="sm-reloj" aria-label="Tiempo restante">01:30:00</span></div>
+      <div class="sm-progreso">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14" fill="none" stroke="#E6DEE8" stroke-width="5"/><circle id="sm-anillo" cx="18" cy="18" r="14" fill="none" stroke="#830065" stroke-width="5" stroke-dasharray="87.96" stroke-dashoffset="87.96"/></svg>
+        <b id="sm-resp">0/20</b><small>preguntas respondidas</small>
+      </div>
+      <div class="sm-fin-fila"><button type="button" class="sm-btn" id="sm-finalizar">Finalizar examen</button></div>
+      <div id="sm-areas"></div>
+      <div class="sm-leyenda">
+        <span><i class="sm-num-mini respondida"></i>Respondida (color del área)</span>
+        <span><i class="sm-num-mini actual"></i>Pregunta actual</span>
+        <span><span class="sm-ico-txt" data-ico="estrella-llena"></span>Marcada para revisar</span>
+        <span><span class="sm-ico-txt" data-ico="sim"></span>Simulación</span>
+        <span><span class="sm-ico-txt" data-ico="reto"></span>Reto</span>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============ Resultados y revisión ============ -->
+  <div class="sm-vista" id="v-resultados" hidden></div>
+
+</main>
+
+<footer class="sm-pie">
+  <p><b>Simulacro no oficial.</b> Preguntas de la demo de tuCertiCyL (Junta de Castilla y León) y del curso. Las preguntas, imágenes, archivos y pantallas de la demo son de tuCertiCyL / CyL Digital (Junta de Castilla y León) y se usan sin fines comerciales, citando la fuente. Curso: CC BY-NC-SA 4.0.</p>
+</footer>
+
+<div class="sm-modal" id="sm-modal" hidden></div>
+<noscript><p class="sm-caja">El simulacro necesita JavaScript.</p></noscript>
+
+<!-- Las 20 preguntas de la demo de tuCertiCyL (https://www.tucerticyl.es/demo), en el mismo orden y con sus textos.
+     Formato de cdc.js; además: n, area, comp, explicacion (para la revisión), pasos (cómo se resuelve) y soloImagen (opciones sin texto, como en la demo).
+     Rutas relativas a demo/. Respuestas verificadas con la corrección de la propia demo y, en los retos, leyendo los archivos. -->
+<script type="application/json" id="sm-demo">[
+  {"n": 1, "area": 1, "comp": "1.1", "tipo": "test", "barajar": false, "soloImagen": true,
+   "enunciado": "¿Cuáles de los siguientes elementos son navegadores web? (Selecciona todas las respuestas correctas, puede haber más de una)",
+   "instrucciones": "Pulsa sobre las siguientes imágenes que quieras seleccionar como tu respuesta. Puedes seleccionar una o varias opciones entre las opciones de respuesta.",
+   "opciones": ["Mozilla Firefox", "Microsoft Edge", "YouTube", "Facebook", "Google Chrome", "Twitter"],
+   "imagenes": ["img/logo-firefox.png", "img/logo-edge.png", "img/logo-youtube.png", "img/logo-facebook.png", "img/logo-chrome.png", "img/logo-twitter.png"],
+   "correcta": [0, 1, 4],
+   "explicacion": "Firefox, Edge y Chrome son programas para abrir páginas web. YouTube es una web de vídeos. Facebook y Twitter son redes sociales. Twitter hoy se llama X. Si el enunciado dice «puede haber más de una», marca todas las correctas."},
+  {"n": 2, "area": 1, "comp": "1.2", "tipo": "test", "barajar": false,
+   "enunciado": "Estás escribiendo un informe sobre las últimas tendencias del mercado para un plan de negocio.\n\n¿Cuál sería la fuente más fiable?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Página web de un periódico local.", "Comentarios de usuarios obtenidos en las redes sociales.", "Página web del Instituto Nacional de Estadística."],
+   "correcta": 2,
+   "explicacion": "El INE es un organismo oficial. Publica datos de población, empleo y precios. Sus datos tienen un responsable y un método. Un periódico local da noticias, pero no es especialista en datos de mercado. Los comentarios en redes son opiniones sin comprobar."},
+  {"n": 3, "area": 1, "comp": "1.3", "tipo": "reto", "archivo": "retos/DOCUMENTOS 2.zip",
+   "enunciado": "Descomprime el archivo “DOCUMENTOS 2.zip” y busca la palabra \"melosa\". Copia el nombre de la carpeta donde se encuentra dicho fichero y pégalo en el cuadro de respuesta.",
+   "instrucciones": "Para resolver el reto sigue las instrucciones del enunciado sin cerrar el navegador. Si has de navegar a una web, accede a ella en otra pestaña de tu navegador o utiliza otro navegador. Si hay un archivo adjunto, descárgalo para realizar el reto con el ordenador.",
+   "respuesta": ["CARPETA 9"],
+   "pasos": ["Pulsa **Descargar**. El archivo va a la carpeta Descargas. No cierres el navegador.", "Abre la carpeta Descargas. Haz clic derecho en DOCUMENTOS 2.zip y elige **Extraer todo** › **Extraer**.", "Dentro hay 10 carpetas. Casi todas tienen documentos de Word. Busca «melosa» con el cuadro de búsqueda del Explorador, o abre los documentos y usa **Buscar** (en Word, Ctrl+B).", "La palabra está en Doc1.docx, dentro de CARPETA 9. Copia ese nombre, pégalo en **Respuesta** y pulsa **Guardar**."],
+   "explicacion": "La palabra «melosa» está en el documento Doc1.docx, que está en la carpeta CARPETA 9. Un archivo ZIP es un archivo comprimido: primero lo extraes y después buscas dentro. En los retos sí puedes usar atajos de teclado."},
+  {"n": 4, "area": 2, "comp": "2.2", "tipo": "simulacion", "sim": "q04-email",
+   "enunciado": "Envía el archivo CV.pdf por email al correo \"imprimir@copisteria.com\" con el asunto \"Imprimir CV\" y el cuerpo del mensaje vacío.",
+   "instrucciones": "Realiza la actividad en el simulador. No puedes utilizar atajos de teclado, salvo que el enunciado lo indique. ¡Recuerda que solo puedes equivocarte una vez al hacer clic!",
+   "pasos": ["Camino corto: clic derecho en **CV** › **Enviar a** › **Destinatario de correo**.", "Escribe imprimir@copisteria.com en **Para** e Imprimir CV en **Asunto**. Pulsa **Enviar**.", "Otro camino: abre **Outlook 2016** › **Nuevo correo electrónico** › **Adjuntar archivo** › **Examinar este equipo** › **CV** › **Insertar**. Rellena Para y Asunto y pulsa **Enviar**."],
+   "explicacion": "Para enviar un archivo por correo, lo adjuntas al mensaje. Desde el escritorio es más rápido: clic derecho en el archivo › Enviar a › Destinatario de correo. Escribe la dirección y el asunto igual que en el enunciado. Si escribes otra cosa, la pregunta cuenta como fallada."},
+  {"n": 5, "area": 2, "comp": "2.3", "tipo": "test", "barajar": false,
+   "enunciado": "¿Para qué sirve el PIN del DNIe?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Para geoposicionar el DNI electrónico en caso de robo o extravío.", "Para acceder a las funcionalidades del DNIe en trámites online que requieran identificación o firma electrónica.", "Para sacar dinero del cajero utilizando el DNI electrónico.", "Para bloquear o revocar en remoto los certificados digitales del DNI electrónico en caso de robo o extravío."],
+   "correcta": 1,
+   "explicacion": "El PIN es la contraseña del chip del DNIe. Sin el PIN no puedes identificarte ni firmar en Internet con el DNIe. El DNIe no tiene GPS ni es una tarjeta del banco. Si lo pierdes, lo denuncias en la Policía: el PIN no lo bloquea."},
+  {"n": 6, "area": 2, "comp": "2.4", "tipo": "reto", "archivo": "retos/Word colaborativo.docx", "barajar": false,
+   "enunciado": "Estás trabajando en un documento colaborativo, en el que se ha eliminado un texto e incorporado como comentario. Indica de qué texto se trata.",
+   "instrucciones": "Para resolver el reto sigue las instrucciones del enunciado sin cerrar el navegador. Si has de navegar a una web, accede a ella en otra pestaña de tu navegador o utiliza otro navegador. Si hay un archivo adjunto, descárgalo para realizar el reto con el ordenador.",
+   "opciones": ["Comments like this one, for example!", "Author", "Replying to comments", "To review the changes in your document,"],
+   "correcta": 0,
+   "pasos": ["Descarga el archivo y ábrelo en Word. No cierres el navegador.", "Ve a **Revisar** › **Todas las marcas**.", "Lee el comentario del margen derecho: «Comments like this one, for example!»."],
+   "explicacion": "La palabra clave es «comentario». «To review the changes in your document,» es un texto borrado con control de cambios, pero no está en un comentario. «Author» no aparece en el documento: no es un texto borrado ni está en un comentario. «Replying to comments» es parte del texto del documento."},
+  {"n": 7, "area": 2, "comp": "2.5", "tipo": "test", "barajar": false,
+   "enunciado": "Si subes una foto con otra persona a una red social...",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Debes pedirle permiso.", "Solo debes pedirle permiso si la etiquetas.", "No pasa nada si esa persona no tiene cuenta en dicha red social.", "Puedes subirla, ya que si él tiene cuenta en esa red social, tendrá configurada la privacidad para decidir si se muestra o no."],
+   "correcta": 0,
+   "explicacion": "Siempre tienes que pedir permiso. Etiquetar o no, tener cuenta o no y la privacidad de la otra persona no cambian la regla. Las otras opciones ponen excepciones que no existen."},
+  {"n": 8, "area": 2, "comp": "2.6", "tipo": "test", "barajar": false,
+   "enunciado": "Imagina que quieres potenciar tu perfil digital, de forma que las posibles empresas que quieran contratarte en el futuro, cuando busquen información sobre ti en Internet, localicen una identidad digital interesante y positiva sobre ti.\n\n¿Cuál de estas pautas has de evitar?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Mantener en abierto perfiles privados en las mismas u otras redes sociales para comentar, compartir y publicar ahí el contenido que desee sobre mi vida privada.", "Crear un perfil de carácter profesional en Facebook y otro en Twitter que vaya orientado hacia tus metas profesionales.", "Contar con un perfil actualizado en una red orientada al empleo como LinkedIn.", "Publicar, compartir y comentar solo información relevante en las cuentas de carácter profesional."],
+   "correcta": 0,
+   "explicacion": "La pregunta pide lo que tienes que evitar. Las otras tres opciones son buenas prácticas. Un perfil personal abierto lo puede ver cualquier empresa. Twitter hoy se llama X. Lee bien si te piden lo correcto o lo que hay que evitar."},
+  {"n": 9, "area": 2, "comp": "2.1", "tipo": "emparejar",
+   "enunciado": "Relaciona cada una de las siguientes características con la herramienta a la que corresponden",
+   "instrucciones": "Ordena los elementos de la segunda lista para emparejarlos con los elementos de la primera lista.",
+   "pares": [["SMS", "Se envían desde un dispositivo móvil"], ["Chat", "Se produce una comunicación instantánea"], ["Email", "Tengo que escribir el destinatario y asunto antes de enviar el mensaje"]],
+   "explicacion": "El SMS es el único que sale siempre de un móvil. El chat también se usa en el móvil, pero lo que lo define es la comunicación instantánea. En el correo electrónico (email) escribes el destinatario y el asunto antes de enviar."},
+  {"n": 10, "area": 3, "comp": "3.1", "tipo": "reto", "archivo": "retos/Cuentas.xlsx", "barajar": false,
+   "enunciado": "Descárgate la siguiente hoja de cálculo, ábrela y suma la columna B en el lugar indicado. A continuación marca cuál es la cantidad resultante.",
+   "instrucciones": "Para resolver el reto sigue las instrucciones del enunciado sin cerrar el navegador. Si has de navegar a una web, accede a ella en otra pestaña de tu navegador o utiliza otro navegador. Si hay un archivo adjunto, descárgalo para realizar el reto con el ordenador.",
+   "opciones": ["9169024545229 €", "9169025229", "19.710.717.050,00 €", "16.654.036.564,00"],
+   "correcta": 1,
+   "pasos": ["Descarga Cuentas.xlsx y ábrelo con Excel.", "Haz clic en la celda B20, la celda verde junto a TOTAL.", "Escribe =SUMA(B2:B19) y pulsa Intro. También puedes usar **Autosuma** (Σ).", "Si ves ##### o 9,17E+09, ensancha la columna B. Sale 9169025229."],
+   "explicacion": "La suma de la columna B es 9169025229. Las otras tres opciones son números distintos con puntos o con €, para confundir. Compara cifra a cifra."},
+  {"n": 11, "area": 3, "comp": "3.3", "tipo": "test", "barajar": false, "soloImagen": true,
+   "enunciado": "Selecciona qué imagen seguro no podrías reutilizar. (Selecciona todas las respuestas correctas, puede haber más de una)",
+   "instrucciones": "Pulsa sobre las siguientes imágenes que quieras seleccionar como tu respuesta. Puedes seleccionar una o varias opciones entre las opciones de respuesta.",
+   "opciones": ["Sin especificar", "(c)", "CC0"],
+   "imagenes": ["img/deer-3006892_640.webp", "img/deer-3000156_640.webp", "img/deer-3005934_640.webp"],
+   "correcta": [0, 1],
+   "explicacion": "Si no se indica la licencia, la obra tiene todos los derechos reservados, igual que con ©. La foto con CC0 sí se puede reutilizar. En estas preguntas puede haber más de una respuesta: marca todas las correctas."},
+  {"n": 12, "area": 3, "comp": "3.2", "tipo": "test", "barajar": false,
+   "enunciado": "Qué atajo de teclado usarás para copiar un archivo del ordenador.",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Ctrl+X", "Ctrl+C", "Crtl+Z", "Ctrl+V"],
+   "correcta": 1,
+   "explicacion": "Ctrl+C copia. Ctrl+X corta para mover. Ctrl+V pega lo copiado o cortado. Ctrl+Z deshace. El examen puede tener erratas, como «Crtl» en lugar de «Ctrl»."},
+  {"n": 13, "area": 4, "comp": "4.1", "tipo": "simulacion", "sim": "q13-usb",
+   "enunciado": "Desconecta con seguridad el pendrive usb que tienes conectado en tu ordenador.",
+   "instrucciones": "Realiza la actividad en el simulador. No puedes utilizar atajos de teclado, salvo que el enunciado lo indique. ¡Recuerda que solo puedes equivocarte una vez al hacer clic!",
+   "pasos": ["Clic derecho en **PEN_DRIVE**, en el escritorio › **Expulsar**.", "Otro camino: flecha ^ de la barra de tareas › icono del USB › **Expulsar**.", "Otro camino: Explorador de archivos › clic derecho en la unidad PEN_DRIVE › **Expulsar**."],
+   "explicacion": "Para quitar un USB sin perder datos, primero lo expulsas. Haz clic derecho en la unidad y elige **Expulsar**. También vale la flecha ^ de la barra de tareas o el Explorador de archivos. Cuando sale el aviso «Es seguro quitar el hardware», ya puedes sacarlo."},
+  {"n": 14, "area": 4, "comp": "4.2", "tipo": "test", "barajar": false,
+   "enunciado": "Por defecto, ¿quién puede ver lo que publicas en Facebook?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Solo aquellas personas a las que etiquetes en la publicación.", "Solo aquellas personas agregadas como tus amigos.", "Todo es público, cualquier persona puede ver lo que publicas.", "Cualquier persona que tenga cuenta en Facebook."],
+   "correcta": 1,
+   "explicacion": "Si no cambias nada, tus publicaciones las ven tus amigos. Antes de publicar puedes elegir el público: Público, Amigos, Amigos excepto..., Amigos concretos o Solo yo. «Por defecto» significa «sin cambiar ninguna opción»."},
+  {"n": 15, "area": 4, "comp": "4.3", "tipo": "test", "barajar": false, "imagen": "img/q15-manos-teclado.png",
+   "enunciado": "¿Cómo has de colocar las manos sobre el teclado del ordenador para un correcto uso?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["1", "2", "3"],
+   "correcta": 0,
+   "explicacion": "La muñeca debe estar recta, en línea con el antebrazo (imagen 1). Si la doblas hacia arriba o hacia abajo, se carga y con el tiempo duele. En las preguntas de postura, busca la línea recta y los ángulos de 90°."},
+  {"n": 16, "area": 4, "comp": "4.4", "tipo": "test", "barajar": false, "imagen": "img/q16-etiquetas-energia.png",
+   "enunciado": "¿Cuál de las siguientes es una etiqueta de certificación energética para dispositivos informáticos como ordenadores o monitores?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["1", "2", "3", "4"],
+   "correcta": 0,
+   "explicacion": "ENERGY STAR (1) es la etiqueta de los equipos informáticos que ahorran energía. El símbolo de reciclaje (3) indica que un material se puede reciclar. La escala de la A a la G (4) es la etiqueta energética de la Unión Europea: la llevan los electrodomésticos y, desde 2021, también los monitores y los televisores. La demo da por buena ENERGY STAR porque es la etiqueta pensada para los equipos informáticos. CRC (2) es un programa del Reino Unido para empresas, no una etiqueta de aparatos."},
+  {"n": 17, "area": 5, "comp": "5.2", "tipo": "test", "barajar": false,
+   "enunciado": "¿Cómo conectarías un vídeo que tienes en el móvil al televisor?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Con un cable USB - Euroconector", "Con un cable microUSB - HDMI", "Con un cable USB-VGA", "No es posible conectar un móvil al televisor"],
+   "correcta": 1,
+   "explicacion": "El móvil tiene un conector microUSB o USB-C. La tele tiene entradas HDMI. El euroconector y el VGA son conectores antiguos. Hoy también puedes usar un cable USB-C - HDMI, un stick HDMI o duplicar la pantalla."},
+  {"n": 18, "area": 5, "comp": "5.2", "tipo": "emparejar",
+   "enunciado": "Relaciona los distintos programas de pago con su equivalente de software libre y gratuito.",
+   "instrucciones": "Ordena los elementos de la segunda lista para emparejarlos con los elementos de la primera lista.",
+   "pares": [["Word", "Writer"], ["Excel", "Calc"], ["PowerPoint", "Impress"], ["Photoshop", "Gimp"], ["Windows", "Linux"]], "ordenInicial": [4, 2, 1, 0, 3],
+   "explicacion": "Writer, Calc e Impress son programas de LibreOffice, un paquete de oficina libre y gratuito. GIMP es un editor de imágenes libre. Linux es un sistema operativo libre. Software libre es el que puedes usar, estudiar, cambiar y compartir."},
+  {"n": 19, "area": 5, "comp": "5.2", "tipo": "test", "barajar": false,
+   "enunciado": "Necesitas hacer un sondeo para recabar información de cientos de personas.\n\n¿Qué aplicación utilizarías?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Google Form", "Microsoft Excel", "Microsoft Word", "Adobe Photoshop"],
+   "correcta": 0,
+   "explicacion": "Un formulario sirve para hacer una encuesta a muchas personas. Google Forms (la demo dice «Google Form») crea el formulario, lo envía con un enlace y junta las respuestas. Excel hace cálculos, Word escribe textos y Photoshop retoca fotos."},
+  {"n": 20, "area": 5, "comp": "5.4", "tipo": "test", "barajar": false,
+   "enunciado": "Los cursos MOOC son un buen recurso para mejorar tus competencias digitales. ¿Cuáles son las características típicas de un curso MOOC?",
+   "instrucciones": "Elige una única opción entre las opciones de respuesta siguientes.",
+   "opciones": ["Cursos gratuitos por videoconferencias en directo.", "Cursos online, gratuitos, sin límite de inscripciones.", "Cursos online de pago de prestigiosas universidades.", "Cursos online, gratuitos, para pequeños grupos."],
+   "correcta": 1,
+   "explicacion": "MOOC significa curso online masivo y abierto. Masivo quiere decir sin límite de alumnos. Abierto quiere decir que cualquiera puede apuntarse. Normalmente es gratis."}
+]</script>
+
+<script src="../assets/cdc.js"></script>
+<script src="demo/sim/q04-email.js"></script>
+<script src="demo/sim/q13-usb.js"></script>
+<script src="simulacro.js"></script>
+</body>
+</html>

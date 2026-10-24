@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 1 · Buscar y gestionar información</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+/* ===== Estilos propios del tema 1 (prefijo t1-) ===== */
+.t1-oculto { display: none !important; }
+.maqueta-movil .ventana, .t1-estatica { pointer-events: none; }
+.sim-aviso .t1-pista { margin-top: 12px; font-size: 23px; color: var(--gris); }
+
+/* Ventana de Chrome (sobre .ventana de cdc.css) */
+.t1-chrome .v-barra { background: #DFE3E8; padding: 0 0 0 10px; gap: 4px; }
+.t1-chrome .v-pestana { display: flex; align-items: center; gap: 8px; width: 240px; font-size: 12.5px; color: #1F1F1F; }
+.t1-chrome .v-pestana .x { margin-left: auto; color: #5F6368; font-size: 11px; font-style: normal; }
+.t1-nueva { align-self: center; font-size: 20px; color: #444; padding: 0 10px; line-height: 1; }
+.t1-ctl { margin-left: auto; align-self: stretch; display: flex; }
+.t1-ctl i { font-style: normal; width: 44px; display: grid; place-items: center; font-size: 13px; color: #333; }
+.t1-chrome .v-direccion { gap: 6px; padding: 0 8px; font-size: 17px; position: relative; }
+.t1-chrome .v-direccion > span:not(.url) { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; flex: none; }
+.t1-chrome .v-direccion .url { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 14px; font-size: 14px; white-space: nowrap; overflow: hidden; }
+.t1-chrome .v-direccion .url .t1-est { margin-left: auto; font-size: 17px; color: #5F6368; font-style: normal; }
+.t1-tune { width: 16px; height: 16px; flex: none; }
+.t1-chrome .v-direccion .t1-perfil { background: #0090A8; color: #fff; font-size: 13px; font-weight: 600; width: 26px; height: 26px; }
+.t1-chrome .v-direccion .t1-puntos { font-size: 20px; font-weight: 700; color: #444; cursor: pointer; }
+.t1-chrome .v-direccion .t1-desc-ico { font-size: 15px; color: #0B57D0; box-shadow: inset 0 0 0 2px #0B57D0; width: 26px; height: 26px; }
+.t1-fav { flex: none; display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: var(--c, #007CC2); color: #fff; font: 700 10px/16px 'Segoe UI', sans-serif; text-align: center; font-style: normal; vertical-align: -3px; }
+.t1-marcas-barra { height: 30px; display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 12.5px; color: #3C4043; border-bottom: 1px solid #E8EAED; }
+.t1-marcas-barra span::before { content: '📁 '; }
+
+/* Menús de Chrome */
+.ventana .t1-menu { width: 330px; font-size: 13px; line-height: 1.25; padding: 6px 0; }
+.ventana .t1-menu > div { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 3.5px 16px; }
+.t1-menu .at { color: #5F6368; font-size: 12px; font-style: normal; white-space: nowrap; }
+.t1-menu .sub::after { content: '›'; color: #5F6368; font-size: 17px; line-height: 1; }
+.ventana .t1-menu > .sep { height: 1px; padding: 0; margin: 5px 0; background: #E3E3E3; }
+.ventana .t1-menu > .t1-gris { color: #5F6368; font-size: 12px; }
+.ventana .t1-menu > .on, .pantalla-html[data-id="submenu"] .t1-mi-hist { background: #E8EAED; }
+.t1-menu span { display: flex; align-items: center; gap: 10px; }
+
+/* Páginas web inventadas */
+.t1-web { background: #fff; }
+.t1-web-cab { padding: 18px 40px; display: flex; align-items: baseline; gap: 16px; color: #fff; background: var(--c, #830065); }
+.t1-web-cab b { font-size: 22px; }
+.t1-web-cab span { font-size: 14px; opacity: .9; }
+.t1-web-txt { padding: 22px 40px; font-size: 15px; color: #202124; }
+.t1-web-txt h3 { font-size: 22px; margin-bottom: 14px; }
+.t1-web-txt p + p { margin-top: 10px; }
+.t1-web-tarjetas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.t1-web-tarjetas div { border: 1px solid #E0E0E0; border-radius: 10px; padding: 14px; font-size: 14px; }
+.t1-web table { border-collapse: collapse; font-size: 15px; margin-top: 6px; }
+.t1-web td { padding: 9px 30px 9px 0; border-bottom: 1px solid #EEE; }
+.t1-foto-web { height: 200px; border-radius: 10px; background: linear-gradient(180deg, #9FD3F0 0 55%, #8FA72F 55% 100%); position: relative; overflow: hidden; }
+.t1-foto-web::before { content: ''; position: absolute; left: 60px; top: 40px; width: 60px; height: 60px; border-radius: 50%; background: #F3C51A; }
+.t1-foto-web::after { content: ''; position: absolute; left: 150px; top: 60px; width: 260px; height: 130px; background: #C2A27A; clip-path: polygon(0 100%, 0 40%, 20% 40%, 20% 10%, 35% 10%, 35% 40%, 65% 40%, 65% 0, 80% 0, 80% 40%, 100% 40%, 100% 100%); }
+
+/* Historial de Chrome */
+.t1-hist { background: #F8F9FA; }
+.t1-hist-cab { height: 56px; display: flex; align-items: center; padding: 0 20px; background: #fff; border-bottom: 1px solid #E8EAED; }
+.t1-hist-tit { width: 200px; font-size: 20px; color: #202124; }
+.t1-hist-buscar { width: 420px; height: 36px; border-radius: 18px; background: #F1F3F4; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: #5F6368; font-size: 14px; }
+.t1-hist-nav { position: absolute; left: 0; top: 56px; width: 220px; padding: 12px 0; font-size: 13.5px; color: #202124; }
+.t1-hist-nav div { padding: 9px 20px; border-radius: 0 18px 18px 0; margin-right: 16px; }
+.t1-hist-nav .on { background: #D3E3FD; color: #041E49; font-weight: 600; }
+.t1-hist-main { position: absolute; left: 220px; right: 24px; top: 56px; bottom: 0; padding: 10px 20px; }
+.t1-hist-tabs { display: flex; gap: 26px; font-size: 13.5px; border-bottom: 1px solid #DADCE0; margin-bottom: 12px; }
+.t1-hist-tabs span { padding: 8px 4px; color: #5F6368; }
+.t1-hist-tabs .on { color: #0B57D0; border-bottom: 3px solid #0B57D0; font-weight: 600; }
+.t1-hist-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.14); padding: 4px 0 6px; margin-bottom: 12px; }
+.t1-hist-card h5 { font-size: 13px; font-weight: 600; color: #202124; margin: 0; padding: 8px 18px 4px; }
+.t1-hist-fila { display: flex; align-items: center; gap: 14px; padding: 6px 18px; font-size: 13.5px; cursor: pointer; }
+.t1-hist-fila .h { width: 40px; color: #5F6368; font-size: 12.5px; }
+.t1-hist-fila .t { color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 360px; }
+.t1-hist-fila .d { color: #5F6368; font-size: 12.5px; }
+.t1-hist-buscar[data-t1-neutro] { cursor: text; }
+/* Nota que sale al pulsar una zona que no cuenta como fallo (data-t1-neutro) */
+.t1-nota { position: absolute; z-index: 6; left: 220px; top: 50px; width: 420px; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.25); border-left: 6px solid #E861A7; padding: 12px 16px; font-size: 15px; line-height: 1.35; color: #202124; }
+
+/* Lupa dibujada */
+.t1-lupa { display: inline-block; width: 13px; height: 13px; border: 2px solid currentColor; border-radius: 50%; position: relative; flex: none; }
+.t1-lupa::after { content: ''; position: absolute; width: 2px; height: 7px; background: currentColor; right: -4px; bottom: -6px; transform: rotate(-45deg); border-radius: 1px; }
+
+/* Google */
+.t1-gini { background: #fff; text-align: center; }
+.t1-gini-top { display: flex; justify-content: flex-end; align-items: center; gap: 18px; padding: 14px 22px; font-size: 13px; color: #202124; }
+.t1-gboton { background: #0B57D0; color: #fff; border-radius: 18px; padding: 8px 20px; font-weight: 600; }
+.t1-glogo { font: 500 74px/1 'Segoe UI', Arial, sans-serif; letter-spacing: -3px; margin-top: 64px; }
+.t1-glogo b { font-weight: 500; }
+.t1-gcaja { width: 560px; height: 46px; margin: 28px auto 0; border: 1px solid #DFE1E5; border-radius: 24px; display: flex; align-items: center; gap: 14px; padding: 0 18px; color: #9AA0A6; box-shadow: 0 1px 6px rgba(32,33,36,.12); cursor: text; }
+.t1-gbts { display: flex; justify-content: center; gap: 12px; margin-top: 28px; }
+.t1-gbts span { background: #F8F9FA; border-radius: 6px; padding: 9px 16px; font-size: 14px; color: #3C4043; }
+.t1-gpie { position: absolute; left: 0; right: 0; bottom: 0; background: #F2F2F2; padding: 12px 30px; text-align: left; font-size: 14px; color: #70757A; }
+.t1-chrome .v-direccion.t1-sobre { position: absolute; top: 42px; left: 0; right: 0; background: #fff; z-index: 4; }
+.t1-chrome .v-direccion .url.t1-edit { background: #fff; box-shadow: 0 0 0 2px #0B57D0; }
+.t1-edit input { border: 0; outline: 0; flex: 1; min-width: 0; font: 14px 'Segoe UI', sans-serif; color: #202124; background: transparent; }
+.t1-sugs { position: absolute; top: 80px; left: 116px; right: 76px; background: #fff; border-radius: 0 0 14px 14px; box-shadow: 0 6px 16px rgba(0,0,0,.2); padding: 6px 0; z-index: 4; font-size: 14px; text-align: left; }
+.t1-sugs > div { display: flex; align-items: center; gap: 14px; padding: 9px 18px; cursor: pointer; }
+.t1-sugs > div:hover { background: #F1F3F4; }
+.t1-sugs > div[hidden] { display: none; }
+.t1-sugs small { color: #5F6368; }
+
+/* Resultados de Google */
+.t1-serp { background: #fff; }
+.t1-serp-cab { display: flex; align-items: center; gap: 28px; padding: 12px 24px 8px; }
+.t1-serp-cab .t1-glogo { font-size: 30px; margin: 0; letter-spacing: -1px; }
+.t1-serp-caja { width: 540px; height: 40px; border-radius: 20px; box-shadow: 0 1px 6px rgba(32,33,36,.22); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; font-size: 15px; color: #202124; }
+.t1-serp-caja .t1-lupa { color: #4285F4; }
+.t1-serp-tabs { display: flex; gap: 22px; padding: 0 0 0 112px; font-size: 13.5px; color: #5F6368; border-bottom: 1px solid #EBEBEB; }
+.t1-serp-tabs span { padding: 7px 2px; }
+.t1-serp-tabs .on { color: #1F1F1F; border-bottom: 3px solid #1F1F1F; font-weight: 600; }
+.t1-serp-res { padding: 6px 0 0 112px; width: 780px; }
+.t1-patro { font-size: 13px; font-weight: 700; color: #202124; margin-bottom: 4px !important; }
+.t1-prods { padding: 4px 0 6px; }
+.t1-prods-fila { display: flex; gap: 10px; }
+.t1-prod { width: 118px; border: 1px solid #E3E3E3; border-radius: 10px; padding: 6px 8px; font-size: 11.5px; line-height: 1.25; cursor: pointer; }
+.t1-prod .img { height: 30px; border-radius: 6px; display: grid; place-items: center; font-size: 20px; margin-bottom: 3px; }
+.t1-prod .p { font-weight: 700; font-size: 12.5px; }
+.t1-prod .s { color: #5F6368; }
+.t1-ad, .t1-res { padding: 4px 0; position: relative; }
+.t1-site { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #202124; line-height: 1.2; }
+.t1-site small { display: block; color: #4D5156; font-size: 12px; }
+.t1-site .t1-fav { width: 24px; height: 24px; border-radius: 50%; line-height: 24px; font-size: 12px; }
+.t1-tit { display: block; color: #1A0DAB; font-size: 18px; line-height: 1.25; margin-top: 2px; cursor: pointer; }
+.t1-desc { font-size: 13px; color: #4D5156; line-height: 1.4; }
+.t1-zona { cursor: pointer; }
+.t1-final .t1-anuncio { box-shadow: 0 0 0 3px #C0392B; background: #FBEAE8; border-radius: 8px; }
+.t1-final .t1-correcto { box-shadow: 0 0 0 3px #1E8E5A; background: #E6F4EC; border-radius: 8px; }
+.t1-leyenda { position: absolute; right: 14px; top: 136px; z-index: 5; display: flex; flex-direction: column; gap: 8px; font: 600 13px/1.2 'Segoe UI', sans-serif; }
+.t1-leyenda span { background: #fff; border-radius: 8px; padding: 6px 10px; box-shadow: 0 2px 8px rgba(0,0,0,.2); border-left: 6px solid; }
+.t1-marca-ko { box-shadow: 0 0 0 3px #C0392B; border-radius: 8px; }
+.t1-marca-ok { box-shadow: 0 0 0 3px #1E8E5A; border-radius: 8px; }
+.t1-num-in { position: absolute; left: -44px; top: 6px; width: 32px; height: 32px; border-radius: 50%; background: #E861A7; color: #fff; font: 700 18px/32px 'Lexend', sans-serif; text-align: center; }
+
+/* Diccionario (DLE) */
+.t1-dle { background: #fff; }
+.t1-dle-cab { display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #E5E5E5; font-size: 12.5px; color: #333; }
+.t1-dle-rae { font: 600 15px/1 Georgia, 'Times New Roman', serif; letter-spacing: .12em; color: #1A1A1A; }
+.t1-dle-tit { font: 400 30px/1.2 Georgia, serif; text-align: center; margin-top: 46px; color: #1A1A1A; }
+.t1-dle-sub { text-align: center; color: #8B1A1A; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-top: 8px; }
+.t1-dle-busca { display: flex; width: 520px; margin: 30px auto 0; border: 1px solid #8C8C8C; border-radius: 4px; height: 44px; overflow: hidden; background: #fff; }
+.t1-dle-busca input, .t1-dle-busca .v { flex: 1; min-width: 0; border: 0; outline: 0; padding: 0 14px; font: 17px 'Segoe UI', sans-serif; display: flex; align-items: center; color: #1A1A1A; }
+.t1-dle-lupa { width: 56px; background: #8B1A1A; color: #fff; display: grid; place-items: center; cursor: pointer; }
+.t1-dle-pie { width: 520px; margin: 40px auto 0; font-size: 13px; color: #555; border-top: 1px solid #EEE; padding-top: 14px; }
+.t1-dle-art { width: 620px; margin: 30px auto 0; font: 21px/1.5 Georgia, serif; color: #1A1A1A; }
+.t1-dle-art h4 { font: 700 38px/1.2 Georgia, serif; margin: 0 0 14px; }
+.t1-dle-art abbr { color: #1F5FA8; font-style: italic; text-decoration: none; }
+
+/* Burbujas de Chrome: marcador, descargas */
+.t1-burbuja { position: absolute; z-index: 5; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,.25); padding: 16px 18px; font-size: 13.5px; color: #202124; }
+.t1-burbuja h6 { font-size: 15px; font-weight: 600; margin: 0 0 12px; }
+.t1-burbuja .fila { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 10px; margin-bottom: 10px; }
+.t1-burbuja .campo { border: 1px solid #C4C7C5; border-radius: 6px; padding: 6px 10px; }
+.t1-burbuja .bts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+.t1-burbuja .bts span { border: 1px solid #C4C7C5; border-radius: 16px; padding: 6px 16px; color: #0B57D0; }
+.t1-burbuja .bts .p { background: #0B57D0; color: #fff; border-color: #0B57D0; }
+.t1-desc-fila { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.t1-desc-fila small { display: block; color: #5F6368; font-size: 12px; }
+.t1-desc-fila .carp { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 3px #E861A7; }
+.t1-pdf { width: 24px; height: 30px; border-radius: 3px; background: #EA4335; color: #fff; font: 700 8px/30px 'Segoe UI', sans-serif; text-align: center; flex: none; }
+
+/* Explorador de Windows 11 */
+.t1-win { position: relative; font-family: 'Segoe UI', sans-serif; color: #1A1A1A; }
+.t1-win-menu { width: 340px; background: #F9F9F9; border: 1px solid #DADADA; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.18); padding: 4px; font-size: 15px; }
+.t1-win-iconos { display: flex; justify-content: space-around; padding: 6px 4px 8px; border-bottom: 1px solid #E5E5E5; margin-bottom: 4px; font-size: 18px; color: #333; }
+.t1-win-menu > div:not(.t1-win-iconos) { display: flex; align-items: center; gap: 12px; padding: 7px 12px; border-radius: 4px; }
+.t1-win-menu em { margin-left: auto; color: #6B6B6B; font-style: normal; font-size: 13px; }
+.t1-win-menu > .on { background: #E5F1FB; box-shadow: inset 0 0 0 3px #E861A7; font-weight: 600; }
+.t1-win-menu > .sep { height: 1px; background: #E5E5E5; padding: 0 !important; margin: 4px 0; }
+.t1-win-dlg { width: 520px; background: #fff; border: 1px solid #C8C8C8; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.2); font-size: 14px; overflow: hidden; }
+.t1-win-dlg .tit { background: #F3F3F3; padding: 9px 14px; font-size: 13px; }
+.t1-win-dlg .cue { padding: 16px 22px 18px; display: flex; flex-direction: column; gap: 10px; }
+.t1-win-dlg h6 { font-size: 17px; font-weight: 400; color: #1C3A8C; margin: 0 0 4px; }
+.t1-win-dlg .ruta-w { display: flex; gap: 8px; }
+.t1-win-dlg .ruta-w span:first-child { flex: 1; border: 1px solid #8A8A8A; padding: 5px 8px; font-size: 13px; }
+.t1-win-dlg .ruta-w span:last-child { border: 1px solid #ADADAD; padding: 5px 10px; background: #F5F5F5; font-size: 13px; }
+.t1-win-dlg .chk::before { content: '☑ '; color: #0067C0; font-size: 16px; }
+.t1-win-dlg .bts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.t1-win-dlg .bts span { border: 1px solid #ADADAD; border-radius: 4px; padding: 5px 22px; background: #F5F5F5; }
+.t1-win-dlg .bts .p { background: #0067C0; color: #fff; border-color: #0067C0; box-shadow: 0 0 0 3px #E861A7; }
+.t1-win-busca { display: flex; align-items: center; gap: 12px; width: 560px; height: 52px; border-radius: 8px; background: #fff; border: 1px solid #C8C8C8; border-bottom: 3px solid #0067C0; padding: 0 18px; font: 20px 'Segoe UI', sans-serif; color: #1A1A1A; box-shadow: var(--sombra); }
+
+/* Imprimir en Chrome */
+.t1-print { display: flex; width: 760px; height: 470px; border-radius: 10px; overflow: hidden; box-shadow: 0 16px 50px rgba(0,0,0,.22); font-family: 'Segoe UI', sans-serif; font-size: 14px; background: #fff; border: 1px solid #D0D0D8; color: #202124; }
+.t1-print-prev { flex: 1; background: #E8EAED; display: grid; place-items: center; }
+.t1-print-prev .hoja { width: 210px; height: 297px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.2); padding: 22px; display: flex; flex-direction: column; gap: 9px; }
+.t1-print-prev .hoja i { display: block; height: 8px; border-radius: 4px; background: #DADCE0; }
+.t1-print-panel { width: 370px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; position: relative; }
+.t1-print-cab { display: flex; justify-content: space-between; align-items: baseline; }
+.t1-print-cab b { font-size: 20px; font-weight: 400; }
+.t1-print-cab span { color: #5F6368; font-size: 13px; }
+.t1-print .fila { display: grid; grid-template-columns: 84px 1fr; align-items: center; gap: 10px; }
+.t1-print .sel, .t1-print .campo { border: 1px solid #DADCE0; border-radius: 6px; padding: 7px 10px; }
+.t1-print .sel::after { content: ' ▾'; float: right; color: #5F6368; }
+.t1-print .marca { box-shadow: 0 0 0 3px #E861A7; }
+.t1-print .pie { position: absolute; right: 22px; bottom: 18px; display: flex; gap: 10px; }
+.t1-print .b1 { background: #0B57D0; color: #fff; border-radius: 18px; padding: 8px 22px; }
+.t1-print .b2 { border: 1px solid #DADCE0; border-radius: 18px; padding: 8px 22px; color: #0B57D0; }
+
+/* Móvil: preferencias de USB y WhatsApp */
+.t1-and-sec { padding: 18px 22px 6px; color: #0B57D0; font-size: 14px; font-weight: 600; }
+.t1-and-op { display: flex; align-items: center; gap: 18px; padding: 12px 22px; font-size: 15.5px; }
+.t1-and-op i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #444; flex: none; }
+.t1-and-op.on i { border-color: #0B57D0; box-shadow: inset 0 0 0 4px #fff; background: #0B57D0; }
+.t1-and-op.on { background: #E8F0FE; }
+.t1-reenv { display: block; color: #667781; font-size: 12px; font-style: italic; margin-bottom: 4px; }
+
+/* La URL desmontada */
+.t1-omni { display: flex; align-items: center; gap: 4px; background: #F1F3F4; border-radius: 999px; padding: 20px 44px; font: 500 56px/1 'JetBrains Mono', Consolas, monospace; width: fit-content; }
+.t1-omni .t1-tune { width: 40px; height: 40px; margin-right: 26px; }
+.t1-p1 { color: #007CC2; } .t1-p2 { color: #830065; } .t1-p3 { color: #617518; }
+
+/* Logos en las opciones de test */
+.t1-logos .opciones.rejilla { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+.t1-logos .opcion.con-img { padding-top: 26px; }
+.t1-logos .opcion.con-img img { max-height: 170px; margin: -18px 0 -14px; }
+.t1-solo-logo .opcion.con-img > span:last-child { display: none; }
+.t1-logo-t img { height: 96px; width: 96px; object-fit: contain; margin-bottom: 4px; }
+.t1-ico-fija { height: 130px !important; width: auto !important; align-self: flex-start; }
+
+/* Marcas numeradas sobre una imagen */
+.t1-n { position: absolute; z-index: 3; width: 44px; height: 44px; border-radius: 50%; background: #E861A7; color: #fff; font: 700 24px/44px 'Lexend', sans-serif; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+.t1-recuadro { position: absolute; z-index: 2; border: 5px solid #E861A7; border-radius: 12px; }
+.t1-cita { font-style: italic; font-size: 30px; font-weight: 600; color: var(--texto); }
+/* Pregunta corregida: la explicación va al lado del botón y se quita la instrucción, para que todo quepa en la diapositiva */
+.preg[data-corregida] > .instr { display: none; }
+.preg:not(.sim-dos):not(.con-img) { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 24px; row-gap: 20px; align-content: start; }
+.preg:not(.sim-dos):not(.con-img) > * { grid-column: 1 / -1; }
+.preg:not(.sim-dos):not(.con-img) > .botones, .preg.con-img > .botones { grid-column: 1; align-self: start; }
+.preg:not(.sim-dos):not(.con-img) > .fb, .preg.con-img > .fb { grid-column: 2; }
+.preg.con-img { grid-template-columns: auto minmax(0, 1fr) auto; }
+.preg.con-img > * { grid-column: 1 / 3; }
+.preg.con-img > .img-enun { grid-column: 3; grid-row: 1 / span 12; max-height: 560px; max-width: 600px; }
+.repaso-test .preg.con-img > .img-enun { max-height: 520px; max-width: 540px; }
+.preg .fb { font-size: 24px; padding: 14px 22px; }
+.preg .fb .fb-tit { font-size: 26px; }
+/* Emparejar: la explicación y las parejas correctas, en una columna a la derecha */
+.t1-dos-col > .preg:not(.sim-dos):not(.con-img) { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); column-gap: 40px; }
+.t1-dos-col > .preg:not(.sim-dos):not(.con-img) > *, .t1-dos-col > .preg:not(.sim-dos):not(.con-img) > .botones { grid-column: 1; }
+.t1-dos-col > .preg:not(.sim-dos):not(.con-img) > .fb.ok, .t1-dos-col > .preg:not(.sim-dos):not(.con-img) > .fb.ko { grid-column: 2; grid-row: 1 / span 3; align-self: start; }
+.t1-dos-col > .preg:not(.sim-dos):not(.con-img) > .fb.info { grid-column: 2; grid-row: 1 / span 3; align-self: end; }
+</style>
+</head>
+<body class="area-1">
+
+<!-- Plantilla: Chrome, abrir una página del historial (práctica de la 1.3). Las pantallas con data-t1-base copian otra pantalla sin sus zonas de clic. -->
+<template id="t1-historial">
+  <div class="ventana t1-chrome">
+    <div class="pantalla-html" data-id="inicio">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#830065">C</i>Competencias digitales · Nivel básico<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>raulibanez.github.io/competencias-digitales-para-la-ciudadania-nivel-basico<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos" data-ir="menu" title="Personaliza y controla Google Chrome">⋮</span></div>
+      <div class="v-cuerpo t1-web">
+        <div class="t1-web-cab"><b>Competencias digitales para la ciudadanía</b><span>Nivel básico · Curso de autoformación</span></div>
+        <div class="t1-web-txt">
+          <h3>Temas</h3>
+          <div class="t1-web-tarjetas"><div><b>Tema 0</b><br>El examen tuCertiCyL</div><div><b>Tema 1</b><br>Buscar y gestionar información</div><div><b>Tema 2</b><br>Comunicación y colaboración</div><div><b>Tema 3</b><br>Creación de contenidos</div><div><b>Tema 4</b><br>Seguridad, bienestar y uso responsable</div><div><b>Tema 5</b><br>Resolución de problemas</div></div>
+          <p style="margin-top:22px">Cada tema termina con preguntas como las del examen: test, simulaciones y retos.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="menu" data-t1-base="inicio">
+      <div class="v-menu t1-menu" style="top:80px;right:8px">
+        <div>Nueva pestaña<i class="at">Ctrl+T</i></div>
+        <div>Nueva ventana<i class="at">Ctrl+N</i></div>
+        <div>Nueva ventana de incógnito<i class="at">Ctrl+Mayús+N</i></div>
+        <div class="sep"></div>
+        <div class="sub">Contraseñas y autocompletar</div>
+        <div class="sub t1-mi-hist" data-ir="submenu">Historial</div>
+        <div>Descargas<i class="at">Ctrl+J</i></div>
+        <div class="sub">Marcadores y listas</div>
+        <div class="sub">Grupos de pestañas</div>
+        <div class="sub">Extensiones</div>
+        <div>Eliminar datos de navegación...<i class="at">Ctrl+Mayús+Supr</i></div>
+        <div class="sep"></div>
+        <div>Zoom<i class="at">−&nbsp;&nbsp;&nbsp;100 %&nbsp;&nbsp;&nbsp;+&nbsp;&nbsp;&nbsp;⛶</i></div>
+        <div class="sep"></div>
+        <div>Imprimir...<i class="at">Ctrl+P</i></div>
+        <div>Buscar con Google Lens</div>
+        <div>Traducir...</div>
+        <div class="sub">Buscar y editar</div>
+        <div class="sub">Enviar, guardar y compartir</div>
+        <div class="sub">Más herramientas</div>
+        <div class="sep"></div>
+        <div class="sub">Ayuda</div>
+        <div>Configuración</div>
+        <div>Salir</div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="submenu" data-t1-base="menu">
+      <div class="v-menu t1-menu" style="top:186px;right:334px;width:310px">
+        <div data-ir="historial">Historial<i class="at">Ctrl+H</i></div>
+        <div class="sep"></div>
+        <div class="t1-gris">Pestañas cerradas recientemente</div>
+        <div><span><i class="t1-fav" style="--c:#0090A8">A</i>El tiempo en Valladolid - AEMET</span></div>
+        <div><span><i class="t1-fav" style="--c:#4285F4">G</i>Google</span></div>
+        <div class="sep"></div>
+        <div class="sub">Pestañas de otros dispositivos</div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="historial">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#5F6368">H</i>Historial<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><b style="font-weight:600">Chrome</b>&nbsp;|&nbsp;chrome://history<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-hist">
+        <div class="t1-hist-cab"><span class="t1-hist-tit">Historial</span><span class="t1-hist-buscar" data-t1-neutro><i class="t1-lupa"></i>Buscar en el historial</span></div>
+        <div class="t1-nota" data-t1-neutro hidden>En esta práctica no hace falta buscar. Busca la página en la lista y haz clic en ella.</div>
+        <div class="t1-hist-nav"><div class="on">Historial de Chrome</div><div>Pestañas de otros dispositivos</div><div>Eliminar datos de navegación</div></div>
+        <div class="t1-hist-main">
+          <div class="t1-hist-tabs"><span class="on">Lista</span><span>Por grupo</span></div>
+          <div class="t1-hist-card"><h5>Hoy - sábado, 24 de octubre de 2026</h5>
+            <div class="t1-hist-fila"><span class="h">10:12</span><i class="t1-fav" style="--c:#830065">C</i><span class="t">Competencias digitales para la ciudadanía</span><span class="d">raulibanez.github.io</span></div>
+            <div class="t1-hist-fila"><span class="h">9:48</span><i class="t1-fav" style="--c:#0090A8">A</i><span class="t">El tiempo en Valladolid - AEMET</span><span class="d">aemet.es</span></div>
+            <div class="t1-hist-fila"><span class="h">9:15</span><i class="t1-fav" style="--c:#007CC2">B</i><span class="t">Actividades de noviembre · Biblioteca Municipal</span><span class="d">biblioteca-municipal.ejemplo.es</span></div>
+          </div>
+          <div class="t1-hist-card"><h5>Ayer - viernes, 23 de octubre de 2026</h5>
+            <div class="t1-hist-fila"><span class="h">19:05</span><i class="t1-fav" style="--c:#EA686B">R</i><span class="t">Bizcocho de yogur fácil</span><span class="d">recetas.ejemplo.es</span></div>
+            <div class="t1-hist-fila" data-ir="final"><span class="h">18:41</span><i class="t1-fav" style="--c:#007CC2">B</i><span class="t">Horario de la Biblioteca Municipal</span><span class="d">biblioteca-municipal.ejemplo.es</span></div>
+            <div class="t1-hist-fila"><span class="h">18:39</span><i class="t1-fav" style="--c:#4285F4">G</i><span class="t">biblioteca municipal - Buscar con Google</span><span class="d">google.es</span></div>
+            <div class="t1-hist-fila"><span class="h">17:20</span><i class="t1-fav" style="--c:#8FA72F">D</i><span class="t">Actividades del pabellón de deportes</span><span class="d">deportes.ejemplo.es</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#007CC2">B</i>Horario de la Biblioteca Municipal<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>biblioteca-municipal.ejemplo.es/horario<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-web">
+        <div class="t1-web-cab" style="--c:#007CC2"><b>Biblioteca Municipal</b><span>Préstamo · Actividades · Horario</span></div>
+        <div class="t1-web-txt">
+          <h3>Horario</h3>
+          <table><tr><td><b>Lunes a viernes</b></td><td>9:00 a 14:00 y 16:30 a 20:30</td></tr><tr><td><b>Sábados</b></td><td>10:00 a 13:30</td></tr><tr><td><b>Domingos y festivos</b></td><td>Cerrado</td></tr></table>
+          <p style="margin-top:18px">En julio y agosto, solo de mañana.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: Chrome, abrir dle.rae.es y buscar «bulo» (Comprueba 1.1 y maquetas del diccionario) -->
+<template id="t1-dle">
+  <div class="ventana t1-chrome">
+    <div class="pantalla-html" data-id="google">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#4285F4">G</i>Google<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url t1-clic" data-ir="dir" style="cursor:text"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>google.es<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-gini">
+        <div class="t1-gini-top"><span>Gmail</span><span>Imágenes</span><span style="letter-spacing:-2px;color:#5F6368">⠿</span><span class="t1-gboton">Iniciar sesión</span></div>
+        <div class="t1-glogo"><b style="color:#4285F4">G</b><b style="color:#EA4335">o</b><b style="color:#FBBC05">o</b><b style="color:#4285F4">g</b><b style="color:#34A853">l</b><b style="color:#EA4335">e</b></div>
+        <div class="t1-gcaja" data-t1-pista="Esa es la caja del buscador. La dirección se escribe en la barra de direcciones, arriba."><i class="t1-lupa"></i><span style="flex:1"></span><span style="color:#4285F4;font-size:18px">●</span></div>
+        <div class="t1-gbts"><span>Buscar con Google</span><span>Voy a tener suerte</span></div>
+        <div class="t1-gpie">España</div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="dir" data-t1-base="google">
+      <div class="v-direccion t1-sobre"><span>←</span><span>→</span><span>⟳</span><span class="url t1-edit t1-sol"><i class="t1-lupa" style="color:#5F6368"></i><input class="t1-campo" data-valida="url" data-ir-ok="dle" data-sugiere data-autofoco data-pista="Escribe la dirección dle.rae.es y pulsa Intro." placeholder="Busca en Google o escribe una URL" aria-label="Barra de direcciones" autocomplete="off" spellcheck="false"></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="t1-sugs" hidden>
+        <div class="t1-sug-dle" data-ir="dle" hidden><span class="t1-fav" style="--c:#8B1A1A">D</span><span>dle.rae.es</span><small>— Diccionario de la lengua española</small></div>
+        <div data-t1-pista="Esa opción busca el texto en Google. Pulsa Intro o elige la dirección dle.rae.es."><i class="t1-lupa" style="color:#5F6368"></i><span class="t1-q"></span><small>— Buscar con Google</small></div>
+      </div>
+      <span class="t1-oculto" data-ir="dle"></span>
+    </div>
+    <div class="pantalla-html" data-id="dle">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#8B1A1A">D</i>Diccionario de la lengua española<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>dle.rae.es<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-dle">
+        <div class="t1-dle-cab"><span class="t1-dle-rae">REAL ACADEMIA ESPAÑOLA</span><span>Diccionarios · Gramática · Ortografía · Dudas rápidas</span></div>
+        <div class="t1-dle-tit">Diccionario de la lengua española</div>
+        <div class="t1-dle-sub">Edición del Tricentenario</div>
+        <div class="t1-dle-busca t1-sol"><input class="t1-campo" data-valida="bulo" data-ir-ok="entrada" data-pista="Escribe la palabra bulo y pulsa la lupa." aria-label="Buscar en el diccionario" autocomplete="off" spellcheck="false"><span class="t1-dle-lupa" data-t1-envia="entrada" title="Consultar"><i class="t1-lupa"></i></span></div>
+        <span class="t1-oculto" data-ir="entrada"></span>
+        <div class="t1-dle-pie">Escribe una palabra y pulsa la lupa para ver su definición.</div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="entrada" data-final>
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#8B1A1A">D</i>bulo | Diccionario de la lengua española<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>dle.rae.es/bulo<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-dle">
+        <div class="t1-dle-cab"><span class="t1-dle-rae">REAL ACADEMIA ESPAÑOLA</span><span>Diccionarios · Gramática · Ortografía · Dudas rápidas</span></div>
+        <div class="t1-dle-busca" style="margin-top:24px"><span class="v">bulo</span><span class="t1-dle-lupa"><i class="t1-lupa"></i></span></div>
+        <div class="t1-dle-art"><h4>bulo</h4><p><b>1.</b> <abbr title="nombre masculino">m.</abbr> Noticia falsa propalada con algún fin.</p></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: resultados de Google, el primer resultado que no es publicidad (Comprueba 1.2). Tiendas y webs inventadas. -->
+<template id="t1-google">
+  <div class="ventana t1-chrome">
+    <div class="pantalla-html" data-id="serp">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#4285F4">G</i>zapatillas de deporte - Buscar con Google<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg>google.es/search?q=zapatillas+de+deporte<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="v-cuerpo t1-serp">
+        <div class="t1-serp-cab"><span class="t1-glogo"><b style="color:#4285F4">G</b><b style="color:#EA4335">o</b><b style="color:#FBBC05">o</b><b style="color:#4285F4">g</b><b style="color:#34A853">l</b><b style="color:#EA4335">e</b></span><span class="t1-serp-caja">zapatillas de deporte<i class="t1-lupa"></i></span></div>
+        <div class="t1-serp-tabs"><span class="on">Todo</span><span>Shopping</span><span>Imágenes</span><span>Vídeos</span><span>Noticias</span><span>Más</span></div>
+        <div class="t1-serp-res">
+          <div class="t1-anuncio t1-prods" data-t1-pista="Ese resultado lleva la etiqueta «Patrocinado». Es un anuncio. Busca el primero que no la lleve.">
+            <p class="t1-patro">Patrocinado</p>
+            <div class="t1-prods-fila">
+              <div class="t1-prod"><div class="img" style="background:#E3F1FA">👟</div><p>Zapatillas running Vuelo 3</p><p class="p">59,99 €</p><p class="s">Deportes Meseta</p></div>
+              <div class="t1-prod"><div class="img" style="background:#FBE6F0">👟</div><p>Zapatillas pádel Smash</p><p class="p">74,95 €</p><p class="s">ZapaRun</p></div>
+              <div class="t1-prod"><div class="img" style="background:#EEF3DE">👟</div><p>Zapatillas trail Sierra</p><p class="p">89,00 €</p><p class="s">Atleta Total</p></div>
+              <div class="t1-prod"><div class="img" style="background:#FDF5D6">👟</div><p>Zapatillas casual Paseo</p><p class="p">39,99 €</p><p class="s">Calzados Duero</p></div>
+              <div class="t1-prod"><div class="img" style="background:#E0F2F4">👟</div><p>Zapatillas gimnasio Flex</p><p class="p">45,50 €</p><p class="s">Deportes Meseta</p></div>
+            </div>
+          </div>
+          <div class="t1-anuncio t1-ad" data-t1-pista="Ese resultado lleva la etiqueta «Patrocinado». Es un anuncio. Busca el primero que no la lleve.">
+            <p class="t1-patro">Patrocinado</p>
+            <div class="t1-site"><i class="t1-fav" style="--c:#E861A7">Z</i><span>ZapaRun<small>https://www.zaparun.ejemplo.es</small></span></div>
+            <span class="t1-tit">Zapatillas de deporte - Hasta un 40 % de descuento</span>
+            <p class="t1-desc">Envío gratis en 24 horas. Devolución fácil. Las mejores marcas de running y pádel.</p>
+          </div>
+          <div class="t1-anuncio t1-ad" data-t1-pista="Ese resultado lleva la etiqueta «Patrocinado». Es un anuncio. Busca el primero que no la lleve.">
+            <p class="t1-patro">Patrocinado</p>
+            <div class="t1-site"><i class="t1-fav" style="--c:#F3C51A">A</i><span>Atleta Total<small>https://www.atletatotal.ejemplo.es</small></span></div>
+            <span class="t1-tit">Zapatillas deportivas para hombre y mujer | Atleta Total</span>
+            <p class="t1-desc">Más de 500 modelos. Compra hoy y recíbelo mañana.</p>
+          </div>
+          <div class="t1-res t1-correcto">
+            <div class="t1-zona t1-sol" data-ir="ok"><div class="t1-site"><i class="t1-fav" style="--c:#007CC2">R</i><span>Revista Deportiva<small>https://revistadeportiva.ejemplo.es › guias</small></span></div>
+            <span class="t1-tit">Cómo elegir zapatillas de deporte: guía paso a paso</span>
+            <p class="t1-desc">Qué mirar antes de comprar: el deporte que haces, tu tipo de pisada, la talla y el precio.</p></div>
+          </div>
+          <div class="t1-res">
+            <div class="t1-site"><i class="t1-fav" style="--c:#8FA72F">C</i><span>Corredores Populares<small>https://corredorespopulares.ejemplo.es › consejos</small></span></div>
+            <span class="t1-tit">10 zapatillas de deporte para empezar a correr</span>
+            <p class="t1-desc">Hemos probado diez modelos baratos para quien empieza a correr.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html t1-final" data-id="ok" data-final data-t1-base="serp">
+      <div class="t1-leyenda"><span style="border-color:#C0392B">Anuncios</span><span style="border-color:#1E8E5A">Primer resultado normal</span></div>
+    </div>
+  </div>
+</template>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada e índice ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 1</p>
+  <h1>Buscar y gestionar información</h1>
+  <p class="sub">Navega, busca, comprueba lo que lees y guarda lo que encuentras.</p>
+  <div class="datos"><span class="pill">Área 1</span><span class="pill clara">3 competencias</span><span class="pill clara">2 horas</span><span class="pill clara">9 preguntas en el examen</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 1</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp">
+      <a href="#c11"><img class="ico" src="img/ia/busqueda.webp" alt=""><div><span class="n">1.1</span><h3>Navegación, búsqueda y filtrado de información</h3><span class="estado-comp" data-comp="1.1"></span></div></a>
+      <a href="#c12"><img class="ico" src="img/ia/evaluacion.webp" alt=""><div><span class="n">1.2</span><h3>Evaluación de la información</h3><span class="estado-comp" data-comp="1.2"></span></div></a>
+      <a href="#c13"><img class="ico" src="img/ia/gestion.webp" alt=""><div><span class="n">1.3</span><h3>Gestión de la información</h3><span class="estado-comp" data-comp="1.3"></span></div></a>
+      <a href="#repaso"><img class="ico" src="../assets/img/area-informacion.webp" alt=""><div><span class="n">Repaso</span><h3>Resumen y test de repaso del área</h3><span class="cap">Preguntas con el botón «Otra pregunta»</span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Esta área tiene 9 preguntas: 3 por cada competencia. Cada competencia termina con un <b>Comprueba</b> de 3 preguntas como las del examen. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué vas a saber hacer">
+  <div class="cab"><p class="etq">Tema 1</p><h2>Qué vas a saber hacer</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><img class="ico p t1-ico-fija" src="img/ia/busqueda.webp" alt=""><h3>1.1 Buscar</h3><p>Abrir webs con su dirección, distinguir navegador y buscador, y buscar en Google, en buscadores especializados, en Wikipedia y en el diccionario.</p></div>
+      <div class="tarjeta"><img class="ico p t1-ico-fija" src="img/ia/evaluacion.webp" alt=""><h3>1.2 Evaluar</h3><p>Saber si una información es fiable, reconocer un bulo y distinguir los anuncios de los resultados normales.</p></div>
+      <div class="tarjeta"><img class="ico p t1-ico-fija" src="img/ia/gestion.webp" alt=""><h3>1.3 Gestionar</h3><p>Guardar archivos y copias de seguridad, usar marcadores e historial, descargar, descomprimir, imprimir y pasar las fotos del móvil.</p></div>
+    </div>
+    <div class="cols" style="align-items:center">
+      <div style="display:flex;align-items:center;gap:36px"><p class="cifra">9</p><p class="peq">preguntas de esta área en el examen: 3 por competencia (2 de conocimientos y 1 de habilidades). La ficha oficial pide acertar al menos la mitad: 5 de 9. En este curso entrenas para acertar 7 de 9 (más del 75 %).</p></div>
+      <div class="caja examen"><span class="tt">En la demo del examen</span>Las preguntas de esta área son la 1 (test con imágenes), la 2 (test) y la 3 (reto con un archivo).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 1.1 Navegación, búsqueda y filtrado ======================= -->
+
+<section class="competencia" data-label="1.1 Navegación, búsqueda y filtrado de información" data-seccion="1.1" data-deck-id="c11" data-deck-section="1.1">
+  <div class="izq">
+    <p class="n">1.1</p>
+    <h2>Navegación, búsqueda y filtrado de información</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: qué programas son navegadores (test con imágenes).</p>
+    <img class="ico" src="img/ia/busqueda.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Abrir una web escribiendo su dirección.</li>
+      <li>Moverte entre páginas y pestañas.</li>
+      <li>Distinguir un navegador de un buscador.</li>
+      <li>Buscar en Google, Bing o Yahoo!</li>
+      <li>Saber por qué cada buscador da resultados distintos.</li>
+      <li>Usar buscadores especializados en un tema.</li>
+      <li>Leer y buscar noticias en Internet.</li>
+      <li>Encontrar vídeos en YouTube.</li>
+      <li>Buscar en Wikipedia.</li>
+      <li>Buscar una palabra en el diccionario de la RAE (DRAE, hoy DLE).</li>
+    </ol>
+    <span class="estado-comp" data-comp="1.1"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que ya sabes: moverte por la web" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Lo que ya sabes: moverte por la web</h2><p class="entrada">Internet es una buena fuente de información: webs oficiales, prensa, enciclopedias, diccionarios y vídeos.</p></div>
+  <div class="cuerpo">
+    <div class="ventana t1-chrome t1-estatica" style="width:1158px;height:86px;zoom:1.45"><div class="pantalla-html activa">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#830065">C</i>Competencias digitales · Nivel básico<i class="x">✕</i></span><span class="v-pestana" style="background:transparent"><i class="t1-fav" style="--c:#8B1A1A">D</i>Diccionario de la lengua española<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">raulibanez.github.io/competencias-digitales-para-la-ciudadania-nivel-basico<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+    </div></div>
+    <div class="cols" style="gap:40px">
+      <table class="tabla peq">
+        <tr><th>Qué quieres hacer</th><th>Cómo</th></tr>
+        <tr><td>Abrir un enlace</td><td>Clic cuando el puntero es una mano</td></tr>
+        <tr><td>Abrir un enlace en otra pestaña</td><td>Ctrl+clic o clic con la rueda del ratón</td></tr>
+        <tr><td>Volver a la página anterior</td><td>Flecha ← o Alt+←</td></tr>
+        <tr><td>Ir a la página siguiente</td><td>Flecha → o Alt+→</td></tr>
+        <tr><td>Recargar la página</td><td>Flecha circular ⟳ o F5</td></tr>
+      </table>
+      <table class="tabla peq">
+        <tr><th>Qué quieres hacer</th><th>Cómo</th></tr>
+        <tr><td>Abrir una pestaña nueva</td><td>Botón + o Ctrl+T</td></tr>
+        <tr><td>Cerrar una pestaña</td><td>La ✕ de la pestaña o Ctrl+W</td></tr>
+        <tr><td>Recuperar la última pestaña cerrada</td><td>Ctrl+Mayús+T</td></tr>
+        <tr><td>Buscar una palabra en la página</td><td>Ctrl+F</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que ya sabes: buscar vídeos en YouTube" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Lo que ya sabes: buscar vídeos en YouTube</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ol class="pasos">
+        <li>Escribe lo que buscas en la caja <b>Buscar</b>, arriba. Pulsa Intro o la lupa.</li>
+        <li>En los resultados, pulsa <b>Filtros</b>. Puedes elegir la fecha de subida, el tipo (vídeo, canal o lista), la duración y las características (subtítulos, Creative Commons).</li>
+        <li>En la página de un canal, la lupa de la fila de pestañas busca solo vídeos de ese canal.</li>
+      </ol>
+      <img class="ico g" src="img/ia/video.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Navegador web" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>El navegador web</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Navegador web</span><p>Un navegador web es un programa para abrir y ver páginas web. Se instala en el ordenador o en el móvil.</p><p class="peq">Mantenlo siempre actualizado. Puedes tener varios navegadores instalados a la vez.</p></div>
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta t1-logo-t"><img src="img/cyl/logo-chrome-recorte.png" alt="Logo de Google Chrome"><h3>Google Chrome</h3><p>Es de Google.</p></div>
+      <div class="tarjeta t1-logo-t"><img src="img/cyl/logo-edge-recorte.png" alt="Logo antiguo de Microsoft Edge"><h3>Microsoft Edge</h3><p>Es de Microsoft. Viene con Windows 11.</p></div>
+      <div class="tarjeta t1-logo-t"><img src="img/cyl/logo-firefox-recorte.png" alt="Logo de Mozilla Firefox"><h3>Mozilla Firefox</h3><p>Es de la Fundación Mozilla. Es software libre.</p></div>
+      <div class="tarjeta t1-logo-t"><img src="img/logos/logo-safari-recorte.png" alt="Logo de Safari"><h3>Safari</h3><p>Es de Apple. Está en el iPhone, el iPad y el Mac.</p></div>
+    </div>
+    <p class="peq">Otros: Brave y Opera. <span class="gris">La demo usa el logo antiguo de Edge (una «e» azul). Hoy es una ola azul y verde.</span></p>
+  </div>
+</section>
+
+<section class="s" data-label="La dirección de una web (URL)" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>La dirección de una web (URL)</h2><p class="entrada">La <b>URL</b> es la dirección de una página web. Se escribe en la <b>barra de direcciones</b>, arriba del todo del navegador. Después pulsas Intro.</p></div>
+  <div class="cuerpo">
+    <div class="t1-omni"><svg class="t1-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14" stroke="#5F6368" stroke-width="1.6" fill="none"/><circle cx="10.5" cy="5" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/><circle cx="5.5" cy="11" r="1.9" fill="none" stroke="#5F6368" stroke-width="1.6"/></svg><span class="t1-p1">https://</span><span class="t1-p2">dle.rae.es</span><span class="t1-p3">/bulo</span></div>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta" style="border-top-color:#007CC2"><h3>Protocolo: <span class="t1-p1">https://</span></h3><p>La conexión va cifrada. No quiere decir que la web sea de fiar.</p></div>
+      <div class="tarjeta" style="border-top-color:#830065"><h3>Dominio: <span class="t1-p2">dle.rae.es</span></h3><p>Es el nombre del sitio. Este termina en la extensión .es.</p></div>
+      <div class="tarjeta" style="border-top-color:#617518"><h3>Ruta: <span class="t1-p3">/bulo</span></h3><p>Es la página concreta dentro del sitio.</p></div>
+    </div>
+    <p class="peq">Normalmente no hace falta escribir https:// ni www. Chrome no los muestra hasta que haces clic en la barra.</p>
+    <div class="caja aviso"><span class="tt">Error típico</span>Escribir la dirección en la caja de Google. Así no entras en la web: ves una lista de resultados.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Navegador y buscador" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Navegador y buscador no son lo mismo</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/navegador.webp" alt=""><h3>Navegador</h3><p>Un <b>navegador</b> es un programa que se instala. Sin navegador no puedes abrir páginas web.</p><p>Ejemplos: Chrome, Edge, Firefox y Safari.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/buscador.webp" alt=""><h3>Buscador</h3><p>Un <b>buscador</b> (o motor de búsqueda) es una página web que encuentra información con las palabras que escribes. No se instala: se abre dentro del navegador.</p><p>Ejemplos: Google, Bing y Yahoo!</p></div>
+    </div>
+    <div class="caja examen"><span class="tt">Trampa del examen</span><b>Google Chrome</b> es un navegador. <b>Google</b> es un buscador. YouTube, Facebook y X (antes Twitter) no son navegadores ni buscadores: son servicios web, es decir, webs para ver vídeos o para relacionarte.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Buscadores generalistas" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Buscadores generalistas</h2><p class="entrada">Un <b>buscador generalista</b> busca información de cualquier tema.</p></div>
+  <div class="cuerpo">
+    <!-- [VERIFICAR] cuota de Google en 2026 («casi 9 de cada 10 búsquedas») -->
+    <table class="tabla">
+      <tr><th>Buscador</th><th>Dirección</th><th>Qué tiene de especial</th></tr>
+      <tr><td>Google</td><td>google.es</td><td>Es el más usado: casi 9 de cada 10 búsquedas en el mundo.</td></tr>
+      <tr><td>Bing</td><td>bing.com</td><td>Es de Microsoft. Es el buscador que trae Edge.</td></tr>
+      <tr><td>Yahoo!</td><td>es.search.yahoo.com</td><td>El examen lo nombra. Hoy se usa poco.</td></tr>
+      <tr><td>DuckDuckGo</td><td>duckduckgo.com</td><td>No guarda tus búsquedas.</td></tr>
+      <tr><td>Ecosia</td><td>ecosia.org</td><td>Dedica sus beneficios a plantar árboles.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Practica: navegador o buscador" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Práctica (no cuenta para el Comprueba)</p><h2>Practica: ¿qué es cada uno?</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t1-dos-col"><script type="application/json">
+      {"tipo": "emparejar", "enunciado": "Une cada nombre con lo que es.",
+       "pares": [["Google Chrome", "Navegador de Google"], ["Google", "Buscador de Google"], ["Microsoft Edge", "Navegador de Microsoft"], ["Bing", "Buscador de Microsoft"], ["YouTube", "Web para ver y subir vídeos"]],
+       "explicacion": "Chrome y Edge son navegadores: programas para abrir páginas web. Google y Bing son buscadores: webs para encontrar información. YouTube es una web de vídeos: no es un navegador ni un buscador."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo trabaja un buscador" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Cómo trabaja un buscador</h2></div>
+  <div class="cuerpo">
+    <svg viewBox="0 0 1680 230" role="img" aria-label="Esquema: las arañas recorren la web, guardan las páginas en el índice y el algoritmo ordena los resultados" style="width:100%;height:auto">
+      <defs><marker id="t1fl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#007CC2"/></marker></defs>
+      <!-- 1: la web y la araña -->
+      <g stroke="#9CC9E6" stroke-width="4"><line x1="90" y1="70" x2="250" y2="40"/><line x1="90" y1="70" x2="170" y2="170"/><line x1="250" y1="40" x2="330" y2="150"/><line x1="170" y1="170" x2="330" y2="150"/></g>
+      <g fill="#fff" stroke="#007CC2" stroke-width="4"><rect x="55" y="30" width="70" height="80" rx="10"/><rect x="215" y="5" width="70" height="80" rx="10"/><rect x="135" y="130" width="70" height="80" rx="10"/><rect x="295" y="110" width="70" height="80" rx="10"/></g>
+      <g stroke="#9CC9E6" stroke-width="5" stroke-linecap="round"><line x1="70" y1="55" x2="110" y2="55"/><line x1="70" y1="70" x2="105" y2="70"/><line x1="230" y1="30" x2="270" y2="30"/><line x1="230" y1="45" x2="262" y2="45"/><line x1="150" y1="155" x2="190" y2="155"/><line x1="150" y1="170" x2="182" y2="170"/><line x1="310" y1="135" x2="350" y2="135"/><line x1="310" y1="150" x2="342" y2="150"/></g>
+      <g stroke="#830065" stroke-width="4" stroke-linecap="round"><line x1="210" y1="105" x2="186" y2="88"/><line x1="210" y1="105" x2="182" y2="108"/><line x1="210" y1="105" x2="188" y2="126"/><line x1="210" y1="105" x2="234" y2="88"/><line x1="210" y1="105" x2="238" y2="108"/><line x1="210" y1="105" x2="232" y2="126"/></g>
+      <circle cx="210" cy="105" r="16" fill="#E861A7"/><circle cx="210" cy="86" r="9" fill="#830065"/>
+      <line x1="420" y1="110" x2="530" y2="110" stroke="#007CC2" stroke-width="6" marker-end="url(#t1fl)"/>
+      <!-- 2: el índice -->
+      <rect x="600" y="40" width="300" height="150" rx="16" fill="#E3F1FA" stroke="#007CC2" stroke-width="4"/>
+      <g fill="#fff" stroke="#0090A8" stroke-width="3"><rect x="625" y="62" width="250" height="28" rx="6"/><rect x="625" y="100" width="250" height="28" rx="6"/><rect x="625" y="138" width="250" height="28" rx="6"/></g>
+      <g font-family="Lexend" font-size="18" fill="#1A1838"><text x="640" y="82">dle.rae.es/bulo</text><text x="640" y="120">ine.es/empleo</text><text x="640" y="158">aemet.es/valladolid</text></g>
+      <line x1="970" y1="110" x2="1080" y2="110" stroke="#007CC2" stroke-width="6" marker-end="url(#t1fl)"/>
+      <!-- 3: la lista ordenada -->
+      <g font-family="Lexend" font-weight="700" font-size="22" fill="#fff">
+        <rect x="1150" y="20" width="440" height="40" rx="12" fill="#007CC2"/><text x="1166" y="48">1</text>
+        <rect x="1150" y="72" width="390" height="40" rx="12" fill="#0090A8"/><text x="1166" y="100">2</text>
+        <rect x="1150" y="124" width="340" height="40" rx="12" fill="#8FA72F"/><text x="1166" y="152">3</text>
+        <rect x="1150" y="176" width="290" height="40" rx="12" fill="#C0E094"/><text x="1166" y="204" fill="#1A1838">4</text>
+      </g>
+    </svg>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde"><h3>1. Recorren la web</h3><p>Unos programas llamados <b>arañas</b> (o bots) recorren la web. Saltan de enlace en enlace.</p></div>
+      <div class="tarjeta sin-borde"><h3>2. Guardan un índice</h3><p>Guardan lo que encuentran en su <b>índice</b>: su propia lista de páginas.</p></div>
+      <div class="tarjeta sin-borde"><h3>3. Ordenan los resultados</h3><p>Cuando buscas, un <b>algoritmo</b> ordena las páginas del índice. Un algoritmo es un conjunto de reglas de cálculo.</p></div>
+    </div>
+    <p class="peq">Google usa más de 200 factores para ordenar: las palabras clave, el contenido, los enlaces que recibe la página, la velocidad y el comportamiento de las visitas.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Cada buscador da resultados distintos" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Cada buscador da resultados distintos</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p>Cada buscador tiene su propio índice y su propio algoritmo. Por eso Google y Bing no dan los mismos resultados ni en el mismo orden.</p>
+        <p>Además, el buscador <b>personaliza</b> los resultados. Para eso usa:</p>
+        <ul class="lista peq"><li>Tu ubicación.</li><li>El idioma.</li><li>Tu historial de búsquedas.</li><li>Tu cuenta, si tienes la sesión iniciada.</li><li>El dispositivo: ordenador o móvil.</li></ul>
+        <div class="caja"><span class="tt">DuckDuckGo</span>No personaliza los resultados con tu historial.</div>
+      </div>
+      <img class="ico g" src="img/ia/buscador.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: misma búsqueda, distinto resultado" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Piensa: misma búsqueda, distinto resultado</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro">
+      <img class="ico g" src="img/ia/mapas.webp" alt="">
+      <div class="piensa">
+        <p class="enun" style="font-size:38px;font-weight:600">Tú buscas «pizzería» en Google desde Valladolid. Tu primo busca lo mismo, a la vez, desde León. ¿Os salen los mismos resultados?</p>
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p><b>No.</b> Google usa tu ubicación y te enseña pizzerías cercanas.</p>
+          <p style="margin-top:14px">También cuentan tu historial y el idioma.</p>
+          <p style="margin-top:14px">Si uno de los dos usa Bing, el orden cambia todavía más, porque Bing tiene otro índice.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Buscadores verticales" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Buscadores verticales</h2><p class="entrada">Un <b>buscador vertical</b> (o temático) busca solo sobre un tema. Busca en menos páginas, pero sus resultados son más útiles para ese tema.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/viajes.webp" alt=""><h3>Viajes y alojamiento</h3><p>Booking (hoteles) y Skyscanner (vuelos).</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/empleo.webp" alt=""><h3>Empleo</h3><p>InfoJobs e Infoempleo.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/vivienda.webp" alt=""><h3>Vivienda</h3><p>Idealista y Fotocasa.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/segunda-mano.webp" alt=""><h3>Segunda mano</h3><p>Wallapop y Milanuncios. Subastas: eBay.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/academico.webp" alt=""><h3>Trabajos científicos</h3><p>Google Académico (scholar.google.es).</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/mapas.webp" alt=""><h3>Lugares y rutas</h3><p>Google Maps.</p></div>
+    </div>
+    <p class="peq">También hay comparadores de seguros, luz o tarifas de móvil: Rastreator o los comparadores de la OCU. Lo contrario son los buscadores generalistas, que buscan de todo: Google, Bing o Yahoo!</p>
+  </div>
+</section>
+
+<section class="s" data-label="Practica: elige el buscador" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Práctica (no cuenta para el Comprueba)</p><h2>Practica: elige el buscador</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t1-dos-col"><script type="application/json">
+      {"tipo": "emparejar", "enunciado": "Une cada necesidad con el buscador más útil.",
+       "pares": [["Un hotel en Segovia para el fin de semana", "Booking"], ["Trabajo de dependiente en Burgos", "InfoJobs"], ["Un piso de alquiler en Salamanca", "Idealista"], ["Una bici de segunda mano", "Wallapop"], ["Artículos científicos para un trabajo de clase", "Google Académico"], ["Cómo llegar andando a la estación", "Google Maps"]],
+       "explicacion": "Cada buscador vertical está especializado en un tema: Booking en alojamientos, InfoJobs en empleo, Idealista en viviendas, Wallapop en segunda mano, Google Académico en trabajos científicos y Google Maps en lugares y rutas."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Noticias en Internet" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Noticias en Internet</h2><p class="entrada">Los periódicos, las radios y las televisiones tienen web. Publican noticias al momento, con vídeos y enlaces a otras noticias.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Medios nacionales</h3><ul class="lista peq"><li>El País</li><li>El Mundo</li><li>ABC</li><li>La Vanguardia</li><li>20minutos</li><li>RTVE (rtve.es): televisión y radio</li></ul></div>
+      <div class="tarjeta"><h3>Periódicos de Castilla y León</h3><ul class="lista peq"><li>El Norte de Castilla</li><li>Diario de León</li><li>Diario de Burgos</li><li>El Adelanto de Salamanca</li></ul></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/periodico.webp" alt=""><h3>Google Noticias</h3><p><b>news.google.com</b> reúne en una página noticias de muchos medios.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Buscar noticias en Google" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Buscar noticias de un tema en Google</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:30px">
+        <ol class="pasos">
+          <li>Busca el tema en Google. Por ejemplo, «noticias castilla y leon».</li>
+          <li>Pulsa la pestaña <b>Noticias</b>.</li>
+          <li>Pulsa <b>Herramientas</b> y elige la fecha. Por ejemplo, <b>Últimas 24 horas</b>.</li>
+        </ol>
+        <p class="peq">Cada resultado muestra el medio, el titular, un resumen y cuándo se publicó: «Hace 5 horas».</p>
+      </div>
+      <figure class="foto" style="height:640px"><img src="img/cyl/noticias-24h.webp" alt="Resultados de Google en la pestaña Noticias con el filtro Últimas 24 horas"><figcaption class="credito">Búsqueda de noticias de Castilla y León de las últimas 24 horas. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Wikipedia" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Wikipedia</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1.15fr;gap:48px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="def"><span class="t">Wikipedia</span><p>Wikipedia es una enciclopedia gratuita, libre y colaborativa. La escriben voluntarios y cualquier persona puede editar sus artículos.</p></div>
+        <p class="peq">La gestiona la Fundación Wikimedia, una organización sin ánimo de lucro. En español: <b>es.wikipedia.org</b>. Para buscar, escribe en la caja de búsqueda y elige el artículo.</p>
+        <ul class="lista peq"><li>Mira la sección <b>Referencias</b>, al final: dice de dónde sale cada dato.</li><li>La pestaña <b>Ver historial</b> enseña quién ha cambiado el artículo y cuándo.</li><li>No la uses como única fuente.</li></ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <figure class="foto" style="height:330px"><img src="img/capturas/wikipedia-arriba.webp" alt="Artículo de Wikipedia con la pestaña Ver historial marcada"><figcaption class="credito">Artículo «Castilla y León» de es.wikipedia.org, con Ver historial marcado. Captura propia (24-10-2026). Contenido de Wikipedia: CC BY-SA 4.0.</figcaption></figure>
+        <figure class="foto" style="height:360px"><img src="img/capturas/wikipedia-referencias.webp" alt="Sección Referencias de un artículo de Wikipedia"><figcaption class="credito">Sección Referencias del mismo artículo. Captura propia (24-10-2026). Contenido de Wikipedia: CC BY-SA 4.0.</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Buscar una palabra en el DRAE (hoy DLE)" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Buscar una palabra en el DRAE (hoy DLE)</h2><p class="entrada">El examen dice <b>DRAE</b>: Diccionario de la Real Academia Española. Hoy se llama <b>DLE</b>, Diccionario de la lengua española. Es gratis en Internet.</p></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr auto">
+      <ol class="pasos">
+        <li>Escribe <b>dle.rae.es</b> en la barra de direcciones. También llegas desde rae.es.</li>
+        <li>Escribe la palabra en la caja de búsqueda.</li>
+        <li>Pulsa la lupa o Intro.</li>
+        <li>Lee la entrada (siguiente diapositiva).</li>
+      </ol>
+      <div class="maqueta-movil" data-plantilla="#t1-dle" data-pantalla="dle" style="zoom:.78"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Leer una entrada del diccionario" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Leer una entrada del diccionario</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:auto 1fr">
+      <div class="maqueta-movil" data-plantilla="#t1-dle" data-pantalla="entrada" style="zoom:1"></div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="peq">Los significados de una palabra van numerados. Cada uno se llama <b>acepción</b>. Las abreviaturas dicen qué tipo de palabra es:</p>
+        <table class="tabla peq"><tr><th>Abreviatura</th><th>Significa</th></tr><tr><td>m.</td><td>masculino</td></tr><tr><td>f.</td><td>femenino</td></tr><tr><td>adj.</td><td>adjetivo</td></tr><tr><td>coloq.</td><td>coloquial</td></tr></table>
+        <p class="peq">Ejemplo: <b>bulo</b> → «1. m. Noticia falsa propalada con algún fin». <i>Propalar</i> es difundir.</p>
+        <div class="caja"><span class="tt">Dudas de escritura</span>Usa <b>Dudas rápidas</b>, en rae.es.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: navegadores" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Así lo pregunta el examen · pregunta 1 de la demo</p><h2>Test con imágenes: navegadores</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t1-logos t1-solo-logo"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "¿Cuáles de los siguientes elementos son navegadores web? (Selecciona todas las respuestas correctas, puede haber más de una)",
+       "instrucciones": "Pulsa sobre las imágenes que quieras seleccionar como tu respuesta. Puedes seleccionar una o varias opciones.",
+       "opciones": ["Mozilla Firefox", "Microsoft Edge", "YouTube", "Facebook", "Google Chrome", "Twitter"],
+       "imagenes": ["img/cyl/logo-firefox.png", "img/cyl/logo-edge.png", "img/cyl/logo-youtube.png", "img/cyl/logo-facebook.png", "img/cyl/logo-chrome.png", "img/cyl/logo-twitter.png"],
+       "correcta": [0, 1, 4],
+       "explicacion": "Firefox, Edge y Chrome son programas para abrir páginas web. YouTube es una web de vídeos. Facebook y Twitter son redes sociales. Twitter hoy se llama X."}
+    </script></div>
+    <div class="caja examen"><span class="tt">Consejo</span>Si el enunciado dice «puede haber más de una», marca todas las correctas.</div>
+    <p class="fuente">Imágenes de la pregunta 1 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 1.1" data-seccion="1.1">
+  <div class="cab"><p class="etq">1.1 · Navegación y búsqueda</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba t1-logos" data-comp="1.1"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Cuáles de estos son buscadores web? Puede haber más de una respuesta correcta.",
+       "instrucciones": "Pulsa sobre las imágenes que quieras seleccionar. Puede haber más de una respuesta correcta.",
+       "opciones": ["Google", "Google Chrome", "Bing", "Mozilla Firefox", "DuckDuckGo", "Microsoft Edge"],
+       "imagenes": ["img/logos/logo-google.png", "img/cyl/logo-chrome.png", "img/logos/logo-bing.png", "img/cyl/logo-firefox.png", "img/logos/logo-duckduckgo.png", "img/cyl/logo-edge.png"],
+       "correcta": [0, 2, 4],
+       "explicacion": "Google, Bing y DuckDuckGo son buscadores: páginas web para encontrar información. Chrome, Firefox y Edge son navegadores: programas para abrir páginas web."},
+      {"tipo": "test", "enunciado": "Buscas trabajo de camarero en León. ¿Qué buscador está especializado en ofertas de empleo?",
+       "opciones": ["Wallapop", "InfoJobs", "Booking", "Idealista"], "correcta": 1,
+       "explicacion": "InfoJobs es un buscador vertical de empleo. Wallapop sirve para comprar y vender cosas de segunda mano. Booking busca alojamientos e Idealista, viviendas."},
+      {"tipo": "simulacion", "html": "#t1-dle",
+       "enunciado": "Abre la página dle.rae.es escribiendo su dirección. Después busca la definición de la palabra «bulo».",
+       "instrucciones": "Haz la tarea en la ventana. Puedes escribir en los campos de texto y pulsar Intro. No uses otros atajos de teclado. Solo puedes equivocarte una vez.",
+       "explicacion": "La dirección de una web se escribe en la **barra de direcciones**, arriba del todo. Si la escribes en la caja de Google, ves una lista de resultados, no la página. En el diccionario, escribe la palabra y pulsa la lupa o Intro."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 1.2 Evaluación de la información ======================= -->
+
+<section class="competencia" data-label="1.2 Evaluación de la información" data-seccion="1.2" data-deck-id="c12" data-deck-section="1.2">
+  <div class="izq">
+    <p class="n">1.2</p>
+    <h2>Evaluación de la información</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: cuál es la fuente más fiable para un informe.</p>
+    <img class="ico" src="img/ia/evaluacion.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Saber que no toda la información de Internet es fiable, y comprobarla.</li>
+      <li>Saber que cualquier persona puede publicar sin que nadie lo revise.</li>
+      <li>Reconocer un bulo que te llega por correo o por WhatsApp.</li>
+      <li>Saber qué hacer con un bulo.</li>
+      <li>Distinguir en Google los anuncios de los resultados normales.</li>
+    </ol>
+    <span class="estado-comp" data-comp="1.2"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Cualquiera puede publicar" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Cualquiera puede publicar</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p>En Internet cualquier persona puede publicar: un blog, una red social, un foro, un comentario, un vídeo o un artículo de Wikipedia. <b>Nadie revisa</b> lo que dice antes de publicarlo.</p>
+        <p class="peq">En cambio:</p>
+        <ul class="lista peq"><li>Un periódico tiene un director que responde de lo que publica.</li><li>Una web oficial (el INE, la Junta de Castilla y León, un ministerio) tiene un organismo responsable.</li></ul>
+        <div class="caja"><span class="tt">Quién está detrás de una web</span>Baja al pie de la página y busca <b>Aviso legal</b>, <b>Quiénes somos</b> o <b>Contacto</b>. Si no hay autor, ni fecha, ni contacto, desconfía.</div>
+      </div>
+      <img class="ico g" src="img/ia/megafono.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba la información: método C.R.A.P." data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Comprueba la información: el método C.R.A.P.</h2><p class="entrada">C.R.A.P. son las iniciales en inglés de 4 preguntas que te haces ante una información.</p></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Letra</th><th>Pregúntate</th></tr>
+      <tr><td>C · Currency: actualidad<br><span style="font-weight:400" class="gris">El manual de CyL la llama «relevancia»</span></td><td>¿De cuándo es? Mira la fecha. En salud o tecnología, la información vieja puede estar mal.</td></tr>
+      <tr><td>R · Reliability: fiabilidad</td><td>¿Dice de dónde salen los datos? ¿Lo dicen también otras fuentes? ¿Está bien escrita?</td></tr>
+      <tr><td>A · Authority: autoridad</td><td>¿Quién lo publica? ¿Es una persona experta o un organismo oficial?</td></tr>
+      <tr><td>P · Purpose: propósito</td><td>¿Quiere informar, vender, convencer o entretener? ¿Hay anuncios? ¿Busca que te enfades o te asustes?</td></tr>
+    </table>
+    <div class="caja ok"><span class="tt">Ejemplo resuelto</span>Una web que vende vitaminas dice que curan la gripe. Propósito: vender. Autor: la propia tienda. No es fiable.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Fuentes fiables y poco fiables" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Fuentes fiables y poco fiables</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta c-ok"><h3>Más fiables</h3><ul class="lista peq">
+        <li>INE (ine.es): población, empleo y precios.</li>
+        <li>Los ministerios: sus direcciones terminan en .gob.es.</li>
+        <li>La Junta de Castilla y León (jcyl.es).</li>
+        <li>AEMET (aemet.es): el tiempo.</li>
+        <li>BOE (boe.es): las leyes.</li>
+        <li>Medios de comunicación conocidos.</li>
+        <li>Enciclopedias y diccionarios, como el DLE.</li>
+      </ul></div>
+      <div class="tarjeta c-ko"><h3>Poco fiables</h3><ul class="lista peq">
+        <li>Comentarios en redes sociales.</li>
+        <li>Foros.</li>
+        <li>Vídeos de personas desconocidas.</li>
+        <li>Webs sin autor ni fecha.</li>
+        <li>Mensajes reenviados.</li>
+      </ul></div>
+    </div>
+    <div class="caja"><span class="tt">Wikipedia</span>Sirve para empezar. Comprueba siempre sus referencias.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Bulo" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Qué es un bulo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Bulo</span><p>Un bulo es una noticia falsa que alguien difunde a propósito. En inglés se dice <b>fake news</b>.</p></div>
+        <p class="peq">Te llega por WhatsApp, por correo o por redes sociales. Muchas veces te lo envían amigos o familiares que creen que es verdad.</p>
+        <p class="peq"><b>Para qué se hace un bulo:</b></p>
+        <ul class="lista peq"><li>Para engañar o asustar.</li><li>Para cambiar lo que piensa la gente.</li><li>Para dañar la imagen de una persona o de una empresa.</li><li>Para ganar dinero con las visitas a una web.</li><li>Para robarte datos con un enlace.</li></ul>
+      </div>
+      <img class="ico g" src="img/ia/bulo-movil.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Ejemplos de bulos" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Ejemplos de bulos</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta c-ko"><p class="t1-cita">«Facebook cerrará las cuentas de usuarios con mala ortografía.»</p><p>Es falso. Busca asustarte para que lo compartas.</p></div>
+      <div class="tarjeta c-ko"><p class="t1-cita">«WhatsApp será de pago si no reenvías este mensaje.»</p><p>Es falso. Solo quiere que lo reenvíes a mucha gente.</p></div>
+      <div class="tarjeta c-ko"><p class="t1-cita">«Un supermercado regala un cupón de 500 € por su aniversario.»</p><p>Es falso. El enlace lleva a una web que pide tus datos.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Qué tienen en común</span>Meten miedo o prometen un premio, tienen prisa y piden que los compartas.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo reconocer un bulo" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Cómo reconocer un bulo</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:auto 1fr;gap:56px">
+      <figure class="foto" style="width:705px;height:590px">
+        <img src="img/cyl/bulo-policia.webp" alt="Mensaje falso que dice ser de la Policía Nacional y avisa de secuestros con un niño que llora">
+        <span class="t1-n" style="left:12px;top:40px">1</span>
+        <span class="t1-n" style="left:12px;top:380px">2</span>
+        <span class="t1-n" style="left:650px;top:432px">3</span>
+        <span class="t1-n" style="left:650px;top:298px">4</span>
+        <figcaption class="credito">Bulo de la «Policía Nacional» que circuló por Facebook. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption>
+      </figure>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <ol class="pasos peq">
+          <li><b>Titular llamativo:</b> «La Policía Nacional informa».</li>
+          <li><b>Mete miedo o prisa:</b> «secuestro, robo y violaciones».</li>
+          <li><b>Pide que lo compartas:</b> «Comparta esta información».</li>
+          <li><b>Signos y puntuación raros:</b> «indicada., Este».</li>
+        </ol>
+        <div class="caja aviso"><span class="tt">Y además</span>No da ninguna fuente ni enlace oficial. No tiene fecha.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Más señales de un bulo" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Más señales de un bulo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <ul class="lista">
+        <li>Faltas de ortografía.</li>
+        <li>Palabras en MAYÚSCULAS y muchos signos: ¡¡!!</li>
+        <li>Una web que copia el aspecto de un periódico real, pero tiene otra dirección.</li>
+        <li>Una foto antigua o cambiada.</li>
+        <li>En WhatsApp, la etiqueta <b>Reenviado muchas veces</b>, con dos flechas.</li>
+      </ul>
+      <div class="movil t1-estatica" style="height:560px;justify-self:center;zoom:1.2">
+        <div class="pantalla-html activa">
+          <div class="wa-barra-estado"><span>18:02</span><span class="ic">▾ ▴ ▮</span></div>
+          <div class="wa-top"><span class="bt atras">←</span><span class="wa-av" style="width:38px;height:38px;font-size:14px;background:#8FA72F">TC</span><span class="tit negro">Tía Carmen</span><span class="bt">⋮</span></div>
+          <div class="wa-conv" style="top:90px">
+            <div class="wa-burbuja"><span class="t1-reenv">⇉ Reenviado muchas veces</span>🎁 ¡¡SUPERAHORRO REGALA UN CUPÓN DE 500 € POR SU ANIVERSARIO!! Solo hoy. Entra y rellena tus datos: <a>superahorro-regalos.ejemplo.com</a><small>18:01</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué hacer si te llega un posible bulo" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Qué hacer si te llega un posible bulo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>No lo reenvíes.</li>
+          <li>Busca la noticia en varios medios fiables.</li>
+          <li>Mira si lo ha desmentido un verificador: <b>Maldita.es</b>, <b>Newtral</b> o <b>EFE Verifica</b>. Un verificador es un medio que comprueba noticias.</li>
+          <li>Si dice que lo informa un organismo (Policía, Guardia Civil, un ministerio), búscalo en su web o en sus redes oficiales.</li>
+          <li>Si hay una foto, búscala con <b>Google Lens</b> (el botón de la cámara en Google). Verás si es antigua o de otro sitio.</li>
+          <li>Si es falso, avisa a quien te lo envió.</li>
+        </ol>
+        <div class="caja aviso"><span class="tt">Ojo</span>Ignorarlo no sirve para saber si es verdad.</div>
+      </div>
+      <img class="ico g" src="img/ia/buscar-imagen.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Anuncios y resultados normales" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Anuncios y resultados normales en Google</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:auto 1fr;gap:50px">
+      <div class="ventana t1-chrome t1-estatica" style="zoom:1">
+        <div class="pantalla-html activa">
+          <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#4285F4">G</i>viajes - Buscar con Google<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+          <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">google.es/search?q=viajes<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+          <div class="v-cuerpo t1-serp">
+            <div class="t1-serp-cab"><span class="t1-glogo"><b style="color:#4285F4">G</b><b style="color:#EA4335">o</b><b style="color:#FBBC05">o</b><b style="color:#4285F4">g</b><b style="color:#34A853">l</b><b style="color:#EA4335">e</b></span><span class="t1-serp-caja">viajes<i class="t1-lupa"></i></span></div>
+            <div class="t1-serp-tabs"><span class="on">Todo</span><span>Imágenes</span><span>Noticias</span><span>Vídeos</span><span>Más</span></div>
+            <div class="t1-serp-res" style="width:820px">
+              <div class="t1-marca-ko" style="position:relative;padding:4px 10px">
+                <span class="t1-num-in">1</span>
+                <div class="t1-ad"><p class="t1-patro">Patrocinado</p><div class="t1-site"><i class="t1-fav" style="--c:#0090A8">V</i><span>Viajes Pinar<small>https://www.viajespinar.ejemplo.es</small></span></div><span class="t1-tit">Viajes baratos 2026 - Ofertas de última hora</span><p class="t1-desc">Vuelo y hotel desde 199 €. Reserva hoy y paga después.</p></div>
+                <div class="t1-ad"><p class="t1-patro">Patrocinado</p><div class="t1-site"><i class="t1-fav" style="--c:#EA686B">E</i><span>Escapadas Duero<small>https://www.escapadasduero.ejemplo.es</small></span></div><span class="t1-tit">Escapadas de fin de semana | Escapadas Duero</span><p class="t1-desc">Casas rurales y spa. Cancelación gratis.</p></div>
+              </div>
+              <div class="t1-marca-ok" style="position:relative;padding:4px 10px;margin-top:12px">
+                <span class="t1-num-in">2</span>
+                <div class="t1-res"><div class="t1-site"><i class="t1-fav" style="--c:#8FA72F">T</i><span>Guía de Turismo<small>https://guiadeturismo.ejemplo.es › castilla-y-leon</small></span></div><span class="t1-tit">Qué ver en Castilla y León: rutas y consejos de viaje</span><p class="t1-desc">Las ciudades, los pueblos y los parques naturales que no te puedes perder.</p></div>
+                <div class="t1-res"><div class="t1-site"><i class="t1-fav" style="--c:#830065">C</i><span>Consejos de Viaje<small>https://consejosdeviaje.ejemplo.es</small></span></div><span class="t1-tit">Cómo preparar un viaje barato: 10 consejos</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>Arriba salen los <b>anuncios</b>. Llevan la etiqueta <b>Patrocinado</b>. Antes ponía <b>Anuncio</b>: así sale en el manual de CyL y puede salir en el examen.</li>
+          <li>Debajo, los <b>resultados normales</b>.</li>
+        </ol>
+        <p class="peq">Al final de la página puede haber más anuncios. En las búsquedas de productos también salen <b>productos patrocinados</b>: fotos con precio.</p>
+        <!-- [VERIFICAR] Desde 2025 Google puede agrupar los anuncios de texto en un bloque con un botón para ocultarlos: comprobar el texto exacto en España -->
+        <p class="peq gris">Google puede juntar varios anuncios en un bloque, con un botón para ocultarlos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Publicidad en buscadores y redes" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Publicidad en buscadores y en redes</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>Anuncios de pago (SEM)</h3><p>Las empresas pagan a Google para salir arriba. Esto se llama <b>SEM</b> (marketing en buscadores, en inglés <i>Search Engine Marketing</i>).</p></div>
+      <div class="tarjeta"><h3>Resultados normales (SEO)</h3><p>Los ordena el algoritmo. Las webs se preparan para salir mejor colocadas. Esto se llama <b>SEO</b> (posicionamiento en buscadores, en inglés <i>Search Engine Optimization</i>).</p></div>
+    </div>
+    <div class="caja aviso"><span class="tt">Recuerda</span>Los primeros resultados no siempre son los mejores.</div>
+    <div class="tarjeta sin-borde"><h3>En redes sociales y en YouTube</h3><ul class="lista peq"><li>Los anuncios llevan <b>Patrocinado</b>, <b>Publicidad</b> o <b>Colaboración pagada</b>.</li><li>Los influencers tienen que avisar cuando un contenido es publicidad. Por ejemplo, con <b>#publi</b>.</li></ul></div>
+  </div>
+</section>
+
+<section class="s" data-label="Infoxicación, contenido viral y spam" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Infoxicación, contenido viral y spam</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><img class="ico p t1-ico-fija" style="margin:0" src="img/ia/infoxicacion.webp" alt=""><h3>Infoxicación</h3><p>La infoxicación es el exceso de información: recibes tanta que no puedes leerla ni comprobarla.</p><p><b>Consejo:</b> sigue pocas fuentes fiables y elige un rato para informarte.</p></div>
+      <div class="tarjeta"><img class="ico p t1-ico-fija" style="margin:0" src="img/ia/viral.webp" alt=""><h3>Contenido viral</h3><p>Un contenido viral es algo que se comparte muchísimo en poco tiempo: vídeos, memes o noticias. Una mentira se difunde más rápido que una verdad.</p><p><b>Consejo:</b> antes de compartir algo viral, compruébalo.</p></div>
+      <div class="tarjeta"><img class="ico p t1-ico-fija" style="margin:0" src="img/ia/spam.webp" alt=""><h3>Spam</h3><p>El spam es la publicidad o los mensajes que recibes sin pedirlos, sobre todo por correo.</p><p><b>Consejo:</b> márcalo como spam y no lo respondas. No publiques tu correo en webs ni foros.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: fuentes fiables" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Así lo pregunta el examen · pregunta 2 de la demo</p><h2>La fuente más fiable</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Estás escribiendo un informe sobre las últimas tendencias del mercado para un plan de negocio. ¿Cuál sería la fuente más fiable?",
+       "opciones": ["Página web de un periódico local.", "Comentarios de usuarios obtenidos en las redes sociales.", "Página web del Instituto Nacional de Estadística."], "correcta": 2,
+       "explicacion": "El INE es un organismo oficial. Publica datos de población, empleo y precios. Sus datos tienen un responsable y un método. Un periódico local da noticias, pero no es especialista en datos de mercado. Los comentarios en redes son opiniones sin comprobar."}
+    </script></div>
+    <p class="fuente">Pregunta 2 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 1.2" data-seccion="1.2">
+  <div class="cab"><p class="etq">1.2 · Evaluación de la información</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="1.2"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Te llega este mensaje por WhatsApp. Tiene la etiqueta «Reenviado muchas veces». Dice: «¡¡URGENTE!! WhatsApp será de pago desde el lunes. Reenvía este mensaje a 10 contactos y seguirá gratis para ti». ¿Qué haces?",
+       "opciones": ["Lo reenvío a 10 contactos por si acaso.", "No lo reenvío y busco si lo ha desmentido un verificador, como Maldita.es.", "Lo reenvío solo a mi familia para avisarla.", "Lo publico en mis redes sociales para que lo vea más gente."], "correcta": 1,
+       "explicacion": "Es un bulo: usa mayúsculas, mete prisa, pide que lo reenvíes y no dice de dónde sale. Antes de reenviar algo, compruébalo en medios fiables o en un verificador."},
+      {"tipo": "test", "enunciado": "¿Qué frase sobre la información de Internet es correcta?",
+       "opciones": ["Lo que sale en los primeros resultados de Google está comprobado.", "Cualquier persona puede publicar en Internet sin que nadie revise lo que dice.", "Si muchas personas comparten una noticia, es verdad.", "Los artículos de Wikipedia los revisan expertos antes de publicarse."], "correcta": 1,
+       "explicacion": "En blogs, redes sociales, foros o Wikipedia cualquiera puede publicar. Nadie lo revisa antes. Por eso tienes que mirar quién lo dice y de dónde salen los datos."},
+      {"tipo": "simulacion", "html": "#t1-google",
+       "enunciado": "Has buscado «zapatillas de deporte» en Google. Haz clic en el primer resultado que no es publicidad.",
+       "instrucciones": "Haz clic en la ventana. Solo puedes equivocarte una vez.",
+       "explicacion": "Los anuncios llevan la etiqueta «Patrocinado». Antes ponía «Anuncio». Las empresas pagan para salir arriba. El primer resultado normal está debajo de los anuncios."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 1.3 Gestión de la información ======================= -->
+
+<section class="competencia" data-label="1.3 Gestión de la información" data-seccion="1.3" data-deck-id="c13" data-deck-section="1.3">
+  <div class="izq">
+    <p class="n">1.3</p>
+    <h2>Gestión de la información</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: un reto con un archivo ZIP.</p>
+    <img class="ico" src="img/ia/gestion.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Saber dónde se guardan los archivos: disco, USB, tarjeta, CD o nube.</li>
+      <li>Saber por qué hay que hacer copias de seguridad.</li>
+      <li>Guardar una web en favoritos.</li>
+      <li>Volver a una web desde el historial.</li>
+      <li>Descargar un archivo y encontrarlo.</li>
+      <li>Descomprimir un archivo ZIP.</li>
+      <li>Guardar una imagen de una web.</li>
+      <li>Imprimir una web o guardarla en PDF.</li>
+      <li>Abrir, copiar y mover archivos.</li>
+      <li>Ver en el ordenador las fotos y los vídeos del móvil.</li>
+    </ol>
+    <span class="estado-comp" data-comp="1.3"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que ya sabes: dónde se guardan los archivos" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Lo que ya sabes: dónde se guardan los archivos</h2></div>
+  <div class="cuerpo">
+    <!-- [VERIFICAR] espacio gratuito de la nube en 2026 -->
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/disco-interno.webp" alt=""><h3>Disco duro interno</h3><p>HDD o SSD. Guarda el sistema, los programas y tus archivos.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/disco-externo.webp" alt=""><h3>Disco duro externo</h3><p>Se conecta por USB. De 1 o 2 TB. Sirve para las copias de seguridad.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/pendrive.webp" alt=""><h3>Memoria USB (pendrive)</h3><p>Para llevar archivos de un sitio a otro.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/microsd.webp" alt=""><h3>Tarjeta de memoria</h3><p>SD o microSD. En cámaras y móviles.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/dvd.webp" alt=""><h3>CD, DVD y Blu-ray</h3><p>Discos ópticos. Hoy se usan poco.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/nube.webp" alt=""><h3>La nube</h3><p>Entras desde cualquier sitio con Internet. Gratis: Google Drive 15 GB, OneDrive 5 GB, iCloud 5 GB y Dropbox 2 GB.</p></div>
+    </div>
+    <div class="caja"><span class="tt">La memoria RAM no guarda archivos</span>Se borra al apagar el ordenador. Unidades, de menor a mayor: MB &lt; GB &lt; TB. Los 15 GB de Google se comparten entre Drive, Gmail y Google Fotos.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que ya sabes: abrir, copiar y mover archivos" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Lo que ya sabes: abrir, copiar y mover archivos</h2><p class="entrada">En el <b>Explorador de archivos</b> (se abre con Windows+E):</p></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <table class="tabla peq">
+        <tr><th>Qué quieres hacer</th><th>Cómo</th></tr>
+        <tr><td>Abrir</td><td>Doble clic</td></tr>
+        <tr><td>Copiar</td><td>Ctrl+C</td></tr>
+        <tr><td>Cortar</td><td>Ctrl+X</td></tr>
+        <tr><td>Pegar</td><td>Ctrl+V</td></tr>
+        <tr><td>Deshacer</td><td>Ctrl+Z</td></tr>
+        <tr><td>Cambiar el nombre</td><td>F2</td></tr>
+        <tr><td>Eliminar</td><td>Supr</td></tr>
+      </table>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="tarjeta"><h3>Arrastrar con el ratón</h3><p>Dentro del mismo disco, el archivo se <b>mueve</b>.</p><p>A otro disco o a un USB, se <b>copia</b>.</p></div>
+        <div class="tarjeta"><h3>Clic derecho</h3><p>En Windows 11, Copiar, Cortar y Cambiar nombre son iconos arriba del menú.</p><p>En Windows 10 (las pantallas del examen) son texto.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Copia de seguridad" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>La copia de seguridad</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">Copia de seguridad</span><p>Una copia de seguridad (backup) es una copia de tus archivos en otro sitio. Sirve para recuperarlos si pierdes los originales.</p></div>
+        <p class="peq"><b>Te protege si:</b></p>
+        <ul class="lista peq"><li>El móvil o el ordenador se estropea.</li><li>Te lo roban.</li><li>Borras algo sin querer.</li><li>Un virus bloquea tus archivos.</li></ul>
+        <p class="peq"><b>Dónde:</b> en un disco externo, un USB o la nube. <b>Cuándo:</b> a menudo y, mejor, de forma automática.</p>
+      </div>
+      <img class="ico g" src="img/ia/copia-seguridad.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="La regla 3-2-1" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>La regla 3-2-1</h2></div>
+  <div class="cuerpo">
+    <svg viewBox="0 0 1680 240" role="img" aria-label="Esquema: el original en el ordenador y una copia en un disco externo, en casa; otra copia en la nube, fuera de casa" style="width:100%;height:auto">
+      <defs><marker id="t1fl2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#007CC2"/></marker></defs>
+      <path d="M40 90 L460 10 L880 90 L880 230 L40 230 Z" fill="#E3F1FA" stroke="#9CC9E6" stroke-width="4"/>
+      <text x="460" y="72" text-anchor="middle" font-family="Lexend" font-size="24" font-weight="700" fill="#007CC2">En casa</text>
+      <!-- ordenador -->
+      <rect x="150" y="110" width="200" height="120" rx="10" fill="#007CC2"/><rect x="164" y="122" width="172" height="90" rx="4" fill="#BFE0F5"/><rect x="120" y="212" width="260" height="14" rx="6" fill="#00063E"/>
+      <!-- disco externo -->
+      <rect x="600" y="120" width="120" height="100" rx="16" fill="#0090A8"/><circle cx="700" cy="200" r="7" fill="#E3F1FA"/><path d="M660 120 Q660 95 700 92" stroke="#00063E" stroke-width="5" fill="none"/>
+      <line x1="390" y1="168" x2="580" y2="168" stroke="#007CC2" stroke-width="6" marker-end="url(#t1fl2)"/>
+      <!-- nube -->
+      <path d="M1230 200 h220 a50 50 0 0 0 0-100 a70 70 0 0 0-130-30 a55 55 0 0 0-90 40 a45 45 0 0 0 0 90 z" fill="#E861A7" opacity=".85"/>
+      <path d="M720 140 C900 60 1080 60 1210 120" stroke="#007CC2" stroke-width="6" fill="none" marker-end="url(#t1fl2)"/>
+      <g font-family="Lexend" font-size="22" fill="#1A1838" text-anchor="middle"><text x="250" y="105">Original</text><text x="660" y="85">Copia 1</text><text x="1340" y="235">Copia 2, fuera de casa</text></g>
+    </svg>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>3 copias</h3><p>El original y 2 copias.</p></div>
+      <div class="tarjeta"><h3>2 soportes distintos</h3><p>Por ejemplo, un disco externo y la nube.</p></div>
+      <div class="tarjeta"><h3>1 fuera de casa</h3><p>La nube cuenta como fuera de casa.</p></div>
+    </div>
+    <div class="caja aviso"><span class="tt">Importante</span>Si pasas los archivos a la nube o a un USB y los borras del original, no tienes copia de seguridad: solo están en un sitio.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Copias de seguridad en tus dispositivos" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Copias de seguridad en tus dispositivos</h2></div>
+  <div class="cuerpo">
+    <!-- [VERIFICAR] nombres en Windows 11 25H2, Android 16 e iOS 26 -->
+    <table class="tabla peq">
+      <tr><th>Dónde</th><th>Cómo se hace</th></tr>
+      <tr><td>Windows 11</td><td>Aplicación <b>Copia de seguridad de Windows</b>: guarda tus carpetas en OneDrive. <b>Historial de archivos</b>, en un disco externo: Panel de control › Sistema y seguridad › Historial de archivos.</td></tr>
+      <tr><td>Android</td><td>Ajustes › Google › Copia de seguridad (el camino cambia según la marca). Se guarda en Google Drive.</td></tr>
+      <tr><td>Fotos</td><td>Google Fotos con la <b>Copia de seguridad</b> activada.</td></tr>
+      <tr><td>WhatsApp</td><td>Ajustes › Chats › Copia de seguridad.</td></tr>
+      <tr><td>iPhone</td><td>Ajustes › tu nombre › iCloud › Copia en iCloud.</td></tr>
+    </table>
+    <div class="cols centro" style="grid-template-columns:1fr 1.2fr;gap:40px">
+      <div class="caja"><span class="tt">No memorices los menús</span>El examen pide saber que existen y por qué son importantes. Las copias de Android se ven en drive.google.com › Almacenamiento › Copias de seguridad.</div>
+      <figure class="foto" style="height:250px"><img src="img/cyl/drive-copias.webp" alt="Google Drive con la lista Copias de seguridad"><figcaption class="credito">Google Drive › Copias de seguridad. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Guardar una web en favoritos (marcadores)" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Guardar una web en favoritos</h2><p class="entrada">Los <b>favoritos</b> o <b>marcadores</b> son accesos guardados a páginas web. Sirven para volver a ellas con un clic. Chrome y Firefox dicen marcadores; Edge dice favoritos.</p></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr auto;gap:48px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <p class="peq gris" style="font-weight:700">PASOS EN CHROME</p>
+        <ol class="pasos peq">
+          <li>Abre la página.</li>
+          <li>Pulsa la estrella ☆ de la barra de direcciones (<b>Añadir esta página a marcadores</b>) o Ctrl+D.</li>
+          <li>Cambia el nombre si quieres. Elige la <b>Carpeta</b>: Barra de marcadores o una carpeta tuya.</li>
+          <li>Pulsa <b>Hecho</b>.</li>
+        </ol>
+      </div>
+      <!-- [VERIFICAR] textos del cuadro «Marcador añadido» en el Chrome actual -->
+      <div class="ventana t1-chrome t1-estatica" style="zoom:.84">
+        <div class="pantalla-html activa">
+          <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#007CC2">B</i>Horario de la Biblioteca Municipal<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+          <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">biblioteca-municipal.ejemplo.es/horario<i class="t1-est" style="color:#0B57D0;box-shadow:0 0 0 3px #E861A7;border-radius:50%;padding:0 4px">★</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+          <div class="v-cuerpo t1-web">
+            <div class="t1-web-cab" style="--c:#007CC2"><b>Biblioteca Municipal</b><span>Préstamo · Actividades · Horario</span></div>
+            <div class="t1-web-txt"><h3>Horario</h3><table><tr><td><b>Lunes a viernes</b></td><td>9:00 a 14:00 y 16:30 a 20:30</td></tr><tr><td><b>Sábados</b></td><td>10:00 a 13:30</td></tr></table></div>
+          </div>
+          <div class="t1-burbuja" style="top:80px;right:70px;width:380px">
+            <h6>Marcador añadido</h6>
+            <div class="fila"><span>Nombre</span><span class="campo">Horario de la Biblioteca Municipal</span></div>
+            <div class="fila"><span>Carpeta</span><span class="campo">Barra de marcadores ▾</span></div>
+            <div class="bts"><span>Quitar</span><span class="p">Hecho</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Ver y organizar los marcadores" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Ver y organizar los marcadores</h2></div>
+  <div class="cuerpo">
+    <div class="ventana t1-chrome t1-estatica" style="width:1158px;height:118px;zoom:1.45"><div class="pantalla-html activa">
+      <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#4285F4">G</i>Google<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">google.es<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+      <div class="t1-marcas-barra"><span>Instituto</span><span>Examen tuCertiCyL</span><span>Biblioteca</span></div>
+    </div></div>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Ver los marcadores</h3><p>En Chrome: menú ⋮ › <b>Marcadores y listas</b>.</p></div>
+      <div class="tarjeta"><h3>Barra de marcadores</h3><p>Está debajo de la barra de direcciones. Se muestra u oculta con Ctrl+Mayús+B.</p></div>
+      <div class="tarjeta"><h3>En Edge</h3><p>La misma estrella y Ctrl+D. El panel de favoritos se abre con Ctrl+Mayús+O.</p></div>
+    </div>
+    <div class="cols centro" style="grid-template-columns:1fr auto">
+      <div class="caja ok"><span class="tt">Organízalos en carpetas</span>Haz una carpeta por tema. Por ejemplo: «Instituto» y «Examen tuCertiCyL».</div>
+      <img class="ico p" src="img/ia/marcador.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Volver a una web: el historial" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Volver a una web: el historial</h2><p class="entrada">El <b>historial</b> es la lista de páginas que has visitado, con la fecha y la hora.</p></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr auto;gap:44px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <ol class="pasos peq">
+          <li>En Chrome, pulsa el menú ⋮ (<b>Personaliza y controla Google Chrome</b>), arriba a la derecha.</li>
+          <li>Pulsa <b>Historial</b>.</li>
+          <li>Pulsa <b>Historial</b> otra vez (o Ctrl+H).</li>
+          <li>Si hay muchas páginas, escribe una palabra de la página en la caja de búsqueda. Si no, sáltate este paso.</li>
+          <li>Haz clic en la página.</li>
+        </ol>
+        <p class="peq">Las pestañas <b>Lista</b> y <b>Por grupo</b> ordenan el historial de dos formas. «Por grupo» antes se llamaba «Recorridos». En Edge y Firefox también es Ctrl+H.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t1-historial" data-pantalla="submenu" style="zoom:.82"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Navegación privada" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>La navegación privada</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Navegación privada</span><p>La navegación privada no guarda el historial ni las cookies cuando cierras la ventana.</p></div>
+    <div class="cols centro" style="grid-template-columns:1.6fr 1fr">
+      <table class="tabla peq">
+        <tr><th>Navegador</th><th>Se llama</th><th>Atajo</th></tr>
+        <tr><td>Chrome</td><td>Ventana de incógnito</td><td>Ctrl+Mayús+N</td></tr>
+        <tr><td>Edge</td><td>Ventana InPrivate</td><td>Ctrl+Mayús+N</td></tr>
+        <tr><td>Firefox</td><td>Ventana privada</td><td>Ctrl+Mayús+P</td></tr>
+        <tr><td>Safari</td><td>Navegación privada</td><td>Cmd+Mayús+N (en el Mac)</td></tr>
+      </table>
+      <figure class="foto" style="height:230px"><img src="img/cyl/inprivate.png" alt="Pantalla de Exploración en InPrivate"><figcaption class="credito">Ventana InPrivate de Microsoft Edge. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+    <div class="caja aviso"><span class="tt">Ojo</span>Los archivos que descargas sí se quedan en la carpeta Descargas.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Practica: abre una página del historial" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Práctica (no cuenta para el Comprueba)</p><h2>Practica: abre una página del historial</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "simulacion", "html": "#t1-historial",
+       "enunciado": "Ayer miraste el horario de la biblioteca municipal. Vuelve a abrir esa página desde el historial de Chrome.",
+       "instrucciones": "Haz clic en la ventana. No uses atajos de teclado. Solo puedes equivocarte una vez.",
+       "explicacion": "El historial está en el menú ⋮ › **Historial** › **Historial**. Las páginas salen por días: Hoy, Ayer… Haz clic en la página para abrirla. El atajo es Ctrl+H, pero en las simulaciones del examen no se usan atajos."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Descargar un archivo" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Descargar un archivo y encontrarlo</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr auto;gap:48px">
+      <ol class="pasos peq">
+        <li>Haz clic en el enlace o en el botón <b>Descargar</b>.</li>
+        <li>Arriba a la derecha aparece el icono de <b>Descargas</b>: una flecha hacia abajo. Ábrelo.</li>
+        <li>Pulsa el archivo para abrirlo. O pulsa el icono de carpeta (<b>Mostrar en carpeta</b>) para verlo en su carpeta.</li>
+        <li>Para ver todas las descargas: menú ⋮ › <b>Descargas</b> o Ctrl+J.</li>
+      </ol>
+      <!-- [VERIFICAR] textos de la burbuja de descargas de Chrome -->
+      <div class="ventana t1-chrome t1-estatica" style="zoom:.84">
+        <div class="pantalla-html activa">
+          <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#007CC2">B</i>Horario de la Biblioteca Municipal<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+          <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">biblioteca-municipal.ejemplo.es/horario<i class="t1-est">☆</i></span><span class="t1-desc-ico">⤓</span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+          <div class="v-cuerpo t1-web">
+            <div class="t1-web-cab" style="--c:#007CC2"><b>Biblioteca Municipal</b><span>Préstamo · Actividades · Horario</span></div>
+            <div class="t1-web-txt"><h3>Horario</h3><p>Descarga el horario en PDF: <u style="color:#1A0DAB">horario-biblioteca.pdf</u></p></div>
+          </div>
+          <div class="t1-burbuja" style="top:80px;right:60px;width:400px">
+            <h6>Descargas recientes</h6>
+            <div class="t1-desc-fila"><span class="t1-pdf">PDF</span><span>horario-biblioteca.pdf<small>245 kB · Listo</small></span><span class="carp">📁</span></div>
+            <p style="color:#0B57D0;margin-top:8px">Historial de descargas completo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde se guardan las descargas" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Dónde se guardan las descargas</h2><p class="entrada">Se guardan en la carpeta <b>Descargas</b>: C:\Usuarios\tu_nombre\Descargas. En algunas ventanas la ruta sale en inglés: C:\Users\tu_nombre\Downloads.</p></div>
+  <div class="cuerpo" style="gap:32px">
+    <div class="ruta-bloque"><span class="donde">Abrir la carpeta Descargas</span><div class="ruta"><span>Explorador de archivos (Windows+E)</span><i>›</i><span class="disp">Descargas</span></div></div>
+    <!-- [VERIFICAR] texto exacto de la opción de Configuración de Chrome -->
+    <div class="ruta-bloque"><span class="donde">Elegir la carpeta cada vez (Chrome)</span><div class="ruta" style="font-size:24px"><span>⋮</span><i>›</i><span>Configuración</span><i>›</i><span>Descargas</span><i>›</i><span class="disp">Preguntar dónde se guardará cada archivo antes de descargarlo</span></div></div>
+    <div class="ruta-bloque"><span class="donde">En el móvil Android</span><div class="ruta"><span>App Archivos</span><i>›</i><span class="disp">Descargas</span></div></div>
+    <div class="caja"><span class="tt">Consejo</span>No dejes los archivos en Descargas. Muévelos a su carpeta: Documentos, Imágenes…</div>
+  </div>
+</section>
+
+<section class="s" data-label="Descomprimir un archivo ZIP" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Descomprimir un archivo ZIP</h2><p class="entrada">Un <b>archivo ZIP</b> es un archivo comprimido: junta varios archivos y carpetas en uno solo y ocupa menos. Termina en .zip y su icono es una carpeta con cremallera.</p></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr auto;gap:40px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="peq gris" style="font-weight:700">PASOS EN WINDOWS 11</p>
+        <ol class="pasos peq">
+          <li>Haz clic derecho en el archivo .zip.</li>
+          <li>Pulsa <b>Extraer todo...</b></li>
+          <li>Pulsa <b>Extraer</b>. Deja marcada la casilla <b>Mostrar los archivos extraídos al completar</b>.</li>
+        </ol>
+        <p class="peq">Aparece una carpeta normal con el mismo nombre.</p>
+        <div class="caja aviso"><span class="tt">Ojo</span>Con doble clic en el .zip ves lo que hay dentro, pero no está descomprimido. Trabaja siempre con la carpeta extraída.</div>
+      </div>
+      <!-- [VERIFICAR] textos de Windows 11 -->
+      <div class="t1-win t1-estatica" style="width:830px;height:480px;align-self:center">
+        <div class="t1-win-menu" style="position:absolute;left:0;top:0">
+          <div class="t1-win-iconos"><span title="Cortar">✂</span><span title="Copiar">❐</span><span title="Cambiar nombre">✎</span><span title="Compartir">⇪</span><span title="Eliminar">🗑</span></div>
+          <div>Abrir<em>Entrar</em></div>
+          <div>Abrir con<em>›</em></div>
+          <div class="on">Extraer todo...</div>
+          <div>Comprimir en...<em>›</em></div>
+          <div>Agregar a Favoritos</div>
+          <div>Copiar como ruta de acceso<em>Ctrl+Mayús+C</em></div>
+          <div>Propiedades<em>Alt+Entrar</em></div>
+          <div class="sep"></div>
+          <div>Mostrar más opciones</div>
+        </div>
+        <div class="t1-win-dlg" style="position:absolute;left:300px;top:236px">
+          <div class="tit">Extraer carpetas comprimidas (en zip)</div>
+          <div class="cue">
+            <h6>Seleccionar un destino y extraer archivos</h6>
+            <span>Los archivos se extraerán en esta carpeta:</span>
+            <div class="ruta-w"><span>C:\Users\Lucía\Downloads\DOCUMENTOS 2</span><span>Examinar...</span></div>
+            <span class="chk">Mostrar los archivos extraídos al completar</span>
+            <div class="bts"><span class="p">Extraer</span><span>Cancelar</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Buscar un archivo o una palabra" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Buscar un archivo o una palabra en una carpeta</h2></div>
+  <div class="cuerpo">
+    <!-- [VERIFICAR] que «contenido:» busque dentro de .docx en una carpeta recién extraída, en los PC del aula; Ctrl+B en el Word del aula -->
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>Buscar por el nombre</h3><p>Usa la caja de búsqueda del <b>Explorador de archivos</b>, arriba a la derecha. Busca en la carpeta abierta y en sus subcarpetas.</p></div>
+      <div class="tarjeta"><h3>Buscar una palabra dentro de los documentos</h3><p>En la caja de búsqueda, escribe <b>contenido:</b> y la palabra, sin espacios. Por ejemplo, <code>contenido:melosa</code>.</p></div>
+    </div>
+    <div class="t1-win-busca t1-estatica" style="align-self:center"><i class="t1-lupa" style="color:#555"></i>contenido:melosa</div>
+    <div class="caja"><span class="tt">Si no lo encuentra</span>Abre cada documento y usa <b>Buscar</b>. En Word en español, el atajo es Ctrl+B.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Guardar una imagen de una web" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Guardar una imagen de una web</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr auto;gap:44px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>Haz clic derecho sobre la imagen.</li>
+          <li>Pulsa <b>Guardar imagen como...</b></li>
+          <li>Elige la carpeta (por ejemplo, Imágenes) y escribe el nombre.</li>
+          <li>Pulsa <b>Guardar</b>.</li>
+        </ol>
+        <!-- [VERIFICAR] texto en Chrome para Android -->
+        <p class="peq">En el móvil: mantén pulsada la imagen › <b>Descargar imagen</b>.</p>
+        <p class="peq"><b>Copiar imagen</b> sirve para pegarla en un documento sin guardarla.</p>
+        <div class="caja aviso"><span class="tt">Derechos de autor</span>Guardar una imagen no te da permiso para publicarla. Muchas tienen derechos de autor (lo ves en el tema 3).</div>
+      </div>
+      <div class="ventana t1-chrome t1-estatica" style="zoom:.84">
+        <div class="pantalla-html activa">
+          <div class="v-barra"><span class="v-pestana"><i class="t1-fav" style="--c:#8FA72F">T</i>Qué ver en Castilla y León<i class="x">✕</i></span><span class="t1-nueva">+</span><span class="t1-ctl"><i>—</i><i>☐</i><i>✕</i></span></div>
+          <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">guiadeturismo.ejemplo.es/castilla-y-leon<i class="t1-est">☆</i></span><span class="t1-perfil">L</span><span class="t1-puntos">⋮</span></div>
+          <div class="v-cuerpo t1-web">
+            <div class="t1-web-txt"><h3>Qué ver en Castilla y León</h3><div class="t1-foto-web" style="width:520px;height:300px"></div><p style="margin-top:12px">Las murallas y los castillos son lo más visitado.</p></div>
+          </div>
+          <div class="v-menu t1-menu" style="top:250px;left:330px;width:330px;font-size:14px">
+            <div>Abrir imagen en una pestaña nueva</div>
+            <div class="on" style="box-shadow:inset 0 0 0 3px #E861A7">Guardar imagen como...</div>
+            <div>Copiar imagen</div>
+            <div>Copiar dirección de imagen</div>
+            <div>Buscar con Google Lens</div>
+            <div class="sep"></div>
+            <div>Inspeccionar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Imprimir una web o guardarla en PDF" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Imprimir una web o guardarla en PDF</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr auto;gap:44px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <!-- [VERIFICAR] textos del cuadro de impresión de Chrome y Edge -->
+        <ol class="pasos peq">
+          <li>Menú ⋮ › <b>Imprimir...</b> o Ctrl+P.</li>
+          <li>En <b>Destino</b> elige la impresora o <b>Guardar como PDF</b>. En Edge, el campo se llama <b>Impresora</b>.</li>
+          <li>En <b>Páginas</b> elige <b>Todas</b> o <b>Personalizado</b>. Con «1-4, 6, 8-10» imprimes de la 1 a la 4, la 6 y de la 8 a la 10.</li>
+          <li>Con una impresora, elige también las <b>Copias</b>, el <b>Diseño</b> (Vertical u Horizontal) y el <b>Color</b>.</li>
+          <li>Pulsa <b>Imprimir</b>. Si es PDF, pulsa <b>Guardar</b> y elige la carpeta y el nombre.</li>
+        </ol>
+        <div class="caja"><span class="tt">Antes de imprimir</span>Piensa si hace falta. El PDF ahorra papel y tinta (lo ves en el tema 4).</div>
+      </div>
+      <div class="t1-print t1-estatica" style="zoom:.92;align-self:center">
+        <div class="t1-print-prev"><div class="hoja"><i style="width:70%;height:14px;background:#9CC9E6"></i><i></i><i></i><i style="width:80%"></i><i></i><i></i><i style="width:60%"></i><i></i><i></i><i style="width:75%"></i></div></div>
+        <div class="t1-print-panel">
+          <div class="t1-print-cab"><b>Imprimir</b><span>8 páginas</span></div>
+          <div class="fila"><span>Destino</span><span class="sel marca">Guardar como PDF</span></div>
+          <div class="fila"><span>Páginas</span><span class="sel">Personalizado</span></div>
+          <div class="fila"><span></span><span class="campo marca">1-4, 6, 8-10</span></div>
+          <div class="fila"><span>Diseño</span><span class="sel">Vertical</span></div>
+          <div class="fila"><span>Más ajustes</span><span style="color:#5F6368">⌄</span></div>
+          <div class="pie"><span class="b1">Guardar</span><span class="b2">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Las fotos y los vídeos del móvil" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Las fotos y los vídeos del móvil</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <table class="tabla peq"><tr><th>Móvil</th><th>Dónde ves las fotos</th></tr><tr><td>Android</td><td>App <b>Google Fotos</b> o <b>Galería</b> (Samsung, Xiaomi)</td></tr><tr><td>iPhone</td><td>App <b>Fotos</b></td></tr></table>
+        <p class="peq">Las fotos y los vídeos de la cámara se guardan en la carpeta <b>DCIM</b>. En Android, dentro de <b>DCIM&nbsp;›&nbsp;Camera</b>. En iPhone, dentro de carpetas como <b>DCIM&nbsp;›&nbsp;100APPLE</b>.</p>
+        <div class="tarjeta"><h3>Por la nube</h3><p>Activa la copia de seguridad de <b>Google Fotos</b> o de <b>Fotos de iCloud</b>. Después entra desde el ordenador en photos.google.com o en icloud.com.</p></div>
+        <!-- [VERIFICAR] nombre de la aplicación Vínculo móvil -->
+        <p class="peq">En Windows 11 también puedes usar la aplicación <b>Vínculo móvil</b>.</p>
+      </div>
+      <img class="ico g" src="img/ia/movil-portatil.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Pasar las fotos al ordenador por cable" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Pasar las fotos al ordenador por cable</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr auto;gap:50px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>Conecta el móvil con el cable USB y desbloquéalo.</li>
+          <li>En Android, toca la notificación de USB y elige <b>Transferencia de archivos</b>. En iPhone, pulsa <b>Confiar</b>.</li>
+          <li>En el ordenador abre el <b>Explorador de archivos</b> › <b>Este equipo</b> › el nombre del móvil › almacenamiento interno › <b>DCIM</b>. En Android, abre <b>Camera</b>. El almacenamiento puede llamarse <b>Almacenamiento interno compartido</b>. En iPhone, abre las carpetas como <b>100APPLE</b>.</li>
+          <li>Copia las fotos a tu carpeta <b>Imágenes</b>.</li>
+        </ol>
+        <figure class="foto" style="height:312px;width:884px"><img src="img/capturas/explorador-movil-dcim.webp" alt="Explorador de archivos de Windows 11 en la carpeta Camera de un móvil. La ruta Redmi 9, Almacenamiento interno compartido, DCIM, Camera está marcada con un recuadro"><figcaption class="credito">Explorador de archivos de Windows 11 con un móvil Android conectado por USB: Redmi 9 › Almacenamiento interno compartido › DCIM › Camera. Captura propia (24-10-2026).</figcaption></figure>
+      </div>
+      <!-- [VERIFICAR] textos de la pantalla de preferencias de USB en Android -->
+      <div class="movil t1-estatica" style="height:620px;zoom:1.1">
+        <div class="pantalla-html activa">
+          <div class="wa-barra-estado"><span>10:24</span><span class="ic">▾ ▴ ▮</span></div>
+          <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Preferencias de USB</span></div>
+          <div class="t1-and-sec">Usar USB para</div>
+          <div class="t1-and-op on"><i></i>Transferencia de archivos / Android Auto</div>
+          <div class="t1-and-op"><i></i>Compartir conexión por USB</div>
+          <div class="t1-and-op"><i></i>MIDI</div>
+          <div class="t1-and-op"><i></i>PTP</div>
+          <div class="t1-and-op"><i></i>Sin transferencia de datos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: el reto del ZIP" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Así lo pregunta el examen · pregunta 3 de la demo</p><h2>Reto: el archivo ZIP</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/DOCUMENTOS 2.zip",
+       "enunciado": "Descomprime el archivo «DOCUMENTOS 2.zip» y busca la palabra «melosa». Copia el nombre de la carpeta donde se encuentra dicho fichero y pégalo en el cuadro de respuesta.",
+       "instrucciones": "Resuelve el reto sin cerrar el navegador. Descarga el archivo y resuélvelo con el ordenador. Después escribe la respuesta. En los retos sí puedes usar atajos de teclado.",
+       "pista": ["Haz clic derecho en el archivo descargado › **Extraer todo** › **Extraer**.", "Escribe **contenido:melosa** en la caja de búsqueda del Explorador. O abre los documentos y usa **Buscar**.", "Copia el nombre exacto de la carpeta: selecciónala, pulsa F2, Ctrl+C y Esc."],
+       "respuesta": ["CARPETA 9", "carpeta9"],
+       "explicacion": "La palabra «melosa» está en el documento Doc1.docx, dentro de **CARPETA 9**. En la siguiente diapositiva tienes la solución paso a paso."}
+    </script></div>
+    <p class="fuente">Archivo y enunciado de la pregunta 3 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Solución del reto del ZIP" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Así lo pregunta el examen · pregunta 3 de la demo</p><h2>Solución del reto paso a paso</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <ol class="pasos peq">
+        <li>Pulsa <b>Descargar</b> en la pregunta. El archivo va a la carpeta Descargas.</li>
+        <li>Minimiza el navegador. No lo cierres.</li>
+        <li>Abre la carpeta Descargas: Windows+E › Descargas.</li>
+        <li>Clic derecho en DOCUMENTOS 2.zip › <b>Extraer todo</b> › <b>Extraer</b>.</li>
+        <li>Abre la carpeta DOCUMENTOS 2. Dentro hay otra carpeta DOCUMENTOS 2: ábrela también. Hay 10 carpetas (de CARPETA 1 a CARPETA 10) con 16 documentos de Word. Varios están repetidos y CARPETA 6 está vacía.</li>
+      </ol>
+      <ol class="pasos peq" style="counter-reset:paso 5">
+        <li>Busca «melosa»: escribe <code>contenido:melosa</code> en la caja de búsqueda del Explorador. O abre los documentos y usa <b>Buscar</b> (en Word en español, Ctrl+B).</li>
+        <li>La palabra está en Doc1.docx, dentro de <b>CARPETA 9</b>.</li>
+        <li>Copia el nombre exacto: selecciona la carpeta, pulsa F2, Ctrl+C y Esc.</li>
+        <li>Pega el nombre en el cuadro de respuesta (Ctrl+V). En el examen, pulsa <b>Guardar</b>. En este curso, pulsa <b>Comprobar</b>.</li>
+      </ol>
+    </div>
+    <div class="caja examen"><span class="tt">Respuesta: CARPETA 9</span>En los retos sí puedes usar atajos de teclado.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 1.3" data-seccion="1.3">
+  <div class="cab"><p class="etq">1.3 · Gestión de la información</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="1.3"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Pasas todas las fotos del móvil a un pendrive. Después las borras del móvil para tener espacio. ¿Tienes una copia de seguridad de tus fotos?",
+       "opciones": ["Sí, porque las fotos están en el pendrive.", "No, porque las fotos solo están en un sitio.", "Sí, porque un pendrive no se estropea nunca.", "No, porque las copias de seguridad solo se pueden hacer en la nube."], "correcta": 1,
+       "explicacion": "Una copia de seguridad necesita tus archivos en 2 sitios como mínimo. Ahora las fotos solo están en el pendrive. Si lo pierdes, pierdes las fotos."},
+      {"tipo": "test", "enunciado": "Estás en Google Chrome. ¿Qué atajo de teclado abre el historial?",
+       "opciones": ["Ctrl+D", "Ctrl+H", "Ctrl+J", "Ctrl+P"], "correcta": 1, "barajar": false,
+       "explicacion": "Ctrl+H abre el historial. Ctrl+D guarda la página en marcadores. Ctrl+J abre las descargas. Ctrl+P sirve para imprimir."},
+      {"tipo": "reto", "archivo": "retos/TRABAJOS.zip",
+       "enunciado": "Descarga el archivo «TRABAJOS.zip». Descomprímelo y busca la palabra «pergamino». Escribe el nombre de la carpeta donde está el documento que tiene esa palabra.",
+       "respuesta": ["CARPETA 6", "carpeta6"],
+       "explicacion": "Primero descomprime el archivo con **Extraer todo**. La palabra está en el documento Historia.docx, dentro de **CARPETA 6**."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= Repaso del área y cierre ======================= -->
+
+<section class="s" data-label="Resumen del tema" data-seccion="R" data-deck-section="R" data-deck-id="repaso">
+  <div class="cab"><p class="etq">Repaso del área 1</p><h2>Resumen del tema</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas peq" style="--n:3">
+      <div class="tarjeta"><h3>1.1 Buscar</h3><ul class="lista peq"><li>Navegador: programa (Chrome, Edge, Firefox, Safari). Buscador: web (Google, Bing, Yahoo!).</li><li>La URL va en la barra de direcciones.</li><li>Cada buscador tiene su índice y personaliza los resultados.</li><li>Verticales: Booking, InfoJobs, Idealista, Wallapop, Google Académico.</li><li>Wikipedia la puede editar cualquiera.</li><li>DRAE = DLE (dle.rae.es).</li></ul></div>
+      <div class="tarjeta"><h3>1.2 Evaluar</h3><ul class="lista peq"><li>Cualquiera publica sin revisión.</li><li>Método C.R.A.P.: actualidad, fiabilidad, autoridad y propósito.</li><li>Fuentes oficiales, como el INE.</li><li>Ante un bulo: no lo reenvíes y compruébalo en medios y verificadores.</li><li>Patrocinado (antes Anuncio) = publicidad.</li></ul></div>
+      <div class="tarjeta"><h3>1.3 Gestionar</h3><ul class="lista peq"><li>Almacenamiento local y en la nube.</li><li>Copia de seguridad: tus archivos en 2 sitios como mínimo.</li><li>Ctrl+D marcadores, Ctrl+H historial, Ctrl+J descargas, Ctrl+P imprimir.</li><li>ZIP: Extraer todo.</li><li>Clic derecho › Guardar imagen como.</li><li>Fotos del móvil: DCIM.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Test de repaso del área" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 1 · preguntas del curso «Soy competente digital», CyL Digital</p><h2>Test de repaso</h2></div>
+  <div class="cuerpo">
+    <div class="repaso-test"><script type="application/json">[
+      {"comp": "1.2", "tipo": "test", "enunciado": "Te llega por WhatsApp este titular: «Facebook cerrará las cuentas de usuarios con mala ortografía». ¿Qué haces para saber si es falso?",
+       "opciones": ["Lo comparto con mis contactos.", "Busco la noticia en varios medios fiables.", "Lo ignoro y sigo navegando.", "Lo publico en mis redes sociales."], "correcta": 1,
+       "explicacion": "Para saber si una noticia es verdad, búscala en varios medios fiables o en un verificador como Maldita.es. Si la compartes o la publicas, ayudas a difundir un posible bulo. Si la ignoras, no sabes si es verdad."},
+      {"comp": "1.3", "tipo": "test", "imagen": "img/cyl/drive-copias.webp", "barajar": false,
+       "enunciado": "Esta pantalla muestra las copias de seguridad de una cuenta de Google. ¿Cómo se llega a ella?",
+       "opciones": ["Gmail › Configuración › Copias de seguridad", "Google › Google Lens › Copias de seguridad", "Google Drive › Almacenamiento › Copias de seguridad", "Todas las respuestas son correctas"], "correcta": 2,
+       "explicacion": "Las copias de seguridad del móvil y de WhatsApp se guardan en Google Drive. Se ven en Almacenamiento › Copias de seguridad. En la pantalla se ven el logo de Drive y el enlace «Volver a Almacenamiento»."},
+      {"comp": "1.1", "tipo": "test", "barajar": false,
+       "enunciado": "Buscas la palabra «friki» en el diccionario de la RAE (dle.rae.es). ¿Qué encuentras?",
+       "opciones": ["No existe «friki»: solo existe «friqui».", "Están aceptadas «friki» y «friqui».", "No está aceptada: es una palabra inglesa.", "No está aceptada: es una palabra francesa."], "correcta": 1,
+       "explicacion": "El diccionario recoge «friki» y también la forma «friqui». Compruébalo tú: escribe dle.rae.es en la barra de direcciones y busca la palabra."},
+      {"comp": "1.1", "tipo": "test", "imagen": "img/cyl/noticias-24h.webp",
+       "enunciado": "Mira esta búsqueda de Google. ¿Qué resultados aparecen?",
+       "opciones": ["Noticias generales", "Noticias de Castilla y León de las últimas 24 horas", "Noticias de Castilla y León de cualquier fecha", "Imágenes de Castilla y León"], "correcta": 1,
+       "explicacion": "La búsqueda es «noticias castilla y leon». Está marcada la pestaña Noticias y, en Herramientas, «Últimas 24 horas». Por eso salen noticias de hace pocas horas."},
+      {"comp": "1.3", "tipo": "test", "imagen": "img/cyl/inprivate.png",
+       "enunciado": "¿De qué navegador es este modo de navegación privada?",
+       "opciones": ["Google Chrome", "Safari", "Mozilla Firefox", "Microsoft Edge"], "correcta": 3,
+       "explicacion": "«InPrivate» es el nombre de la navegación privada de Microsoft Edge. En Chrome se llama ventana de incógnito y en Firefox, ventana privada."},
+      {"comp": "1.2", "tipo": "test", "imagen": "img/cyl/bulo-policia.webp", "barajar": false,
+       "enunciado": "En Facebook ves este mensaje de «la Policía Nacional». Avisa de secuestros con un niño que llora y lleva una dirección en la mano. ¿Es verdad o es un bulo?",
+       "opciones": ["Es un bulo (fake news).", "Es verdad, porque sale en Facebook.", "Es verdad, porque me lo envían mis contactos.", "Es verdad, porque lo dice la web de la Policía."], "correcta": 0,
+       "explicacion": "Es un bulo: mete miedo, pide que lo compartas y no tiene fecha ni enlace oficial. Que salga en Facebook o que te lo envíen tus contactos no lo hace verdad."},
+      {"comp": "1.1", "tipo": "test", "enunciado": "¿Cuál de estos no es un navegador?",
+       "opciones": ["Chrome", "Edge", "Brave", "Yahoo!"], "correcta": 3,
+       "explicacion": "Yahoo! es un buscador: una web para buscar información. Chrome, Edge y Brave son navegadores: programas para abrir páginas web."},
+      {"comp": "1.3", "tipo": "test", "enunciado": "¿Cuánto espacio gratis tiene una cuenta de Google Drive?",
+       "opciones": ["5 GB", "10 GB", "15 GB", "20 GB"], "correcta": 2, "barajar": false,
+       "explicacion": "Una cuenta gratuita de Google tiene 15 GB. Ese espacio se comparte entre Google Drive, Gmail y Google Fotos."},
+      {"comp": "1.3", "tipo": "test", "enunciado": "¿Cuál de estos no es un dispositivo de almacenamiento?",
+       "opciones": ["Disco duro HDD", "Disco SSD", "Memoria RAM", "Memoria flash (pendrive)"], "correcta": 2,
+       "explicacion": "La memoria RAM guarda los datos solo mientras el ordenador está encendido. Al apagarlo, se borra. Los discos HDD y SSD y la memoria flash guardan los archivos aunque apagues."},
+      {"comp": "1.1", "tipo": "test", "enunciado": "¿Qué imagen muestra las pestañas de Google Chrome?",
+       "opciones": ["Imagen A", "Imagen B", "Imagen C", "Imagen D"],
+       "imagenes": ["img/cyl/chrome-2-1.png", "img/cyl/chrome-2-2.png", "img/cyl/chrome-2-3.png", "img/cyl/chrome-2-4.png"], "correcta": 1,
+       "explicacion": "Las pestañas son las fichas de arriba del todo. Cada una tiene el título de una página y una ✕ para cerrarla. La imagen A son los botones Atrás, Adelante, Recargar e Inicio. La C son los botones de compartir y de marcadores. La D, las extensiones."},
+      {"comp": "1.3", "tipo": "test", "barajar": false,
+       "enunciado": "Vas a imprimir un documento. En Páginas escribes «1-4, 6, 8-10». ¿Qué páginas se imprimen?",
+       "opciones": ["De la 1 a la 10, menos la 6", "Solo la 1, la 4, la 6, la 8 y la 10", "De la 1 a la 10, menos la 5 y la 7", "La 6, y a doble cara la 1, la 4, la 8 y la 9"], "correcta": 2,
+       "explicacion": "El guion une un intervalo: 1-4 son las páginas 1, 2, 3 y 4. La coma separa: 6 es solo la página 6. Y 8-10 son la 8, la 9 y la 10. No se imprimen la 5 ni la 7. Algunos programas separan con punto y coma: «1-4;6;8-10»."},
+      {"comp": "1.1", "tipo": "test", "imagen": "img/cyl/youtube-canal.webp",
+       "enunciado": "Estás en la página de un canal de YouTube. ¿Con qué número buscas vídeos solo de ese canal?",
+       "opciones": ["1", "2", "3", "4"], "correcta": 1,
+       "explicacion": "La lupa de la fila de pestañas del canal (2) busca solo en sus vídeos. La caja Buscar de arriba (1) busca en todo YouTube."},
+      {"comp": "1.3", "tipo": "test", "imagen": "img/cyl/drive-30gb.webp", "barajar": false,
+       "enunciado": "Mira el espacio de esta cuenta de Google Drive. ¿Es gratuita o de pago?",
+       "opciones": ["De pago", "Gratuita", "No se puede saber", "Es de OneDrive, no de Google Drive"], "correcta": 0,
+       "explicacion": "Pone «7,61 GB de 30 GB usado». Una cuenta gratuita tiene 15 GB. Con 30 GB, es una cuenta de pago (por ejemplo, de Google Workspace)."},
+      {"comp": "1.2", "tipo": "test", "imagen": "img/cyl/outlook-spam.webp",
+       "enunciado": "Estás en Outlook. ¿Qué botón usas para marcar un correo como spam?",
+       "opciones": ["1", "2", "3", "4"], "correcta": 0,
+       "explicacion": "El botón Correo no deseado (1) marca el correo como spam. Así los próximos correos de ese remitente van a la carpeta Correo no deseado. Eliminar (2) solo lo borra."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Recursos" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 1</p><h2>Recursos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Webs</h3><ul class="lista peq">
+        <li><a href="https://dle.rae.es" target="_blank" rel="noopener">dle.rae.es</a>: diccionario de la RAE.</li>
+        <li><a href="https://es.wikipedia.org" target="_blank" rel="noopener">es.wikipedia.org</a>: Wikipedia en español.</li>
+        <li><a href="https://news.google.com" target="_blank" rel="noopener">news.google.com</a>: Google Noticias.</li>
+        <li><a href="https://maldita.es" target="_blank" rel="noopener">maldita.es</a>, <a href="https://www.newtral.es" target="_blank" rel="noopener">newtral.es</a> y <a href="https://verifica.efe.com" target="_blank" rel="noopener">verifica.efe.com</a>: verificadores.</li>
+        <li><a href="https://www.ine.es" target="_blank" rel="noopener">ine.es</a>: Instituto Nacional de Estadística.</li>
+        <li><a href="https://support.google.com/chrome" target="_blank" rel="noopener">support.google.com/chrome</a>: ayuda de Chrome.</li>
+        <li><a href="https://www.tucerticyl.es/demo" target="_blank" rel="noopener">tucerticyl.es/demo</a>: demo oficial del examen.</li>
+      </ul></div>
+      <div class="tarjeta"><h3>Vídeos del Módulo 1 de CyL Digital</h3><ul class="lista peq">
+        <li><a href="https://www.youtube.com/watch?v=bYlXrXFTdFk" target="_blank" rel="noopener">Las páginas web, el navegador y el buscador</a></li>
+        <li><a href="https://www.youtube.com/watch?v=uXunayC9Epk" target="_blank" rel="noopener">Cómo funcionan los buscadores</a></li>
+        <li><a href="https://www.youtube.com/watch?v=t8CntibMnv4" target="_blank" rel="noopener">Buscadores temáticos o verticales</a></li>
+        <li><a href="https://www.youtube.com/watch?v=rTUtF4URcwM" target="_blank" rel="noopener">Detección de noticias falsas</a></li>
+        <li><a href="https://www.youtube.com/watch?v=f2l0rW4vGdw" target="_blank" rel="noopener">El método C.R.A.P.</a></li>
+        <li><a href="https://www.youtube.com/watch?v=4QxKGnXnbQg" target="_blank" rel="noopener">Copias de seguridad en la nube</a></li>
+        <li><a href="https://www.youtube.com/watch?v=JJ9CX4UByi8" target="_blank" rel="noopener">Favoritos y páginas más visitadas</a></li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 1" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 1</p><h2>Buscar y gestionar información</h2></div>
+  <div class="cuerpo" style="gap:36px">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta" style="color:var(--texto)"><h3>1.1</h3><p>Navegación, búsqueda y filtrado de información</p><span class="estado-comp" data-comp="1.1"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>1.2</h3><p>Evaluación de la información</p><span class="estado-comp" data-comp="1.2"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>1.3</h3><p>Gestión de la información</p><span class="estado-comp" data-comp="1.3"></span></div>
+    </div>
+    <p>Si te falta alguna competencia, vuelve a su Comprueba y repítelo hasta acertar las 3 preguntas.</p>
+    <div class="botones"><a class="btn sec" href="../">Portada del curso</a><a class="btn ciruela" href="#c11">Volver al principio del tema</a><a class="btn sec" href="../tema2/">Tema 2 · Comunicación y colaboración</a></div>
+    <p class="peq" style="opacity:.85;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), CC BY-NC. Preguntas 1 a 3 de la demo de tuCertiCyL. Logos de Google, Bing, DuckDuckGo y Safari: Wikimedia; marcas de sus propietarios, con fines educativos. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+
+<!-- Tema 1: pantallas repetidas de las plantillas y campos de texto de las simulaciones HTML (sin tocar el motor común) -->
+<script>
+(function () {
+  'use strict';
+  // 1. Una pantalla con data-t1-base empieza con una copia de otra pantalla, sin sus zonas de clic (data-ir)
+  document.querySelectorAll('template[id^="t1-"]').forEach(function (t) {
+    var hechas = [];
+    var pantalla = function (id) { return t.content.querySelector('.pantalla-html[data-id="' + id + '"]'); };
+    var resuelve = function (p) {
+      if (hechas.indexOf(p) >= 0) return;
+      hechas.push(p);
+      var b = p.dataset.t1Base && pantalla(p.dataset.t1Base);
+      if (!b) return;
+      resuelve(b);
+      var copia = b.cloneNode(true);
+      copia.querySelectorAll('[data-ir]').forEach(function (e) { e.removeAttribute('data-ir'); });
+      copia.querySelectorAll('.t1-campo').forEach(function (e) { e.classList.remove('t1-campo'); e.readOnly = true; });
+      copia.querySelectorAll('.t1-sol').forEach(function (e) { e.classList.remove('t1-sol'); });
+      p.prepend.apply(p, Array.prototype.slice.call(copia.childNodes));
+    };
+    t.content.querySelectorAll('.pantalla-html').forEach(resuelve);
+  });
+
+  // 2. Campos de texto de las simulaciones: escribir no cuenta como clic; Intro o la lupa comprueban lo escrito
+  var valida = {
+    url: function (v) { return /^(https?:\/\/)?dle\.rae\.es\/?$/i.test(v.trim()); },
+    bulo: function (v) { return v.trim().toLowerCase() === 'bulo'; }
+  };
+  var avisos = function (m) { return m.querySelectorAll('.sim-aviso').length; };
+  var pista = function (m, antes, texto) {
+    var av = m.querySelectorAll('.sim-aviso');
+    if (!texto || av.length <= antes) return;
+    var a = av[av.length - 1], p = document.createElement('p');
+    p.className = 't1-pista';
+    p.textContent = texto;
+    a.insertBefore(p, a.querySelector('.btn'));
+  };
+  var ir = function (pant, id) { var z = pant.querySelector('[data-ir="' + id + '"]'); if (z) z.click(); };
+  var envia = function (inp) {
+    var pant = inp.closest('.pantalla-html'), m = inp.closest('.sim-marco');
+    if (!m || m.querySelector('.sim-aviso')) return;
+    if (valida[inp.dataset.valida](inp.value)) { ir(pant, inp.dataset.irOk); return; }
+    var antes = avisos(m);
+    pant.click(); // cuenta como un clic fallido
+    pista(m, antes, inp.dataset.pista);
+  };
+  var marcaSolucion = function (m) {
+    setTimeout(function () {
+      var act = m.querySelector('.pantalla-html.activa');
+      if (act && m.__t1sol) act.querySelectorAll('.t1-sol').forEach(function (s) { s.classList.add('zona-sol-html'); });
+    }, 40);
+  };
+  document.addEventListener('click', function (e) {
+    var m = e.target.closest('.sim-marco');
+    if (!m) return;
+    m.__t1antes = avisos(m);
+    if (e.target.closest('.sim-aviso .btn')) {
+      // al cerrar el aviso, el cursor vuelve al campo de texto de la pantalla
+      setTimeout(function () { var f = m.querySelector('.pantalla-html.activa .t1-campo'); if (f) f.focus({ preventScroll: true }); }, 30);
+      if (/soluci/i.test(e.target.textContent)) { m.__t1sol = true; marcaSolucion(m); }
+      return;
+    }
+    if (e.target.closest('.t1-campo')) { e.stopPropagation(); return; }
+    // zona neutra (data-t1-neutro): no cuenta como fallo; enseña la nota .t1-nota de la pantalla
+    var neutra = e.target.closest('[data-t1-neutro]');
+    if (neutra && !m.querySelector('.sim-aviso')) {
+      e.stopPropagation();
+      var nota = neutra.closest('.pantalla-html').querySelector('.t1-nota');
+      if (nota) { nota.hidden = false; clearTimeout(nota.__t1); nota.__t1 = setTimeout(function () { nota.hidden = true; }, 6000); }
+      return;
+    }
+    var b = e.target.closest('[data-t1-envia]');
+    if (b && !m.querySelector('.sim-aviso')) {
+      e.stopPropagation();
+      envia(b.closest('.pantalla-html').querySelector('.t1-campo'));
+    }
+  }, true);
+  document.addEventListener('click', function (e) {
+    var m = e.target.closest('.sim-marco');
+    if (!m) return;
+    var z = e.target.closest('[data-t1-pista]');
+    if (z) pista(m, m.__t1antes || 0, z.dataset.t1Pista);
+    if (m.__t1sol) marcaSolucion(m);
+    // pantalla final con los anuncios marcados: el aviso «¡Correcto!» se quita para que se vea la pantalla
+    if (e.target.closest('[data-ir]') && m.querySelector('.pantalla-html.activa.t1-final')) setTimeout(function () {
+      m.querySelectorAll('.sim-aviso').forEach(function (a) { if (/Correcto/.test(a.textContent)) a.style.display = 'none'; });
+    }, 2600);
+    if (e.target.closest('[data-ir]')) setTimeout(function () {
+      var f = m.querySelector('.pantalla-html.activa .t1-campo[data-autofoco]');
+      if (f) f.focus({ preventScroll: true });
+    }, 30);
+  });
+  document.addEventListener('keydown', function (e) {
+    var inp = e.target.closest && e.target.closest('.t1-campo');
+    if (!inp || e.key !== 'Enter') return;
+    e.preventDefault();
+    envia(inp);
+  });
+  document.addEventListener('input', function (e) {
+    var inp = e.target.closest && e.target.closest('.t1-campo[data-sugiere]');
+    if (!inp) return;
+    var pant = inp.closest('.pantalla-html'), caja = pant.querySelector('.t1-sugs');
+    var v = inp.value.trim().toLowerCase().replace(/^https?:\/\//, '');
+    caja.hidden = !v;
+    pant.querySelectorAll('.t1-q').forEach(function (s) { s.textContent = inp.value.trim(); });
+    pant.querySelector('.t1-sug-dle').hidden = !(v.length >= 3 && 'dle.rae.es/'.indexOf(v) === 0);
+  });
+})();
+</script>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+</body>
+</html>

@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 5 · Resolución de problemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+/* Estilos propios del tema 5 (prefijo t5-) */
+.t5-maqueta .ventana { pointer-events: none; }
+.t5-maqueta { justify-self: center; }
+.t5-col { display: flex; flex-direction: column; gap: 26px; }
+.t5-ico-fijo .tarjeta > .ico { height: 130px; width: auto; max-width: 100%; align-self: flex-start; object-fit: contain; }
+.t5-compacta td { padding-top: 9px !important; padding-bottom: 9px !important; }
+.t5-resumen .lista { font-size: 24px; gap: 10px; }
+.t5-resumen .tarjeta { padding: 24px 24px; }
+/* Preguntas más compactas (el enunciado, las opciones y la explicación caben en la diapositiva) */
+.t5-preg .preg { gap: 14px; }
+.t5-preg .preg .enun { font-size: 29px; }
+.t5-preg .preg .instr { font-size: 22px; }
+.t5-preg .opciones { gap: 10px; }
+.t5-preg .opcion { font-size: 24px; padding: 10px 20px; border-radius: 16px; }
+.t5-preg .opcion .marca { width: 30px; height: 30px; }
+.t5-preg .preg .fb { font-size: 22px; padding: 12px 20px; }
+.t5-preg .preg .fb .fb-tit { font-size: 24px; }
+.t5-preg .preg .btn { font-size: 22px; padding: 12px 26px; }
+.t5-preg .preg.con-img > .img-enun { max-height: 470px; max-width: 520px; }
+.t5-preg .reto-archivo { padding: 12px 22px; }
+.t5-preg .comprueba, .comprueba.t5-preg { gap: 16px; }
+.sim-marco .ventana.t5-v { zoom: .86; }
+.t5-preg .parejas { gap: 8px 24px; }
+.t5-preg .lista-mov { gap: 8px; }
+.t5-preg .parejas .fija, .t5-preg .parejas .mov, .t5-preg .orden .mov { min-height: 52px; font-size: 22px; padding-top: 6px; padding-bottom: 6px; }
+.t5-preg .preg > .fb.info:has(.fb-tit) { column-count: 2; column-gap: 40px; font-size: 20px; }
+.t5-preg .preg > .fb.info .fb-tit { column-span: all; }
+.t5-preg .pista-pasos { gap: 10px; }
+.t5-preg .pista-pasos > li { padding-left: 56px; min-height: 40px; padding-top: 4px; }
+.t5-preg .pista-pasos > li::before { width: 40px; height: 40px; font-size: 22px; }
+.t5-fila-ico { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
+
+/* Bocadillos «mal» y «bien» */
+.t5-bocadillos { display: grid; grid-template-columns: 1fr 1.6fr; gap: 28px; }
+.t5-boca { border-radius: 26px; padding: 22px 30px; font-size: 26px; position: relative; }
+.t5-boca .q { display: block; font-weight: 700; font-size: 22px; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 6px; }
+.t5-boca.mal { background: var(--ko-claro); border: 3px solid var(--ko); }
+.t5-boca.mal .q { color: var(--ko); }
+.t5-boca.bien { background: var(--ok-claro); border: 3px solid var(--ok); }
+.t5-boca.bien .q { color: var(--ok); }
+
+/* Etiqueta de la parte de abajo de un portátil (marca inventada) */
+.t5-etiqueta { background: #F4F4F6; border: 3px solid #C9C4D0; border-radius: 18px; padding: 22px 26px; font: 500 20px/1.45 'Segoe UI', Tahoma, sans-serif; color: #2B2B3A; width: 470px; box-shadow: var(--sombra); }
+.t5-etiqueta .marca-et { font: 800 30px/1 'Lexend', sans-serif; letter-spacing: .12em; color: #3B3B58; margin-bottom: 10px; }
+.t5-etiqueta .barras { height: 54px; margin: 10px 0 4px; background: repeating-linear-gradient(90deg, #2B2B3A 0 3px, transparent 3px 5px, #2B2B3A 5px 6px, transparent 6px 10px, #2B2B3A 10px 14px, transparent 14px 16px); }
+.t5-etiqueta .resalta { outline: 4px solid var(--rosa); outline-offset: 2px; border-radius: 4px; }
+.t5-etiqueta .pie-et { font-size: 15px; color: #6A6A7A; margin-top: 8px; }
+
+/* Barras de estado del móvil */
+.t5-barras { display: flex; flex-direction: column; gap: 22px; }
+.t5-barra { display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 22px; padding: 14px 26px; font: 600 26px/1 Roboto, 'Segoe UI', sans-serif; color: #111; box-shadow: var(--sombra); width: 520px; }
+.t5-barra .ics { display: flex; align-items: center; gap: 12px; }
+.t5-barra .g { font-size: 20px; font-weight: 700; }
+.t5-barra-tit { font-size: var(--type-caption); color: var(--gris); font-weight: 600; margin-bottom: -12px; }
+
+/* Línea de tiempo de las generaciones */
+.t5-linea { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; margin-top: 10px; }
+.t5-linea::before { content: ''; position: absolute; left: 6%; right: 6%; top: 46px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--verde-claro), var(--a5)); }
+.t5-linea .gen { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 0 14px; position: relative; }
+.t5-linea .bola { width: 100px; height: 100px; border-radius: 50%; background: var(--a5); color: #fff; display: grid; place-items: center; font: 800 32px/1 'Lexend', sans-serif; box-shadow: 0 0 0 8px var(--fondo); }
+.t5-linea .gen:nth-child(1) .bola { background: #A9BD6A; font-size: 24px; }
+.t5-linea .gen:nth-child(2) .bola { background: #8FA72F; }
+.t5-linea .gen:nth-child(3) .bola { background: #6F8A1E; }
+.t5-linea .gen h3 { font-size: 30px; }
+.t5-linea .gen p { font-size: 24px; color: var(--texto); }
+.t5-flecha-linea { display: flex; justify-content: space-between; font-size: 22px; font-weight: 700; color: var(--gris); }
+
+/* Esquemas de conexión: aparato, enlace (cable, wifi u ondas) y aparato */
+.t5-esq-fila { display: flex; align-items: center; gap: 14px; }
+.t5-esq-fila img { height: auto; flex: none; }
+.t5-esq-fila .movil { width: 84px; }
+.t5-esq-fila .tele { width: 170px; }
+.t5-esq-fila .cable { width: 130px; }
+.t5-enl { flex: 1; min-width: 60px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70px; }
+.t5-enl::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 6px solid var(--a5); transform: translateY(-50%); }
+.t5-enl.wifi::before, .t5-enl.ondas::before { border-top: 6px dashed var(--verde); }
+.t5-enl svg { position: relative; width: 48px; height: 38px; fill: var(--a5); background: var(--blanco); padding: 0 8px; box-sizing: content-box; }
+.t5-enl.wifi svg path { fill: none; stroke: var(--a5); stroke-width: 3.8; stroke-linecap: round; }
+.t5-enl i { position: absolute; top: 100%; margin-top: -6px; font-style: normal; font-size: 20px; font-weight: 700; color: var(--a5); white-space: nowrap; }
+.t5-tele-stick { position: relative; flex: none; }
+.t5-tele-stick .stick { position: absolute; width: 74px; right: -34px; top: 18px; }
+.t5-rutas { display: flex; flex-direction: column; gap: 12px; }
+.t5-ruta { display: grid; grid-template-columns: 620px 1fr; gap: 48px; align-items: center; background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); border-left: 10px solid var(--area); padding: 10px 36px 12px; }
+.t5-esq h3 { font-size: 30px; margin-bottom: 6px; }
+.t5-esq .t5-esq-fila { padding-right: 34px; }
+.t5-ruta-txt { font-size: var(--type-caption); display: flex; flex-direction: column; gap: 8px; }
+.t5-conexion { width: 100%; max-width: 560px; height: 120px; padding-bottom: 10px; }
+.t5-conexion .movil { width: 62px; }
+.t5-conexion .fuente-red { width: 130px; }
+.t5-conexion .fuente-red.antena { width: auto; height: 118px; }
+
+/* Tablas con un icono delante del texto de la celda */
+.t5-ico-fila { float: left; height: 40px; width: 40px; object-fit: contain; margin: -5px 12px -5px 0; }
+
+/* Conectores */
+.t5-conectores { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
+.t5-con { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; font-size: 22px; }
+.t5-con svg { width: 100%; height: 130px; }
+.t5-con h3 { font-size: 28px; }
+.t5-con.antiguo { opacity: .92; }
+.t5-con .tag { font-size: 18px; font-weight: 700; border-radius: 999px; padding: 4px 14px; }
+.t5-con .tag.si { background: var(--ok-claro); color: var(--ok); }
+.t5-con .tag.no { background: #FDF0E0; color: #A85E10; }
+
+/* Ejemplos de SmartArt dibujados */
+.t5-sa { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.t5-sa-caja { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.t5-sa-caja h3 { font-size: 28px; align-self: flex-start; }
+.t5-sa-caja .nota { font-size: 21px; color: var(--gris); align-self: flex-start; }
+.t5-sa-proc { display: flex; align-items: center; gap: 8px; height: 160px; }
+.t5-sa-proc span { background: #4472C4; color: #fff; border-radius: 8px; padding: 12px 10px; font: 600 17px/1.2 'Segoe UI', sans-serif; width: 112px; text-align: center; }
+.t5-sa-proc i { width: 0; height: 0; border-top: 14px solid transparent; border-bottom: 14px solid transparent; border-left: 18px solid #A5B8DD; }
+.t5-sa-ciclo { position: relative; width: 250px; height: 200px; }
+.t5-sa-ciclo span { position: absolute; background: #70AD47; color: #fff; border-radius: 50%; width: 92px; height: 92px; display: grid; place-items: center; font: 600 16px/1.15 'Segoe UI', sans-serif; text-align: center; }
+.t5-sa-ciclo svg { position: absolute; inset: 0; }
+.t5-sa-jer { display: flex; flex-direction: column; align-items: center; gap: 0; height: 200px; justify-content: center; }
+.t5-sa-jer .n1, .t5-sa-jer .n2 span { background: #ED7D31; color: #fff; border-radius: 6px; padding: 10px 12px; font: 600 16px/1.15 'Segoe UI', sans-serif; text-align: center; }
+.t5-sa-jer .n2 { display: flex; gap: 14px; position: relative; padding-top: 34px; }
+.t5-sa-jer .n2::before { content: ''; position: absolute; top: 0; left: 50%; width: 3px; height: 17px; background: #F4B183; }
+.t5-sa-jer .n2::after { content: ''; position: absolute; top: 17px; left: 16%; right: 16%; height: 3px; background: #F4B183; }
+.t5-sa-jer .n2 span { position: relative; }
+.t5-sa-jer .n2 span::before { content: ''; position: absolute; top: -17px; left: 50%; width: 3px; height: 17px; background: #F4B183; }
+
+/* QR */
+.t5-qr { width: 300px; height: 300px; border-radius: 18px; box-shadow: var(--sombra); display: block; }
+
+/* ---------- Simulaciones HTML: web inventada kalimpra.es ---------- */
+.t5-k { position: absolute; inset: 0; background: #fff; font-family: 'Segoe UI', Tahoma, sans-serif; color: #1F2430; }
+.t5-k-cab { height: 64px; display: flex; align-items: center; gap: 30px; padding: 0 26px; border-bottom: 1px solid #E3E6EE; }
+.t5-k-logo { font: 800 26px/1 'Lexend', sans-serif; color: #D2335C; letter-spacing: .02em; margin-right: 20px; }
+.t5-k-logo b { color: #1F2430; font-weight: 800; }
+.t5-k-menu { display: flex; gap: 6px; font-size: 16px; font-weight: 600; }
+.t5-k-menu span { padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.t5-k-menu span.on { background: #FCE6EC; color: #D2335C; }
+.t5-k-cuerpo { display: grid; grid-template-columns: 1fr 210px; gap: 22px; padding: 20px 26px; }
+.t5-k-hero { background: linear-gradient(120deg, #FCE6EC, #E8F1FB); border-radius: 16px; height: 330px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 30px; position: relative; cursor: pointer; }
+.t5-k-hero h3 { font: 700 30px/1.15 'Lexend', sans-serif; margin: 0 0 10px; }
+.t5-k-hero p { font-size: 16px; color: #4A5060; margin: 0 0 16px; }
+.t5-k-hero .bt { display: inline-block; background: #D2335C; color: #fff; border-radius: 20px; padding: 9px 20px; font-weight: 600; font-size: 15px; }
+.t5-k-hero img { width: 230px; justify-self: center; }
+.t5-k-puntos { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.t5-k-puntos i { width: 10px; height: 10px; border-radius: 50%; background: #C9CCD6; }
+.t5-k-puntos i:first-child { background: #D2335C; }
+.t5-k-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+.t5-k-mini div { background: #F5F6FA; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; }
+.t5-k-anuncio { background: #FFFBEA; border: 2px solid #F0D772; border-radius: 12px; padding: 14px; font-size: 15px; cursor: pointer; align-self: start; }
+.t5-k-anuncio .pat { display: inline-block; font-size: 11px; font-weight: 700; background: #F0D772; color: #5B4A00; border-radius: 4px; padding: 2px 6px; margin-bottom: 8px; }
+.t5-k-anuncio b { display: block; font-size: 18px; margin-bottom: 6px; color: #1F2430; }
+.t5-k-anuncio .bt { display: block; margin-top: 10px; background: #2E9E3E; color: #fff; text-align: center; border-radius: 6px; padding: 8px; font-weight: 700; }
+.t5-k-sop h3 { font: 700 30px/1.2 'Lexend', sans-serif; margin: 6px 0 18px; }
+.t5-buscador { display: flex; gap: 0; max-width: 560px; }
+.t5-buscador .campo { flex: 1; }
+.t5-buscador input { width: 100%; font: 400 18px/1 'Segoe UI', Tahoma, sans-serif; padding: 13px 16px; border: 2px solid #9AA0B0; border-right: 0; border-radius: 10px 0 0 10px; outline: none; color: #1F2430; background: #fff; }
+.t5-buscador input:focus { border-color: #D2335C; }
+.t5-lupa { width: 58px; background: #D2335C; color: #fff; border-radius: 0 10px 10px 0; display: grid; place-items: center; cursor: pointer; }
+.t5-lupa svg { width: 24px; height: 24px; }
+.t5-k-etq { font-size: 15px; font-weight: 700; color: #4A5060; margin-bottom: 8px; }
+.t5-k-enlaces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; max-width: 560px; }
+.t5-k-enlaces div { border: 2px solid #E3E6EE; border-radius: 12px; padding: 16px 12px; text-align: center; font-weight: 600; font-size: 15px; cursor: pointer; }
+.t5-k-enlaces div i { display: block; font-style: normal; font-size: 22px; color: #D2335C; margin-bottom: 4px; }
+.t5-k-ficha { padding: 18px 26px; }
+.t5-k-ruta { font-size: 13px; color: #6A7080; margin-bottom: 8px; }
+.t5-k-prod { display: flex; gap: 24px; align-items: center; margin-bottom: 14px; }
+.t5-k-prod img { width: 120px; }
+.t5-k-prod h3 { font: 700 28px/1.1 'Lexend', sans-serif; margin: 0 0 6px; }
+.t5-k-prod p { margin: 0; font-size: 15px; color: #4A5060; }
+.t5-k-pest { display: flex; gap: 4px; border-bottom: 2px solid #E3E6EE; margin-bottom: 16px; }
+.t5-k-pest span { padding: 10px 16px; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 8px 8px 0 0; color: #4A5060; }
+.t5-k-pest span.on { color: #D2335C; box-shadow: inset 0 -3px 0 #D2335C; }
+.t5-k-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 30px; font-size: 15px; }
+.t5-k-datos div { border-bottom: 1px solid #EEF0F4; padding: 6px 0; }
+.t5-k-doc { display: flex; align-items: center; gap: 16px; border: 2px solid #E3E6EE; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; cursor: pointer; font-size: 16px; }
+.t5-k-doc .pdf { background: #D93025; color: #fff; font-weight: 800; font-size: 13px; border-radius: 6px; padding: 8px 7px; }
+.t5-k-doc b { flex: 1; }
+.t5-k-doc small { color: #6A7080; font-size: 14px; }
+.t5-k-doc .des { color: #D2335C; font-weight: 700; font-size: 14px; }
+.t5-k-visor { position: absolute; inset: 0; background: #525659; display: flex; justify-content: center; padding-top: 22px; }
+.t5-k-visor .hoja { width: 420px; height: 600px; background: #fff; padding: 40px 36px; box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+.t5-k-visor .hoja h4 { font: 700 30px/1.15 'Lexend', sans-serif; color: #D2335C; margin: 0 0 6px; }
+.t5-k-visor .hoja p { font-size: 15px; margin: 0 0 14px; color: #333; }
+.t5-k-visor .hoja i { display: block; height: 10px; background: #E6E8EE; border-radius: 4px; margin: 10px 0; }
+
+/* ---------- Simulaciones HTML: Word de Microsoft 365 ---------- */
+.t5-w { position: absolute; inset: 0; background: #F3F3F3; font-family: 'Segoe UI', Tahoma, sans-serif; color: #242424; font-size: 13px; }
+.t5-w-tit { height: 36px; background: #185ABD; color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 13px; }
+.t5-w-tit .app { font-weight: 800; background: #fff; color: #185ABD; border-radius: 4px; width: 22px; height: 22px; display: grid; place-items: center; font-size: 14px; }
+.t5-w-tit .nom { flex: 1; text-align: center; }
+.t5-w-tit .bus { background: rgba(255,255,255,.18); border-radius: 6px; padding: 4px 40px; font-size: 12px; }
+.t5-w-tabs { height: 34px; display: flex; align-items: flex-end; gap: 2px; padding: 0 8px; background: #F3F3F3; }
+.t5-w-tabs span { padding: 7px 11px 8px; cursor: pointer; border-radius: 4px 4px 0 0; white-space: nowrap; }
+.t5-w-tabs span.arch { color: #185ABD; font-weight: 600; }
+.t5-w-tabs span.on { color: #185ABD; font-weight: 600; box-shadow: inset 0 -3px 0 #185ABD; }
+.t5-w-tabs span.ctx { color: #185ABD; font-weight: 600; }
+.t5-w-cinta { height: 104px; background: #fff; margin: 0 8px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.12); display: flex; align-items: stretch; padding: 6px 4px 0; gap: 0; overflow: hidden; }
+.t5-w-grupo { display: flex; flex-direction: column; border-right: 1px solid #E1E1E1; padding: 0 6px; }
+.t5-w-grupo .bts { flex: 1; display: flex; gap: 2px; align-items: flex-start; }
+.t5-w-grupo .nom-g { text-align: center; font-size: 11.5px; color: #616161; padding: 3px 0 5px; white-space: nowrap; }
+.t5-w-bt { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px 4px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: center; line-height: 1.15; min-width: 44px; }
+.t5-w-bt svg { width: 32px; height: 32px; }
+.t5-w-col { display: flex; flex-direction: column; gap: 1px; }
+.t5-w-bp { display: flex; align-items: center; gap: 5px; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.t5-w-bp svg { width: 16px; height: 16px; }
+.t5-w-ini { display: flex; gap: 8px; align-items: center; padding: 6px 4px; font-size: 12px; }
+.t5-w-ini .caja-f { border: 1px solid #C8C8C8; border-radius: 3px; padding: 3px 8px; background: #fff; }
+.t5-w-ini b { font-weight: 800; padding: 0 5px; }
+.t5-w-estilo { border: 1px solid #E1E1E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; background: #fff; }
+.t5-w-doc { position: absolute; top: 182px; left: 0; right: 0; bottom: 24px; background: #E8E8E8; overflow: hidden; display: flex; justify-content: center; padding-top: 18px; cursor: text; }
+.t5-w-pag { width: 620px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.2); padding: 56px 72px; font-family: Aptos, Calibri, 'Segoe UI', sans-serif; font-size: 15px; color: #111; }
+.t5-w-pag h1 { font: 400 30px/1.2 Aptos, Calibri, 'Segoe UI', sans-serif; color: #0F4761; margin: 0 0 14px; }
+.t5-w-pag p { margin: 0 0 10px; }
+.t5-w-cursor { display: inline-block; width: 2px; height: 18px; background: #111; vertical-align: -3px; animation: t5-parpadeo 1s steps(1) infinite; }
+@keyframes t5-parpadeo { 50% { opacity: 0; } }
+.t5-w-estado { position: absolute; left: 0; right: 0; bottom: 0; height: 24px; background: #F3F3F3; border-top: 1px solid #E1E1E1; font-size: 11.5px; color: #616161; display: flex; align-items: center; padding: 0 12px; gap: 18px; }
+.t5-w-velo { position: absolute; inset: 0; background: rgba(0,0,0,.18); }
+.t5-w-dlg { position: absolute; left: 90px; top: 60px; width: 800px; height: 520px; background: #fff; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.35); display: flex; flex-direction: column; z-index: 2; }
+.t5-w-dlg .cab-d { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 14px; border-bottom: 1px solid #E1E1E1; }
+.t5-w-dlg .cab-d span:last-child { font-size: 16px; color: #616161; }
+.t5-w-dlg .cuerpo-d { flex: 1; display: grid; grid-template-columns: 150px 1fr 230px; min-height: 0; }
+.t5-w-cats { border-right: 1px solid #E1E1E1; padding: 8px 0; }
+.t5-w-cats div { display: flex; align-items: center; gap: 8px; padding: 6px 12px; font-size: 13px; cursor: pointer; }
+.t5-w-cats div i { width: 16px; height: 12px; border-radius: 2px; background: #9DB5E0; flex: none; }
+.t5-w-cats div.on { background: #DCE6F7; }
+.t5-w-minis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px; align-content: start; overflow: hidden; }
+.t5-w-mini { height: 70px; border: 2px solid transparent; border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 3px; cursor: pointer; padding: 6px; }
+.t5-w-mini.on { border-color: #185ABD; background: #EEF3FC; }
+.t5-w-mini i { display: block; background: #4472C4; border-radius: 2px; }
+.t5-w-prev { border-left: 1px solid #E1E1E1; padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; }
+.t5-w-prev .dib { height: 120px; border: 1px solid #E1E1E1; border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.t5-w-prev h5 { font-size: 15px; margin: 0; font-weight: 600; }
+.t5-w-pie { height: 52px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 0 16px; border-top: 1px solid #E1E1E1; }
+.t5-w-pie span { border: 1px solid #C8C8C8; border-radius: 4px; padding: 6px 22px; font-size: 13px; cursor: pointer; }
+.t5-w-pie span.pri { background: #185ABD; border-color: #185ABD; color: #fff; }
+.t5-w-sa { display: flex; align-items: center; gap: 10px; margin: 18px 0 8px; border: 1px dashed #9DB5E0; padding: 16px 12px; position: relative; }
+.t5-w-sa span { background: #4472C4; color: #fff; border-radius: 6px; padding: 18px 8px; width: 120px; text-align: center; font-size: 13px; }
+.t5-w-sa i { width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 16px solid #A5B8DD; }
+.t5-w-panel { position: absolute; left: -190px; top: 0; width: 176px; background: #fff; border: 1px solid #C8C8C8; border-radius: 4px; font-size: 12px; padding: 8px 10px; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+.t5-w-panel b { display: block; margin-bottom: 6px; }
+.t5-w-panel div { padding: 2px 0; }
+/* Miniaturas de la ventana «Elegir un gráfico SmartArt» */
+.t5-m-proc i { width: 18px; height: 14px; }
+.t5-m-proc b { color: #8FA9DC; font-size: 14px; }
+.t5-m-redondo i { border-radius: 50%; width: 15px; height: 15px; }
+.t5-m-procv { flex-direction: column; gap: 0 !important; }
+.t5-m-procv i { width: 30px; height: 9px; }
+.t5-m-procv b { color: #8FA9DC; font-size: 10px; line-height: 8px; }
+.t5-m-cheu { gap: 0 !important; }
+.t5-m-cheu i { width: 24px; height: 16px; clip-path: polygon(0 0, 72% 0, 100% 50%, 72% 100%, 0 100%, 28% 50%); margin-right: -3px; }
+.t5-m-peq i { width: 17px; height: 12px; }
+.t5-m-lista { flex-direction: column; gap: 3px !important; }
+.t5-m-lista i { width: 56px; height: 9px; }
+.t5-m-bloques { display: grid !important; grid-template-columns: repeat(3, 18px); gap: 4px !important; align-content: center; justify-content: center; }
+.t5-m-bloques i { height: 14px; }
+.t5-w-prev .t5-m-bloques { grid-template-columns: repeat(3, 44px); gap: 8px !important; }
+.t5-w-prev .t5-m-bloques i { height: 30px; }
+.t5-m-ciclo { flex-wrap: wrap; width: 100%; padding: 6px 22px !important; gap: 4px 14px !important; }
+.t5-m-ciclo i { width: 14px; height: 14px; border-radius: 50%; }
+.t5-m-jer { flex-direction: column; gap: 5px !important; }
+.t5-m-jer .arr { width: 18px; height: 11px; }
+.t5-m-jer span { display: flex; gap: 4px; }
+.t5-m-jer span i { width: 14px; height: 11px; }
+.t5-m-rel i { width: 24px; height: 24px; border-radius: 50%; opacity: .75; margin: 0 -5px; }
+.t5-m-matriz { display: grid !important; grid-template-columns: repeat(2, 20px); gap: 3px !important; align-content: center; justify-content: center; }
+.t5-m-matriz i { height: 15px; }
+.t5-m-piram i { width: 46px; height: 38px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.t5-m-pasos { align-items: flex-end !important; padding-bottom: 14px !important; }
+.t5-m-pasos i { width: 15px; }
+.t5-m-pasos i:nth-child(1) { height: 12px; } .t5-m-pasos i:nth-child(2) { height: 22px; } .t5-m-pasos i:nth-child(3) { height: 32px; }
+.t5-m-inv { align-items: flex-start !important; padding-top: 14px !important; }
+.t5-m-flecha i { width: 50px; height: 34px; clip-path: polygon(0 35%, 60% 35%, 60% 5%, 100% 50%, 60% 95%, 60% 65%, 0 65%); }
+.t5-m-gira i { transform: rotate(-35deg); }
+.t5-m-img i { width: 16px; height: 22px; background: #BFD0EE !important; border: 2px solid #4472C4; }
+.t5-w-prev .dib i { display: block; background: #4472C4; border-radius: 3px; }
+.t5-w-prev .dib.t5-m-proc i { width: 44px; height: 32px; }
+.t5-w-prev .dib.t5-m-proc b { font-size: 26px; }
+</style>
+</head>
+<body class="area-5">
+
+<!-- Iconos de la cinta de Word (se usan en la plantilla t5-word-smartart) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="t5-i-portada" viewBox="0 0 32 32"><rect x="7" y="3" width="18" height="26" rx="2" fill="#fff" stroke="#616161" stroke-width="1.5"/><rect x="10" y="7" width="12" height="7" fill="#185ABD"/></symbol>
+  <symbol id="t5-i-tabla" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="20" rx="2" fill="#fff" stroke="#616161" stroke-width="1.5"/><path d="M4 12h24M4 19h24M12 6v20M20 6v20" stroke="#616161" stroke-width="1.5"/><rect x="4" y="6" width="24" height="6" fill="#185ABD" opacity=".7"/></symbol>
+  <symbol id="t5-i-imagen" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="20" rx="2" fill="#fff" stroke="#616161" stroke-width="1.5"/><path d="M6 24l7-9 5 6 3-3 5 6z" fill="#3A96DD"/><circle cx="21" cy="12" r="2.5" fill="#F3C51A"/></symbol>
+  <symbol id="t5-i-formas" viewBox="0 0 32 32"><circle cx="12" cy="13" r="7" fill="none" stroke="#185ABD" stroke-width="2"/><rect x="14" y="15" width="13" height="12" fill="#fff" stroke="#616161" stroke-width="1.8"/></symbol>
+  <symbol id="t5-i-iconos" viewBox="0 0 32 32"><circle cx="16" cy="12" r="5" fill="none" stroke="#616161" stroke-width="1.8"/><path d="M7 27c1-6 5-8 9-8s8 2 9 8" fill="none" stroke="#616161" stroke-width="1.8"/></symbol>
+  <symbol id="t5-i-3d" viewBox="0 0 32 32"><path d="M16 4l11 6v12l-11 6-11-6V10z" fill="#fff" stroke="#616161" stroke-width="1.6"/><path d="M5 10l11 6 11-6M16 16v12" stroke="#616161" stroke-width="1.6" fill="none"/><path d="M16 4l11 6-11 6-11-6z" fill="#3A96DD" opacity=".6"/></symbol>
+  <symbol id="t5-i-smartart" viewBox="0 0 32 32"><rect x="11" y="3" width="10" height="7" rx="1.5" fill="#13A10E"/><rect x="3" y="20" width="10" height="7" rx="1.5" fill="#13A10E"/><rect x="19" y="20" width="10" height="7" rx="1.5" fill="#13A10E"/><path d="M16 10v5M8 20v-5h16v5" stroke="#616161" stroke-width="1.6" fill="none"/></symbol>
+  <symbol id="t5-i-grafico" viewBox="0 0 32 32"><rect x="5" y="16" width="5" height="11" fill="#185ABD"/><rect x="13" y="8" width="5" height="19" fill="#3A96DD"/><rect x="21" y="12" width="5" height="15" fill="#13A10E"/><path d="M3 28h26" stroke="#616161" stroke-width="1.5"/></symbol>
+  <symbol id="t5-i-captura" viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="17" rx="2" fill="#fff" stroke="#616161" stroke-width="1.5"/><path d="M9 12v-2h3M23 12v-2h-3M9 19v2h3M23 19v2h-3" stroke="#185ABD" stroke-width="1.8" fill="none"/></symbol>
+  <symbol id="t5-i-vinculo" viewBox="0 0 32 32"><path d="M14 19l-3 3a4 4 0 01-6-6l4-4a4 4 0 016 0M18 13l3-3a4 4 0 016 6l-4 4a4 4 0 01-6 0" stroke="#616161" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M12 20l8-8" stroke="#185ABD" stroke-width="2"/></symbol>
+  <symbol id="t5-i-comentario" viewBox="0 0 32 32"><path d="M5 7h22v14H14l-6 5v-5H5z" fill="#fff" stroke="#616161" stroke-width="1.6"/></symbol>
+  <symbol id="t5-i-cabecera" viewBox="0 0 32 32"><rect x="7" y="3" width="18" height="26" rx="2" fill="#fff" stroke="#616161" stroke-width="1.5"/><rect x="9" y="5" width="14" height="4" fill="#185ABD"/></symbol>
+  <symbol id="t5-i-texto" viewBox="0 0 32 32"><rect x="5" y="6" width="22" height="20" fill="#fff" stroke="#616161" stroke-width="1.5" stroke-dasharray="3 2"/><path d="M11 12h10M16 12v10" stroke="#242424" stroke-width="2"/></symbol>
+  <symbol id="t5-i-wordart" viewBox="0 0 32 32"><text x="16" y="25" text-anchor="middle" font-family="Georgia" font-size="24" font-weight="700" fill="#185ABD" stroke="#0F3C7A" stroke-width=".8">A</text></symbol>
+  <symbol id="t5-i-simbolo" viewBox="0 0 32 32"><text x="16" y="25" text-anchor="middle" font-family="Segoe UI" font-size="22" fill="#242424">Ω</text></symbol>
+</svg>
+
+<!-- Plantilla: web inventada del fabricante Kalimpra (simulación de la 5.1 y maqueta de la diapositiva de manuales) -->
+<template id="t5-kalimpra">
+  <div class="ventana t5-v">
+    <div class="pantalla-html" data-id="inicio">
+      <div class="v-barra"><span class="v-pestana">Kalimpra · Impresoras para casa y oficina</span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">https://www.kalimpra.es</span><span>⋮</span></div>
+      <div class="v-cuerpo"><div class="t5-k">
+        <div class="t5-k-cab"><span class="t5-k-logo">kalim<b>pra</b></span>
+          <div class="t5-k-menu"><span>Productos</span><span>Tienda</span><span>Ofertas</span><span data-ir="soporte">Soporte</span><span>Contacto</span></div>
+        </div>
+        <div class="t5-k-cuerpo">
+          <div>
+            <div class="t5-k-hero"><div><h3>Nueva serie J</h3><p>Imprime, escanea y copia desde el móvil.</p><span class="bt">Descúbrela</span></div><img src="img/ia/impresora.webp" alt=""><div class="t5-k-puntos"><i></i><i></i><i></i></div></div>
+            <div class="t5-k-mini"><div>Impresoras de tinta</div><div>Impresoras láser</div><div>Tinta y tóner</div></div>
+          </div>
+          <div class="t5-k-anuncio"><span class="pat">Patrocinado</span><b>Descarga aquí cualquier manual gratis</b>Todos los manuales en un solo clic. Sin registro.<span class="bt">DESCARGAR</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="pantalla-html" data-id="soporte">
+      <div class="v-barra"><span class="v-pestana">Soporte · Kalimpra</span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">https://www.kalimpra.es/soporte</span><span>⋮</span></div>
+      <div class="v-cuerpo"><div class="t5-k">
+        <div class="t5-k-cab"><span class="t5-k-logo">kalim<b>pra</b></span>
+          <div class="t5-k-menu"><span>Productos</span><span>Tienda</span><span>Ofertas</span><span class="on">Soporte</span><span>Contacto</span></div>
+        </div>
+        <div class="t5-k-cuerpo">
+          <div class="t5-k-sop">
+            <h3>¿En qué podemos ayudarte?</h3>
+            <p class="t5-k-etq">Busca tu producto</p>
+            <div class="t5-buscador"><div class="campo" data-ir="soporte"><input type="text" placeholder="Escribe el modelo o el número de serie" aria-label="Busca tu producto" autocomplete="off" spellcheck="false"></div><span class="t5-lupa" title="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></span></div>
+            <div class="t5-k-enlaces"><div><i>⟳</i>Estado de mi reparación</div><div><i>✓</i>Garantía</div><div><i>✉</i>Pedir una reparación</div></div>
+          </div>
+          <div class="t5-k-anuncio"><span class="pat">Patrocinado</span><b>Descarga aquí cualquier manual gratis</b>Todos los manuales en un solo clic. Sin registro.<span class="bt">DESCARGAR</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="pantalla-html" data-id="ficha">
+      <div class="v-barra"><span class="v-pestana">Kalimpra J300 · Soporte</span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">https://www.kalimpra.es/soporte/j300</span><span>⋮</span></div>
+      <div class="v-cuerpo"><div class="t5-k">
+        <div class="t5-k-cab"><span class="t5-k-logo">kalim<b>pra</b></span>
+          <div class="t5-k-menu"><span>Productos</span><span>Tienda</span><span>Ofertas</span><span class="on">Soporte</span><span>Contacto</span></div>
+        </div>
+        <div class="t5-k-ficha">
+          <p class="t5-k-ruta">Soporte › Impresoras › Serie J › J300</p>
+          <div class="t5-k-prod"><img src="img/ia/impresora.webp" alt=""><div><h3>Kalimpra J300</h3><p>Impresora multifunción de tinta con wifi. Imprime, escanea y copia.</p></div></div>
+          <div class="t5-k-pest"><span class="on">Resumen</span><span>Controladores y software</span><span data-ir="manuales">Manuales y documentos</span><span>Garantía</span><span>Contactar</span></div>
+          <div class="t5-k-datos"><div><b>Tipo:</b> multifunción de tinta</div><div><b>Conexión:</b> wifi y USB</div><div><b>Funciones:</b> imprimir, escanear, copiar</div><div><b>Sistemas:</b> Windows, macOS, Android, iOS</div></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="pantalla-html" data-id="manuales">
+      <div class="v-barra"><span class="v-pestana">Kalimpra J300 · Manuales y documentos</span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">https://www.kalimpra.es/soporte/j300/manuales</span><span>⋮</span></div>
+      <div class="v-cuerpo"><div class="t5-k">
+        <div class="t5-k-cab"><span class="t5-k-logo">kalim<b>pra</b></span>
+          <div class="t5-k-menu"><span>Productos</span><span>Tienda</span><span>Ofertas</span><span class="on">Soporte</span><span>Contacto</span></div>
+        </div>
+        <div class="t5-k-ficha">
+          <p class="t5-k-ruta">Soporte › Impresoras › Serie J › J300</p>
+          <div class="t5-k-pest"><span>Resumen</span><span>Controladores y software</span><span class="on">Manuales y documentos</span><span>Garantía</span><span>Contactar</span></div>
+          <div class="t5-k-doc"><span class="pdf">PDF</span><b>Guía de instalación rápida</b><small>PDF · 2 MB</small><span class="des">Descargar</span></div>
+          <div class="t5-k-doc" data-ir="final"><span class="pdf">PDF</span><b>Manual de usuario</b><small>PDF · español · 8 MB</small><span class="des">Descargar</span></div>
+          <div class="t5-k-doc"><span class="pdf">PDF</span><b>Declaración de conformidad</b><small>PDF · 1 MB</small><span class="des">Descargar</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="v-barra"><span class="v-pestana">Manual de usuario Kalimpra J300.pdf</span></div>
+      <div class="v-direccion"><span>←</span><span>→</span><span>⟳</span><span class="url">https://www.kalimpra.es/docs/manual-j300-es.pdf</span><span>⋮</span></div>
+      <div class="v-cuerpo"><div class="t5-k-visor"><div class="hoja"><h4>Kalimpra J300</h4><p>Manual de usuario · Español</p><i></i><i style="width:80%"></i><i></i><i style="width:60%"></i><i></i><i style="width:90%"></i><i style="width:70%"></i></div></div></div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: Word de Microsoft 365 con el documento «Cómo pedir una beca» (simulación de la 5.3 y maquetas del SmartArt) -->
+<template id="t5-word-smartart">
+  <div class="ventana t5-v">
+    <div class="pantalla-html" data-id="inicio">
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span class="on">Inicio</span><span data-ir="insertar">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+        <div class="t5-w-cinta">
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-portada"/></svg>Pegar</div><div class="t5-w-col"><span class="t5-w-bp">✂ Cortar</span><span class="t5-w-bp">⧉ Copiar</span><span class="t5-w-bp">🖌 Copiar formato</span></div></div><div class="nom-g">Portapapeles</div></div>
+          <div class="t5-w-grupo"><div class="bts" style="flex-direction:column;gap:6px"><div class="t5-w-ini"><span class="caja-f">Aptos (Cuerpo)</span><span class="caja-f">11</span><span>A⁺ A⁻</span></div><div class="t5-w-ini"><b>N</b><i>K</i><u>S</u><span>abc</span><span>x₂ x²</span><span style="color:#C00000;font-weight:700">A</span></div></div><div class="nom-g">Fuente</div></div>
+          <div class="t5-w-grupo"><div class="bts" style="flex-direction:column;gap:6px"><div class="t5-w-ini"><span>☰</span><span>⋮☰</span><span>⇤</span><span>⇥</span><span>¶</span></div><div class="t5-w-ini"><span>≡</span><span>≣</span><span>≡</span><span>≣</span><span>↕</span></div></div><div class="nom-g">Párrafo</div></div>
+          <div class="t5-w-grupo"><div class="bts" style="gap:6px;align-items:center"><span class="t5-w-estilo">Normal</span><span class="t5-w-estilo">Sin espaciado</span><span class="t5-w-estilo" style="color:#0F4761;font-size:15px">Título 1</span><span class="t5-w-estilo" style="color:#0F4761">Título 2</span></div><div class="nom-g">Estilos</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-col"><span class="t5-w-bp">🔍 Buscar</span><span class="t5-w-bp">⇄ Reemplazar</span><span class="t5-w-bp">⬚ Seleccionar</span></div></div><div class="nom-g">Edición</div></div>
+        </div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p><p><span class="t5-w-cursor"></span></p></div></div>
+        <div class="t5-w-estado"><span>Página 1 de 1</span><span>7 palabras</span><span>Español (España)</span></div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="insertar">
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+        <div class="t5-w-cinta">
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-portada"/></svg>Páginas</div></div><div class="nom-g">Páginas</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-tabla"/></svg>Tabla</div></div><div class="nom-g">Tablas</div></div>
+          <div class="t5-w-grupo"><div class="bts">
+            <div class="t5-w-bt"><svg><use href="#t5-i-imagen"/></svg>Imágenes</div>
+            <div class="t5-w-bt"><svg><use href="#t5-i-formas"/></svg>Formas</div>
+            <div class="t5-w-bt"><svg><use href="#t5-i-iconos"/></svg>Iconos</div>
+            <div class="t5-w-bt"><svg><use href="#t5-i-3d"/></svg>Modelos<br>3D</div>
+            <div class="t5-w-bt" data-ir="dialogo"><svg><use href="#t5-i-smartart"/></svg>SmartArt</div>
+            <div class="t5-w-bt"><svg><use href="#t5-i-grafico"/></svg>Gráfico</div>
+            <div class="t5-w-bt"><svg><use href="#t5-i-captura"/></svg>Captura</div>
+          </div><div class="nom-g">Ilustraciones</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-vinculo"/></svg>Vínculo</div></div><div class="nom-g">Vínculos</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-comentario"/></svg>Comentario</div></div><div class="nom-g">Comentarios</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-cabecera"/></svg>Encabezado</div><div class="t5-w-bt"><svg><use href="#t5-i-cabecera"/></svg>Pie de<br>página</div></div><div class="nom-g">Encabezado y pie</div></div>
+          <div class="t5-w-grupo" style="border:0"><div class="bts"><div class="t5-w-bt" style="min-width:62px"><svg><use href="#t5-i-texto"/></svg>Cuadro<br>de texto</div><div class="t5-w-bt"><svg><use href="#t5-i-wordart"/></svg>WordArt</div></div><div class="nom-g">Texto</div></div>
+        </div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p><p><span class="t5-w-cursor"></span></p></div></div>
+        <div class="t5-w-estado"><span>Página 1 de 1</span><span>7 palabras</span><span>Español (España)</span></div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="dialogo">
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+        <div class="t5-w-cinta"></div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p></div></div>
+        <div class="t5-w-velo"></div>
+        <div class="t5-w-dlg">
+          <div class="cab-d"><span>Elegir un gráfico SmartArt</span><span>?  ✕</span></div>
+          <div class="cuerpo-d">
+            <div class="t5-w-cats"><div class="on"><i></i>Todos</div><div><i></i>Lista</div><div data-ir="proceso"><i></i>Proceso</div><div><i></i>Ciclo</div><div><i></i>Jerarquía</div><div><i></i>Relación</div><div><i></i>Matriz</div><div><i></i>Pirámide</div><div><i></i>Imagen</div><div><i></i>Office.com</div></div>
+            <div class="t5-w-minis">
+              <div class="t5-w-mini on t5-m-bloques"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-lista"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-cheu"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-proc"><i></i><b>›</b><i></i><b>›</b><i></i></div>
+              <div class="t5-w-mini t5-m-ciclo"><i></i><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-jer"><i class="arr"></i><span><i></i><i></i><i></i></span></div>
+              <div class="t5-w-mini t5-m-rel"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-matriz"><i></i><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-piram"><i></i></div>
+              <div class="t5-w-mini t5-m-pasos"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-img"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-lista"><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="t5-w-prev"><div class="dib t5-m-bloques" style="display:grid"><i></i><i></i><i></i><i></i><i></i><i></i></div><h5>Lista de bloques básica</h5><p>Se usa para mostrar bloques de información no secuenciales o agrupados.</p></div>
+          </div>
+          <div class="t5-w-pie"><span class="pri">Aceptar</span><span>Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="proceso">
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+        <div class="t5-w-cinta"></div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p></div></div>
+        <div class="t5-w-velo"></div>
+        <div class="t5-w-dlg">
+          <div class="cab-d"><span>Elegir un gráfico SmartArt</span><span>?  ✕</span></div>
+          <div class="cuerpo-d">
+            <div class="t5-w-cats"><div><i></i>Todos</div><div><i></i>Lista</div><div class="on"><i></i>Proceso</div><div><i></i>Ciclo</div><div><i></i>Jerarquía</div><div><i></i>Relación</div><div><i></i>Matriz</div><div><i></i>Pirámide</div><div><i></i>Imagen</div><div><i></i>Office.com</div></div>
+            <div class="t5-w-minis">
+              <div class="t5-w-mini on t5-m-proc" data-ir="seleccionado" title="Proceso básico"><i></i><b>›</b><i></i><b>›</b><i></i></div>
+              <div class="t5-w-mini t5-m-pasos"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-cheu"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-flecha"><i></i></div>
+              <div class="t5-w-mini t5-m-procv"><i></i><b>⌄</b><i></i><b>⌄</b><i></i></div>
+              <div class="t5-w-mini t5-m-cheu t5-m-peq"><i></i><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-pasos t5-m-inv"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-proc t5-m-redondo"><i></i><b>›</b><i></i><b>›</b><i></i></div>
+              <div class="t5-w-mini t5-m-lista"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-flecha t5-m-gira"><i></i></div>
+              <div class="t5-w-mini t5-m-procv t5-m-redondo"><i></i><b>⌄</b><i></i><b>⌄</b><i></i></div>
+              <div class="t5-w-mini t5-m-cheu"><i></i><i></i></div>
+            </div>
+            <div class="t5-w-prev"><div class="dib t5-m-proc"><i></i><b>›</b><i></i><b>›</b><i></i></div><h5>Proceso básico</h5><p>Se usa para mostrar una progresión o los pasos seguidos de una tarea, un proceso o un flujo de trabajo.</p></div>
+          </div>
+          <div class="t5-w-pie"><span class="pri" data-ir="final">Aceptar</span><span>Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="seleccionado">
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+        <div class="t5-w-cinta"></div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p></div></div>
+        <div class="t5-w-velo"></div>
+        <div class="t5-w-dlg">
+          <div class="cab-d"><span>Elegir un gráfico SmartArt</span><span>?  ✕</span></div>
+          <div class="cuerpo-d">
+            <div class="t5-w-cats"><div><i></i>Todos</div><div><i></i>Lista</div><div class="on"><i></i>Proceso</div><div><i></i>Ciclo</div><div><i></i>Jerarquía</div><div><i></i>Relación</div><div><i></i>Matriz</div><div><i></i>Pirámide</div><div><i></i>Imagen</div><div><i></i>Office.com</div></div>
+            <div class="t5-w-minis">
+              <div class="t5-w-mini on t5-m-proc" data-ir="final" title="Proceso básico"><i></i><b>›</b><i></i><b>›</b><i></i></div>
+              <div class="t5-w-mini t5-m-pasos"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-cheu"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-flecha"><i></i></div>
+              <div class="t5-w-mini t5-m-procv"><i></i><b>⌄</b><i></i><b>⌄</b><i></i></div>
+              <div class="t5-w-mini t5-m-cheu t5-m-peq"><i></i><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-pasos t5-m-inv"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-proc t5-m-redondo"><i></i><b>›</b><i></i><b>›</b><i></i></div>
+              <div class="t5-w-mini t5-m-lista"><i></i><i></i><i></i></div>
+              <div class="t5-w-mini t5-m-flecha t5-m-gira"><i></i></div>
+              <div class="t5-w-mini t5-m-procv t5-m-redondo"><i></i><b>⌄</b><i></i><b>⌄</b><i></i></div>
+              <div class="t5-w-mini t5-m-cheu"><i></i><i></i></div>
+            </div>
+            <div class="t5-w-prev"><div class="dib t5-m-proc"><i></i><b>›</b><i></i><b>›</b><i></i></div><h5>Proceso básico</h5><p>Se usa para mostrar una progresión o los pasos seguidos de una tarea, un proceso o un flujo de trabajo.</p></div>
+          </div>
+          <div class="t5-w-pie"><span class="pri" data-ir="final">Aceptar</span><span>Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="t5-w">
+        <div class="t5-w-tit"><span class="app">W</span><span>⟲ ⟳ 💾</span><span class="nom">Cómo pedir una beca.docx · Guardado</span><span class="bus">Buscar</span><span>—  ☐  ✕</span></div>
+        <div class="t5-w-tabs"><span class="arch">Archivo</span><span>Inicio</span><span>Insertar</span><span>Dibujar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Revisar</span><span>Vista</span><span class="on">Diseño de SmartArt</span><span class="ctx">Formato</span></div>
+        <div class="t5-w-cinta">
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-col"><span class="t5-w-bp">＋ Agregar forma</span><span class="t5-w-bp">↑ Promover</span><span class="t5-w-bp">↓ Disminuir nivel</span></div><div class="t5-w-bt"><svg><use href="#t5-i-texto"/></svg>Panel de<br>texto</div></div><div class="nom-g">Crear gráfico</div></div>
+          <div class="t5-w-grupo"><div class="bts" style="gap:6px;align-items:center"><div class="t5-w-mini on t5-m-proc" style="width:76px;height:54px"><i></i><b>›</b><i></i><b>›</b><i></i></div><div class="t5-w-mini t5-m-cheu" style="width:76px;height:54px"><i></i><i></i><i></i></div><div class="t5-w-mini t5-m-pasos" style="width:76px;height:54px"><i></i><i></i><i></i></div></div><div class="nom-g">Diseños</div></div>
+          <div class="t5-w-grupo"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-grafico"/></svg>Cambiar<br>colores</div></div><div class="nom-g">Colores</div></div>
+          <div class="t5-w-grupo"><div class="bts" style="gap:6px;align-items:center"><span class="t5-w-estilo">▭</span><span class="t5-w-estilo" style="box-shadow:2px 2px 4px #999">▭</span><span class="t5-w-estilo" style="background:#DCE6F7">▭</span></div><div class="nom-g">Estilos SmartArt</div></div>
+          <div class="t5-w-grupo" style="border:0"><div class="bts"><div class="t5-w-bt"><svg><use href="#t5-i-portada"/></svg>Restablecer<br>gráfico</div></div><div class="nom-g">Restablecer</div></div>
+        </div>
+        <div class="t5-w-doc"><div class="t5-w-pag"><h1>Cómo pedir una beca</h1><p>Sigue estos pasos:</p>
+          <div class="t5-w-sa"><div class="t5-w-panel"><b>Escriba aquí el texto</b><div>• [Texto]</div><div>• [Texto]</div><div>• [Texto]</div></div><span>[Texto]</span><i></i><span>[Texto]</span><i></i><span>[Texto]</span></div>
+        </div></div>
+        <div class="t5-w-estado"><span>Página 1 de 1</span><span>7 palabras</span><span>Español (España)</span></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada e índice ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 5</p>
+  <h1>Resolución de problemas</h1>
+  <p class="sub" style="max-width:600px">Resuelve problemas técnicos, elige la tecnología que necesitas, crea con ella y sigue aprendiendo.</p>
+  <div class="datos"><span class="pill">Área 5</span><span class="pill clara">4 competencias</span><span class="pill clara">2 horas</span><span class="pill clara">12 preguntas en el examen</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 5</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp">
+      <a href="#c51"><img class="ico" src="img/ia/comp-51.webp" alt=""><div><span class="n">5.1</span><h3>Identificar y resolver problemas técnicos</h3><span class="estado-comp" data-comp="5.1"></span></div></a>
+      <a href="#c52"><img class="ico" src="img/ia/comp-52.webp" alt=""><div><span class="n">5.2</span><h3>Identificar necesidades y respuestas tecnológicas</h3><span class="estado-comp" data-comp="5.2"></span></div></a>
+      <a href="#c53"><img class="ico" src="img/ia/comp-53.webp" alt=""><div><span class="n">5.3</span><h3>Soluciones creativas con tecnologías digitales</h3><span class="estado-comp" data-comp="5.3"></span></div></a>
+      <a href="#c54"><img class="ico" src="img/ia/comp-54.webp" alt=""><div><span class="n">5.4</span><h3>Identificar necesidades de competencias digitales</h3><span class="estado-comp" data-comp="5.4"></span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Esta área tiene 12 preguntas: 3 por cada competencia (2 de conocimientos y 1 de habilidades). En la demo son las preguntas 17 a 20. Cada competencia termina con un <b>Comprueba</b> de 3 preguntas como las del examen. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<!-- ======================= 5.1 Problemas técnicos ======================= -->
+
+<section class="competencia" data-label="5.1 Identificar y resolver problemas técnicos" data-seccion="5.1" data-deck-id="c51" data-deck-section="5.1">
+  <div class="izq">
+    <p class="n">5.1</p>
+    <h2>Identificar y resolver problemas técnicos</h2>
+    <p class="examen">En el examen: 3 preguntas. Aquí practicas con una pregunta del estilo de la demo, un reto y una simulación.</p>
+    <img class="ico" src="img/ia/comp-51.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar al servicio técnico qué le pasa a tu aparato, con los datos que necesita.</li>
+      <li>Buscar la solución en Internet: foros, vídeos y tutoriales.</li>
+      <li>Encontrar en Internet el servicio técnico oficial de un aparato.</li>
+      <li>Encontrar en Internet su manual de usuario.</li>
+      <li>Cambiar los ajustes básicos de Windows, del móvil y de las aplicaciones.</li>
+    </ol>
+    <span class="estado-comp" data-comp="5.1"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Antes de pedir ayuda" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Antes de pedir ayuda</h2><p class="entrada">Muchos fallos se arreglan con estos pasos. Hazlos en orden.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ol class="pasos peq">
+        <li><b>Reinicia</b> el aparato: apágalo y vuelve a encenderlo.</li>
+        <li>Comprueba los <b>cables</b>, el enchufe y la batería.</li>
+        <li>Si no tienes Internet, mira si otro aparato de casa tiene conexión. Si ninguno tiene, reinicia el <b>router</b> y mira sus luces. El manual del router dice cuáles tienen que estar encendidas.</li>
+        <li>Si falla una <b>aplicación</b>, ciérrala y ábrela. Después, actualízala. Si sigue fallando, desinstálala y vuelve a instalarla.</li>
+        <li>Apunta el <b>mensaje de error</b> exacto y lo que has probado. Puedes hacer una captura con <kbd>Windows</kbd> + <kbd>Mayús</kbd> + <kbd>S</kbd>. El servicio técnico te lo va a preguntar.</li>
+      </ol>
+      <div class="tarjetas" style="--n:2;gap:20px">
+        <img class="ico p" src="img/ia/reiniciar.webp" alt="">
+        <img class="ico p" src="img/ia/cables.webp" alt="">
+        <img class="ico p" src="img/ia/router.webp" alt="">
+        <img class="ico p" src="img/ia/error.webp" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="El servicio técnico" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>El servicio técnico</h2></div>
+  <div class="cuerpo">
+    <div class="t5-fila-ico">
+      <div class="def"><span class="t">Servicio técnico</span><p>El servicio técnico (también soporte técnico o asistencia técnica) es el servicio que repara aparatos y resuelve problemas de uso.</p></div>
+      <img class="ico p" src="img/ia/soporte.webp" alt="">
+    </div>
+    <p>Tienes tres opciones:</p>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta c-ok"><h3>Servicio técnico oficial</h3><p>Es del fabricante o está autorizado por él.</p><p>Conoce el aparato y usa piezas originales. Atiende la garantía.</p></div>
+      <div class="tarjeta"><h3>La tienda donde lo compraste</h3><p>Tramita la garantía.</p><p>Lleva la factura o el ticket de compra.</p></div>
+      <div class="tarjeta c-ko"><h3>Taller no oficial</h3><p>Puede ser más barato.</p><p>Si abre el aparato durante la garantía, puedes perderla.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Garantía, contacto y falsos servicios técnicos" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Garantía, contacto y falsos servicios técnicos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>La garantía</h3><p>La <b>garantía</b> es el tiempo en que el vendedor tiene que arreglar o cambiar gratis un producto que falla.</p><p>En España es de <b>3 años</b> para los productos nuevos comprados desde el 1 de enero de 2022. Antes eran 2 años.</p><p>Guarda la factura o el ticket.</p></div>
+      <div class="tarjeta"><h3>Cómo contactar</h3><ul class="lista peq"><li>Por teléfono.</li><li>Por chat o con el formulario de su web.</li><li>Con cita en una tienda.</li><li>Con recogida del aparato por mensajero.</li></ul></div>
+    </div>
+    <div class="caja aviso"><span class="tt">Cuidado: falsos servicios técnicos</span>Hay webs, anuncios y llamadas que dicen ser de Microsoft o de otra marca. Te piden pagar o instalar un programa de control remoto, como AnyDesk o TeamViewer. Es una estafa. Microsoft no te llama para avisarte de un virus. Si la estafa es por teléfono, se llama vishing (tema 4).</div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué datos das al servicio técnico" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Explica el problema (1): los datos del aparato</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <table class="tabla peq">
+        <tr><th>Dato</th><th>Dónde lo encuentras</th></tr>
+        <tr><td>Marca y modelo<br><span class="gris" style="font-weight:400">«Lenovo IdeaPad 3»</span></td><td>Etiqueta de debajo del portátil o de detrás de la torre, caja o factura. Móvil: <b>Ajustes › Acerca del teléfono</b>. Windows 11: <b>Configuración › Sistema › Información</b>.</td></tr>
+        <tr><td>Número de serie (S/N) o IMEI</td><td>Etiqueta o caja. Móvil: <b>Ajustes › Acerca del teléfono</b>, o marca <code>*#06#</code> para ver el IMEI (tema 4).</td></tr>
+        <tr><td>Sistema y versión<br><span class="gris" style="font-weight:400">«Windows 11», «Android 16»</span></td><td><b>Configuración › Sistema › Información</b>. Móvil: <b>Ajustes › Acerca del teléfono › Información de software</b>.</td></tr>
+        <tr><td>Fecha de compra</td><td>Factura, ticket o pedido online. Sirve para la garantía.</td></tr>
+      </table>
+      <div class="t5-col" style="align-items:center">
+        <div class="t5-etiqueta" role="img" aria-label="Etiqueta de un portátil con la marca, el modelo y el número de serie">
+          <div class="marca-et">NUBO</div>
+          <div><b>Modelo:</b> <span class="resalta">Nubo Book 14</span></div>
+          <div><b>Tipo:</b> NB14-A2</div>
+          <div><b>S/N:</b> <span class="resalta">NB4X7K29Q3</span></div>
+          <div class="barras"></div>
+          <div class="pie-et">Entrada: 19 V ⎓ 3,42 A · Fabricado en 2025</div>
+        </div>
+        <p class="peq">El <b>número de serie</b> es el código que identifica a un aparato concreto. No hay dos iguales.</p>
+        <p class="cap">Etiqueta de una marca inventada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Explica qué pasa y qué has probado" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Explica el problema (2): qué pasa</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Dato</th><th>Ejemplo</th><th>Cómo lo consigues</th></tr>
+      <tr><td>Qué pasa y desde cuándo</td><td>«La pantalla se queda negra al encender, desde ayer».</td><td>Fíjate bien y apúntalo.</td></tr>
+      <tr><td>Mensaje de error exacto</td><td>«No se encuentra MSVCP140.dll».</td><td>Haz una captura (<kbd>Windows</kbd> + <kbd>Mayús</kbd> + <kbd>S</kbd>) o una foto con el móvil.</td></tr>
+      <tr><td>Qué has probado</td><td>«He reiniciado y he probado otro enchufe».</td><td>Los pasos de «Antes de pedir ayuda».</td></tr>
+    </table>
+    <div class="t5-bocadillos">
+      <div class="t5-boca mal"><span class="q">Mal</span>«Mi ordenador no va».</div>
+      <div class="t5-boca bien"><span class="q">Bien</span>«Mi portátil Lenovo IdeaPad 3, comprado en marzo de 2025, no enciende desde ayer. La luz de carga no se enciende. He probado otro enchufe y otro cargador».</div>
+    </div>
+    <div class="caja aviso"><span class="tt">Nunca des tus contraseñas</span>El servicio técnico no las necesita para saber qué le pasa al aparato.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Encuentra la web oficial del fabricante" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Encuentra la web oficial del fabricante</h2><p class="entrada">Allí están el servicio técnico oficial y el manual de usuario. La caja suele traer solo una guía rápida.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <ol class="pasos">
+        <li>Busca la marca y el modelo exactos, en la etiqueta o en la caja.</li>
+        <li>En el buscador, escribe marca + modelo + «soporte» o «manual». Ejemplo: <code>HP DeskJet 2720e manual</code>.</li>
+        <li>Abre la web oficial del fabricante. Comprueba la dirección: hp.com, samsung.com, lenovo.com, apple.com.</li>
+      </ol>
+      <div class="t5-col">
+        <div class="tarjeta"><h3>Páginas de soporte oficiales</h3><ul class="lista peq"><li>support.hp.com</li><li>samsung.com/es/support</li><li>support.apple.com/es-es</li><li>pcsupport.lenovo.com</li></ul></div>
+        <div class="caja aviso"><span class="tt">«Patrocinado»</span>No entres en los resultados con esa etiqueta (tema 1). Pueden llevarte a webs falsas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="En la web del fabricante: Soporte y Manuales" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>En la web: Soporte › tu modelo › Manuales</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 700px;gap:48px">
+      <div class="t5-col">
+        <ol class="pasos peq" style="counter-reset:paso 3">
+          <li>Entra en el apartado <b>Soporte</b>. Puede llamarse Asistencia, Ayuda o Atención al cliente.</li>
+          <li>Escribe el modelo o el número de serie en el buscador de esa web.</li>
+          <li>Elige lo que necesitas: <b>Manuales</b> (el manual de usuario en PDF), <b>Descargas</b> o <b>Controladores</b>, <b>Contacto</b>, <b>Reparación</b> o <b>Garantía</b>.</li>
+        </ol>
+        <p class="peq">Un <b>controlador</b> (o driver) es el programa que permite al ordenador usar un aparato, como una impresora.</p>
+      </div>
+      <div class="t5-col" style="gap:12px">
+        <div class="maqueta-movil t5-maqueta" data-plantilla="#t5-kalimpra" data-pantalla="ficha" style="zoom:.71"></div>
+        <p class="cap">Ficha de soporte de una impresora. Kalimpra es una marca inventada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Reto: busca en un manual" data-seccion="5.1">
+  <div class="cab" style="margin-bottom:24px"><p class="etq">5.1 · Práctica (no cuenta para el Comprueba)</p><h2>Reto: busca en un manual</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/Manual Rutelia R5.pdf",
+       "enunciado": "Descarga el manual del router Rutelia R5 (una marca inventada). La luz Wi-Fi de tu router está apagada. Según el manual, ¿qué tienes que hacer?",
+       "pista": ["Abre el PDF con el navegador y pulsa **Ctrl + F** para buscar «Wi-Fi».", "Mira la tabla **Luces del router** de la página 2, en la fila **Wi-Fi**."],
+       "opciones": ["Pulsar el botón WLAN durante 3 segundos", "Pulsar el botón Reset durante 10 segundos", "Llamar a tu compañía de Internet", "Cambiar el cable de red"], "correcta": 0,
+       "explicacion": "La tabla de luces del manual dice que la luz Wi-Fi apagada significa que la wifi está desactivada. Se activa con el botón **WLAN**. El botón Reset borra la configuración."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Busca ayuda en Internet" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Busca ayuda en Internet</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Dónde</th><th>Cómo lo usas</th></tr>
+      <tr><td>Buscador (Google, Bing)</td><td>Copia el mensaje de error exacto entre comillas y añade el sistema o el modelo. Las comillas buscan la frase exacta.</td></tr>
+      <tr><td>Ayuda oficial</td><td>Guías paso a paso del fabricante: support.microsoft.com, support.google.com, support.apple.com.</td></tr>
+      <tr><td>Foro</td><td>Un <b>foro</b> es una web donde los usuarios preguntan y otros responden. Ejemplos: Comunidad de Microsoft, foros del fabricante, Reddit. Mira si hay una respuesta marcada como solución y su fecha.</td></tr>
+      <tr><td>Vídeo tutorial (YouTube)</td><td>Busca «cómo + tarea + modelo». Ejemplo: «cómo hacer una captura de pantalla Samsung Galaxy A55». Mira la fecha y los comentarios.</td></tr>
+      <tr><td>Tutorial escrito o blog</td><td>Explica los pasos con capturas de pantalla.</td></tr>
+    </table>
+    <div class="ruta-bloque"><span class="donde">Ejemplo de búsqueda con un mensaje de error</span><div class="ruta"><span class="disp" style="font-family:'JetBrains Mono',monospace;font-weight:500">Windows 11 "no se encuentra MSVCP140.dll"</span></div></div>
+  </div>
+</section>
+
+<section class="s" data-label="Pide ayuda a un asistente de IA" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Pide ayuda a un asistente de IA</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div class="t5-col">
+        <div class="def"><span class="t">Asistente de IA</span><p>Un asistente de IA (inteligencia artificial) es un programa que entiende lo que escribes y te responde. Ejemplos: ChatGPT, Microsoft Copilot y Google Gemini.</p></div>
+        <p class="peq"><b>Cómo preguntar:</b> describe el aparato, el sistema, el mensaje exacto y lo que has probado. Pide los pasos. La IA puede equivocarse: compruébalo.</p>
+        <div class="t5-boca bien" style="font-size:24px"><span class="q">Ejemplo</span>«Mi portátil con Windows 11 va muy lento al abrir Chrome. Tengo 8 GB de RAM. Ya lo he reiniciado. Dime paso a paso qué tengo que comprobar».</div>
+      </div>
+      <div class="t5-col">
+        <img class="ico p" src="img/ia/ia.webp" alt="">
+        <p class="peq">Para preguntas rápidas, usa un <b>asistente de voz</b>: Gemini (antes, Asistente de Google) o Siri.</p>
+        <div class="caja aviso"><span class="tt">Reglas de seguridad</span>No descargues archivos sueltos (.dll o «programas que limpian el ordenador») de webs desconocidas. No desactives el antivirus ni el cortafuegos. No des contraseñas. No dejes que un desconocido controle tu ordenador a distancia.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cambiar la configuración de Windows" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos · ya lo sabes</p><h2>Cambiar la configuración de Windows</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div class="t5-col">
+        <div class="ruta-bloque"><span class="donde">Windows 11</span><div class="ruta"><span>Inicio</span><i>›</i><span class="disp">Configuración</span></div></div>
+        <p class="peq">También con <kbd>Windows</kbd> + <kbd>I</kbd>. Sus apartados:</p>
+        <ul class="lista peq">
+          <li><b>Sistema</b>: pantalla, sonido e Información del equipo.</li>
+          <li><b>Bluetooth y dispositivos</b> · <b>Red e Internet</b> · <b>Personalización</b> (el fondo).</li>
+          <li><b>Aplicaciones</b>: desinstalar programas.</li>
+          <li><b>Cuentas</b>: un usuario para cada persona (<b>Otros usuarios › Agregar cuenta</b>).</li>
+          <li><b>Hora e idioma</b> · <b>Accesibilidad</b> · <b>Windows Update</b>.</li>
+        </ul>
+      </div>
+      <div class="t5-col">
+        <figure class="foto" style="height:300px"><img src="img/cyl/config-win10.png" alt="Pantalla principal de Configuración de Windows 10 con Sistema, Dispositivos, Cuentas y otros apartados"><figcaption class="credito">Configuración de Windows 10. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+        <div class="caja examen"><span class="tt">En el examen</span>Salen pantallas de Windows 10. Los nombres son parecidos: Sistema, Dispositivos, Cuentas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Plantilla: WhatsApp en Android con el menú ⋮ abierto (la misma maqueta que el tema 4) -->
+<template id="t5-wa-menu">
+  <div class="movil">
+    <div class="pantalla-html" data-id="menu">
+      <div class="wa-barra-estado"><span>10:24</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="tit">WhatsApp</span><span class="bt">◎</span><span class="bt">⋮</span></div>
+      <div class="wa-buscar">🔍 Buscar</div>
+      <div class="wa-chips"><span class="on">Todos</span><span>No leídos</span><span>Favoritos</span><span>Grupos</span></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#E861A7">CL</span><div class="txt"><div class="n">Clase 1.º SMR <small>10:12</small></div><div class="m">Marta: ¿Alguien tiene el horario?</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#007CC2">MA</span><div class="txt"><div class="n">Mamá <small>9:47</small></div><div class="m">Llámame cuando salgas</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#8FA72F">DA</span><div class="txt"><div class="n">Dani <small>ayer</small></div><div class="m">Vale, nos vemos a las 6</div></div></div>
+      <div class="wa-velo"></div>
+      <div class="wa-menu"><div>Nuevo grupo</div><div>Nueva comunidad</div><div>Nueva difusión</div><div>Dispositivos vinculados</div><div>Mensajes destacados</div><div>Leer todo</div><div style="outline:3px solid var(--area);outline-offset:-3px;border-radius:8px;font-weight:700">Ajustes</div></div>
+    </div>
+  </div>
+</template>
+
+<section class="s" data-label="Ajustes del móvil y de las aplicaciones" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos · ya lo sabes</p><h2>Ajustes del móvil y de las aplicaciones</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="t5-col">
+        <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/smartphone.webp" alt=""><h3>El móvil: Ajustes</h3><p>Wifi, Bluetooth, brillo, sonido, idioma y modo avión.</p><p>La <b>lupa</b> de Ajustes busca cualquier ajuste. Escribe, por ejemplo, «brillo».</p></div>
+        <figure class="foto cred-arriba" style="height:210px;width:630px;align-self:center"><img src="img/capturas/android-ajustes-buscar.webp" alt="Parte de arriba de Ajustes en Android, con el cuadro Buscar ajustes y la lupa marcada con un círculo"><figcaption class="credito">Ajustes de Android 15 con la lupa «Buscar ajustes» marcada. Captura propia en el emulador de Android Studio (24-10-2026).</figcaption></figure>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:28px;align-items:start">
+        <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/portatil.webp" alt=""><h3>Las aplicaciones</h3><p>Busca la rueda dentada ⚙, el menú <b>⋮</b> o tu foto de perfil. Dentro está <b>Ajustes</b> o <b>Configuración</b>.</p><div class="ruta" style="font-size:22px"><span>WhatsApp en Android</span><i>›</i><span>⋮</span><i>›</i><span class="disp">Ajustes</span></div></div>
+        <div class="maqueta-movil" data-plantilla="#t5-wa-menu" data-pantalla="menu" style="zoom:.8"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: dónde buscar ayuda" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Así lo pregunta el examen · pregunta del estilo de la demo</p><h2>Dónde buscar ayuda</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "¿Dónde puedes buscar ayuda en Internet si tienes un problema con tu ordenador? (Selecciona todas las respuestas correctas, puede haber más de una)",
+       "opciones": ["Foros de usuarios", "Vídeos tutoriales", "La web de soporte del fabricante", "El historial del navegador"], "correcta": [0, 1, 2],
+       "explicacion": "Foros, vídeos y la web del fabricante tienen soluciones de otras personas o del fabricante. El historial solo guarda las páginas que ya has visitado. Consejo: si el enunciado dice «puede haber más de una», marca todas las correctas."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 5.1" data-seccion="5.1">
+  <div class="cab"><p class="etq">5.1 · Problemas técnicos</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba t5-preg" data-comp="5.1"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Tu portátil no enciende. Llamas al servicio técnico. ¿Qué información le das?",
+       "opciones": ["La marca, el modelo, el número de serie y qué le pasa exactamente.", "Solo tu nombre y tu número de teléfono.", "Tu contraseña de Windows, para que lo revisen.", "Solo «No funciona»."], "correcta": 0,
+       "explicacion": "El servicio técnico necesita saber qué aparato es y qué le pasa. Nunca des tus contraseñas."},
+      {"tipo": "test", "enunciado": "Al abrir un programa aparece este mensaje: «No se encuentra el archivo MSVCP140.dll». ¿Qué haces para buscar la solución?",
+       "opciones": ["Copias el mensaje exacto en el buscador.", "Buscas «mi ordenador no va».", "Descargas el archivo de la primera web que lo ofrece.", "Formateas el ordenador."], "correcta": 0,
+       "explicacion": "Con el mensaje exacto encuentras foros y tutoriales con el mismo problema. No descargues archivos sueltos de webs desconocidas: pueden tener virus."},
+      {"tipo": "simulacion", "html": "#t5-kalimpra",
+       "enunciado": "Busca el manual de usuario de tu impresora Kalimpra J300 en la web del fabricante.",
+       "instrucciones": "Haz la tarea en la pantalla. Para escribir, haz clic en el cuadro de búsqueda.",
+       "explicacion": "Los manuales están en la web oficial del fabricante, en el apartado **Soporte**: buscas tu modelo y abres **Manuales y documentos**. Los anuncios «Patrocinado» pueden llevar a webs falsas."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 5.2 Necesidades y respuestas tecnológicas ======================= -->
+
+<section class="competencia" data-label="5.2 Identificar necesidades y respuestas tecnológicas" data-seccion="5.2" data-deck-id="c52" data-deck-section="5.2">
+  <div class="izq">
+    <p class="n">5.2</p>
+    <h2>Identificar necesidades y respuestas tecnológicas</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: ver un vídeo del móvil en la tele y emparejar programas de pago con programas libres.</p>
+    <img class="ico" src="img/ia/comp-52.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Reconocer los dispositivos más comunes y para qué sirve cada uno.</li>
+      <li>Saber qué son una smart TV, la Internet TV y un smartwatch.</li>
+      <li>Elegir el dispositivo que mejor se adapta a lo que necesitas.</li>
+      <li>Elegir la aplicación adecuada para cada tarea, también programas libres y gratuitos.</li>
+      <li>Diferenciar los datos móviles y la wifi en el uso diario.</li>
+      <li>Conectar el móvil a la televisión.</li>
+    </ol>
+    <span class="estado-comp" data-comp="5.2"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Dispositivos que ya conoces" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas · ya lo sabes</p><h2>Dispositivos que ya conoces</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:4;gap:22px">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/sobremesa.webp" alt=""><h3>Ordenador de sobremesa</h3><p>Torre y monitor. Es potente, pero no se mueve.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/portatil.webp" alt=""><h3>Portátil</h3><p>Todo en uno, con batería. Lo llevas a clase.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/tableta.webp" alt=""><h3>Tableta</h3><p>Pantalla táctil grande. Para ver vídeos, leer o dibujar con un lápiz.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/smartphone.webp" alt=""><h3>Smartphone</h3><p>Teléfono inteligente: llamadas, mensajes, cámara, aplicaciones e Internet.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/impresora.webp" alt=""><h3>Impresora</h3><p>Pasa un archivo a papel. De tinta o láser. La <b>multifunción</b> imprime, escanea y copia.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/escaner.webp" alt=""><h3>Escáner</h3><p>Pasa un papel a un archivo (PDF o imagen). También con el móvil: <b>Google Drive › Escanear</b>.</p></div>
+      <div class="tarjeta sin-borde con-ico" style="grid-column:span 2"><img src="img/ia/ebook.webp" alt=""><h3>Ebook o lector de libros electrónicos</h3><p>Su pantalla de tinta electrónica no cansa la vista y gasta muy poca batería. Ejemplos: Kindle de Amazon y Kobo. Los libros suelen estar en formato EPUB.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Smart TV e Internet TV" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Smart TV e Internet TV</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas t5-ico-fijo" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/smart-tv.webp" alt=""><h3>Smart TV</h3><p>Una <b>smart TV</b> (televisión inteligente) es una tele que se conecta a Internet, por wifi o por cable.</p><p>Tiene aplicaciones: YouTube, Netflix, RTVE Play.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/stick-hdmi.webp" alt=""><h3>Stick HDMI</h3><p>Es un aparato pequeño que se enchufa a la tele. Convierte una tele normal en inteligente.</p><p>Ejemplos: Amazon Fire TV Stick, Xiaomi TV Stick, Google TV Streamer. Google dejó de fabricar el Chromecast en 2024.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/video.webp" alt=""><h3>Internet TV</h3><p>La <b>Internet TV</b> es ver la tele y vídeos por Internet, en directo o a la carta. Se ve en la tele, el móvil o el ordenador.</p><p>Es <b>streaming</b> (retransmisión por Internet). Con datos móviles, gasta muchos GB de tu tarifa.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Smartwatch, altavoz inteligente e Internet de las cosas" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Smartwatch, altavoz inteligente e Internet de las cosas</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas t5-ico-fijo" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/smartwatch.webp" alt=""><h3>Smartwatch</h3><p>Un <b>smartwatch</b> (reloj inteligente) es un reloj con pantalla táctil que se conecta al móvil por Bluetooth.</p><p>Avisos, llamadas, pasos, pulso, sueño, GPS y pago con NFC.</p><p>Ejemplos: Apple Watch (el temario dice «iWatch», pero Apple nunca ha usado ese nombre) y Samsung Galaxy Watch. La pulsera de actividad es más sencilla.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/altavoz.webp" alt=""><h3>Altavoz inteligente</h3><p>Es un altavoz con asistente de voz. Responde, pone música y controla aparatos de casa.</p><p>Ejemplos: Amazon Echo (Alexa) y Google Nest.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/bombilla.webp" alt=""><h3>Internet de las cosas</h3><p>El <b>Internet de las cosas</b> (IoT) son objetos normales conectados a Internet y manejados con el móvil.</p><p>Ejemplos: bombillas, enchufes, robots aspiradores y cámaras.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Elige el dispositivo según lo que necesitas" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Elige el dispositivo según lo que necesitas</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq t5-compacta t5-tabla-ico">
+      <tr><th style="width:37%">Necesidad</th><th style="width:27%">Dispositivo</th><th>Por qué</th></tr>
+      <tr><td>Leer muchos libros</td><td><img class="t5-ico-fila" src="img/ia/ebook.webp" alt="">Ebook</td><td>Tinta electrónica. La batería dura semanas.</td></tr>
+      <tr><td>Hacer trabajos con Word y llevarlos al instituto</td><td><img class="t5-ico-fila" src="img/ia/portatil.webp" alt="">Portátil</td><td>Teclado, programas completos y batería.</td></tr>
+      <tr><td>Ver series en un viaje</td><td><img class="t5-ico-fila" src="img/ia/tableta.webp" alt="">Tableta</td><td>Pantalla grande y poco peso.</td></tr>
+      <tr><td>Contar los pasos y medir el pulso al correr</td><td><img class="t5-ico-fila" src="img/ia/smartwatch.webp" alt="">Smartwatch o pulsera</td><td>Lo llevas puesto y mide mientras corres.</td></tr>
+      <tr><td>Ver YouTube en la pantalla grande del salón</td><td><img class="t5-ico-fila" src="img/ia/smart-tv.webp" alt="">Smart TV o stick HDMI</td><td>Tiene las aplicaciones en la tele.</td></tr>
+      <tr><td>Imprimir desde el salón con la impresora en otra habitación</td><td><img class="t5-ico-fila" src="img/ia/impresora.webp" alt="">Impresora wifi</td><td>Se conecta sin cables.</td></tr>
+      <tr><td>Enviar un papel firmado sin tener escáner</td><td><img class="t5-ico-fila" src="img/ia/escaner.webp" alt="">App del móvil para escanear</td><td><b>Google Drive › Escanear</b>.</td></tr>
+      <tr><td>Editar vídeo y jugar</td><td><img class="t5-ico-fila" src="img/ia/sobremesa.webp" alt="">Sobremesa potente</td><td>Más potencia y una pantalla grande.</td></tr>
+    </table>
+    <div class="caja"><span class="tt">Antes de comprar</span>Piensa para qué lo vas a usar y dónde. Mira cuánto dura la batería, el precio y las opiniones.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Datos móviles y wifi" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Datos móviles y wifi</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><div class="t5-esq-fila t5-conexion"><img class="movil" src="img/ia/smartphone.webp" alt="Móvil"><span class="t5-enl wifi"><svg viewBox="0 0 40 32" aria-hidden="true"><path d="M4 12a23 23 0 0132 0M10 18.5a14 14 0 0120 0M15.5 24.5a6 6 0 019 0"/><circle cx="20" cy="28.5" r="2.8"/></svg><i>pocos metros</i></span><img class="fuente-red" src="img/ia/router.webp" alt="Router"></div><h3>Wifi</h3><p>La <b>wifi</b> es una conexión a Internet sin cables a través de un router: en casa, en el instituto o en la biblioteca.</p><ul class="lista peq"><li>No gasta los datos de tu tarifa.</li><li>Funciona a pocos metros del router.</li><li>En las redes públicas, ten cuidado (tema 4).</li></ul></div>
+      <div class="tarjeta"><div class="t5-esq-fila t5-conexion"><img class="movil" src="img/ia/smartphone.webp" alt="Móvil"><span class="t5-enl ondas"><svg viewBox="0 0 32 28" aria-hidden="true"><rect x="2" y="20" width="5" height="6"/><rect x="10" y="14" width="5" height="12"/><rect x="18" y="8" width="5" height="18"/><rect x="26" y="2" width="5" height="24"/></svg><i>kilómetros</i></span><img class="fuente-red antena" src="img/ia/antena-movil.webp" alt="Antena de telefonía"></div><h3>Datos móviles</h3><p>Los <b>datos móviles</b> son la conexión a Internet que te da tu compañía de teléfono a través de sus antenas.</p><ul class="lista peq"><li>Funcionan casi en cualquier sitio.</li><li>Gastan los GB (gigas) de tu tarifa. Cuando se acaban, la conexión va muy lenta o pagas más.</li><li>Con poca cobertura, gastan más batería.</li></ul></div>
+    </div>
+    <div class="caja ok"><span class="tt">Regla</span>Si el móvil está conectado a una red wifi, usa la wifi y no gasta datos. Los vídeos, las actualizaciones y las copias de seguridad, mejor con wifi.</div>
+  </div>
+  <aside class="notas">Para el profesor: algunos móviles pasan solos a datos móviles si la wifi va muy mal (asistente de wifi o «cambiar a datos móviles»).</aside>
+</section>
+
+<section class="s" data-label="Cómo sabes qué conexión usas" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Cómo sabes qué conexión usas</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 420px">
+      <div class="t5-col">
+        <div class="t5-barras">
+          <p class="t5-barra-tit">Conectado a una wifi: icono de abanico</p>
+          <div class="t5-barra"><span>10:24</span><span class="ics"><svg width="34" height="28" viewBox="0 0 34 28" aria-label="wifi"><path d="M17 26L1 8a24 24 0 0132 0z" fill="#111"/></svg><svg width="22" height="28" viewBox="0 0 22 28"><rect x="5" y="2" width="12" height="24" rx="2" fill="none" stroke="#111" stroke-width="2.5"/><rect x="7.5" y="9" width="7" height="15" fill="#111"/></svg></span></div>
+          <p class="t5-barra-tit">Con datos móviles: «4G» o «5G» junto a las barras</p>
+          <div class="t5-barra"><span>10:24</span><span class="ics"><span class="g">4G</span><svg width="32" height="28" viewBox="0 0 32 28" aria-label="cobertura"><rect x="2" y="20" width="5" height="6" fill="#111"/><rect x="10" y="14" width="5" height="12" fill="#111"/><rect x="18" y="8" width="5" height="18" fill="#111"/><rect x="26" y="2" width="5" height="24" fill="#BBB"/></svg><svg width="22" height="28" viewBox="0 0 22 28"><rect x="5" y="2" width="12" height="24" rx="2" fill="none" stroke="#111" stroke-width="2.5"/><rect x="7.5" y="9" width="7" height="15" fill="#111"/></svg></span></div>
+        </div>
+        <div class="caja examen"><span class="tt">No te confundas</span>Una red wifi cuyo nombre acaba en «-5G» es la banda de <b>5 GHz</b> del router: más rápida y con menos alcance. No son datos 5G. Muchos aparatos inteligentes solo se conectan a la banda de <b>2,4 GHz</b>.</div>
+      </div>
+      <figure class="foto" style="height:700px"><img src="img/cyl/panel-wifi.png" alt="Panel de redes wifi de Windows 10 con una red MOVISTAR conectada y otras redes cercanas, una de ellas de 5G"><figcaption class="credito">Panel de redes wifi de Windows 10. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Generaciones de datos móviles: GPRS, 3G, 4G y 5G" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Generaciones de datos móviles</h2><p class="entrada">La G significa «generación». Son las conexiones de datos de tu compañía de teléfono, de la más antigua a la más rápida.</p></div>
+  <div class="cuerpo" style="gap:18px">
+    <div class="t5-linea">
+      <div class="gen"><span class="bola">2G</span><h3>2G y GPRS</h3><p>Llamadas y SMS. Con <b>GPRS</b> (también 2,5G) llegaron los primeros datos, muy lentos: correo y mensajes.</p></div>
+      <div class="gen"><span class="bola">3G</span><h3>3G</h3><p>Internet en el móvil: navegar y las primeras videollamadas.</p></div>
+      <div class="gen"><span class="bola">4G</span><h3>4G (LTE)</h3><p>Rápido: vídeo en alta calidad, redes sociales y videollamadas.</p></div>
+      <div class="gen"><span class="bola">5G</span><h3>5G</h3><p>Mucho más rápido y con muy poca latencia: coches conectados e Internet de las cosas.</p></div>
+    </div>
+    <div class="t5-flecha-linea"><span>← más antigua y lenta</span><span>más moderna y rápida →</span></div>
+    <p class="peq">La <b>latencia</b> es el tiempo que tarda la red en responder.</p>
+    <div class="cols">
+      <div class="caja examen"><span class="tt">En el examen</span>Sale <b>GPRS</b>: es la conexión de datos más antigua.</div>
+      <div class="caja"><span class="tt">Hoy</span>Vodafone y Movistar ya han apagado su red 3G. MásOrange la apagará antes del final de 2027.</div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: sin wifi y con prisa" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Piensa: estás de viaje, sin wifi</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro">
+      <img class="ico g" src="img/ia/punto-acceso.webp" alt="">
+      <div class="piensa">
+        <p class="enun" style="font-size:38px;font-weight:600">Tienes que enviar un archivo urgente desde el portátil. ¿Qué haces?</p>
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p>Usa el móvil como router y comparte sus datos con el portátil. Se llama <b>punto de acceso</b>, zona wifi portátil o conexión compartida.</p>
+          <p style="margin-top:12px"><b>Android:</b> Ajustes › Redes e Internet › Compartir Internet › Punto de acceso wifi. En Samsung: Ajustes › Conexiones › Zona Wi-Fi Móvil y Módem. Ahí ves el nombre de la red y la contraseña.</p>
+          <p style="margin-top:12px"><b>iPhone:</b> Ajustes › Punto de acceso personal › Permitir a otros conectarse.</p>
+          <p style="margin-top:12px">En el portátil, conéctate a esa red wifi con su contraseña. Gasta los datos del móvil.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué aplicación para cada tarea (1)" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Qué aplicación para cada tarea (1)</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tarea</th><th>Tipo de aplicación</th><th>Ejemplos</th></tr>
+      <tr><td>Escribir un texto o un trabajo</td><td>Procesador de textos</td><td>Word, LibreOffice Writer, Documentos de Google</td></tr>
+      <tr><td>Cálculos, presupuestos, listas con números y gráficos</td><td>Hoja de cálculo</td><td>Excel, LibreOffice Calc, Hojas de cálculo de Google</td></tr>
+      <tr><td>Una exposición en clase</td><td>Presentaciones</td><td>PowerPoint, LibreOffice Impress, Presentaciones de Google, Canva</td></tr>
+      <tr><td>Apuntar algo rápido en el móvil</td><td>Notas</td><td>Google Keep, Notas (iPhone), Samsung Notes</td></tr>
+      <tr style="background:var(--area-claro)"><td>Una encuesta a cientos de personas</td><td>Formularios</td><td><b>Google Forms</b> (Formularios de Google; la demo dice «Google Form») y Microsoft Forms</td></tr>
+      <tr><td>Retocar una foto</td><td>Editor de imágenes</td><td>GIMP, Photoshop, Snapseed</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Qué aplicación para cada tarea (2)" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Qué aplicación para cada tarea (2)</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tarea</th><th>Tipo de aplicación</th><th>Ejemplos</th></tr>
+      <tr><td>Hablar y verse a distancia</td><td>Videollamadas</td><td>Google Meet, Microsoft Teams, Zoom, WhatsApp</td></tr>
+      <tr><td>Traducir un texto, un cartel o una conversación</td><td>Traductor</td><td>Google Traductor: con la cámara, en modo conversación o con la voz</td></tr>
+      <tr><td>Escanear un papel</td><td>Escáner del móvil</td><td>Google Drive › Escanear</td></tr>
+      <tr><td>Enviar un archivo demasiado grande para el correo</td><td>Envío de archivos</td><td>Un enlace de Google Drive u OneDrive. WeTransfer: gratis hasta 3 GB por envío (el manual de CyL Digital dice 2 GB: el límite ha cambiado).</td></tr>
+      <tr><td>Cambiar el formato de un archivo (un vídeo a GIF, un PDF a ebook)</td><td>Convertidor online</td><td>CloudConvert</td></tr>
+      <tr><td>Organizar las tareas de un grupo</td><td>Tablero de tareas</td><td>Trello (lo viste en el tema 2)</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Programas de pago y alternativas libres" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Programas de pago y alternativas libres</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1" style="grid-template-columns:1fr 1.15fr">
+      <div class="t5-col">
+        <div class="def"><span class="t">Software libre</span><p>El software libre es el que se puede usar, estudiar, modificar y compartir. Muchos programas libres son gratuitos.</p></div>
+        <p class="peq">Writer, Calc e Impress son partes de <b>LibreOffice</b>.</p>
+        <div class="caja aviso"><span class="tt">Gratis no siempre es libre</span>Documentos de Google y la versión gratuita de Canva son gratuitos, pero no son libres.</div>
+      </div>
+      <table class="tabla peq">
+        <tr><th>De pago</th><th>Libre y gratuito</th></tr>
+        <tr><td>Microsoft Word</td><td>LibreOffice Writer</td></tr>
+        <tr><td>Microsoft Excel</td><td>LibreOffice Calc</td></tr>
+        <tr><td>Microsoft PowerPoint</td><td>LibreOffice Impress</td></tr>
+        <tr><td>Adobe Photoshop</td><td>GIMP</td></tr>
+        <tr><td>Windows</td><td>Linux (por ejemplo, Ubuntu)</td></tr>
+        <tr><td>Adobe Illustrator</td><td>Inkscape</td></tr>
+        <tr><td>Adobe Premiere Pro</td><td>Kdenlive o Shotcut</td></tr>
+        <tr><td>Outlook de Microsoft 365</td><td>Mozilla Thunderbird</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Practica con la pregunta 18 de la demo" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Práctica · pregunta 18 de la demo</p><h2>Programas de pago y programas libres</h2><p class="fuente" style="margin-top:6px">Pregunta 18 de la demo de tuCertiCyL (Junta de Castilla y León).</p></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "emparejar",
+       "enunciado": "Relaciona los distintos programas de pago con su equivalente de software libre y gratuito.",
+       "instrucciones": "Ordena los elementos de la segunda lista para emparejarlos con los elementos de la primera lista. Arrastra o pulsa dos elementos para cambiarlos de sitio.",
+       "pares": [["Word", "Writer"], ["Excel", "Calc"], ["PowerPoint", "Impress"], ["Photoshop", "GIMP"], ["Windows", "Linux"]], "ordenInicial": [4, 2, 1, 0, 3],
+       "explicacion": "Writer, Calc e Impress son partes de LibreOffice: procesador de textos, hoja de cálculo y presentaciones. GIMP edita imágenes, como Photoshop. Linux es un sistema operativo, como Windows."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Ver el móvil en la televisión" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Ver el móvil en la televisión</h2><p class="entrada">Hay tres formas.</p></div>
+  <div class="cuerpo">
+    <div class="t5-rutas">
+      <div class="t5-ruta">
+        <div class="t5-esq"><h3>1. Con un cable</h3>
+          <div class="t5-esq-fila"><img class="movil" src="img/ia/smartphone.webp" alt="Móvil"><span class="t5-enl cable"></span><img class="cable" src="img/ia/cable-hdmi.webp" alt="Cable USB-C a HDMI"><span class="t5-enl cable"></span><img class="tele" src="img/ia/smart-tv.webp" alt="Tele"></div></div>
+        <div class="t5-ruta-txt"><p><b>USB-C - HDMI</b>: móviles con salida de vídeo por USB-C. <b>MicroUSB - HDMI</b>: móviles antiguos compatibles con MHL («enlace móvil de alta definición»). Mira en el manual si tu móvil lo admite.</p><p>Enchufa el cable en una entrada HDMI de la tele. Elige esa entrada con el botón <b>Source</b> o <b>Input</b> del mando.</p></div>
+      </div>
+      <div class="t5-ruta">
+        <div class="t5-esq"><h3>2. Con un stick HDMI</h3>
+          <div class="t5-esq-fila"><img class="movil" src="img/ia/smartphone.webp" alt="Móvil"><span class="t5-enl wifi"><svg viewBox="0 0 40 32" aria-hidden="true"><path d="M4 12a23 23 0 0132 0M10 18.5a14 14 0 0120 0M15.5 24.5a6 6 0 019 0"/><circle cx="20" cy="28.5" r="2.8"/></svg><i>misma wifi</i></span><span class="t5-tele-stick"><img class="tele" src="img/ia/smart-tv.webp" alt="Tele"><img class="stick" src="img/ia/stick-hdmi.webp" alt="Stick HDMI enchufado a la tele"></span></div></div>
+        <div class="t5-ruta-txt"><p>Google TV Streamer (o Chromecast) o Amazon Fire TV Stick. El stick se enchufa en una entrada HDMI de la tele.</p><p>El móvil y el stick tienen que estar en la misma wifi. En YouTube o Netflix, pulsa <b>Enviar</b>: el icono de una pantalla con ondas.</p></div>
+      </div>
+      <div class="t5-ruta">
+        <div class="t5-esq"><h3>3. Con una smart TV</h3>
+          <div class="t5-esq-fila"><img class="movil" src="img/ia/smartphone.webp" alt="Móvil"><span class="t5-enl wifi"><svg viewBox="0 0 40 32" aria-hidden="true"><path d="M4 12a23 23 0 0132 0M10 18.5a14 14 0 0120 0M15.5 24.5a6 6 0 019 0"/><circle cx="20" cy="28.5" r="2.8"/></svg><i>sin cables</i></span><img class="tele" src="img/ia/smart-tv.webp" alt="Smart TV"></div></div>
+        <div class="t5-ruta-txt"><p>En el panel rápido del móvil, pulsa <b>Enviar</b> o <b>Duplicar pantalla</b>. En Samsung se llama <b>Smart View</b>.</p><p>iPhone: <b>Duplicar pantalla</b> con AirPlay, en teles compatibles. También puedes pulsar <b>Enviar</b> dentro de la app.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Conectores que tienes que reconocer" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Conectores que tienes que reconocer</h2></div>
+  <div class="cuerpo">
+    <div class="t5-conectores">
+      <div class="t5-con"><svg viewBox="0 0 200 130" role="img" aria-label="Conector HDMI"><path d="M28 38h144v34l-16 18H44L28 72z" fill="#3B3B58"/><path d="M42 50h116v16l-8 9H50l-8-9z" fill="#C9C4D0"/><path d="M52 58h96" stroke="#3B3B58" stroke-width="5" stroke-dasharray="4 3"/></svg><h3>HDMI</h3><p>Imagen y sonido digitales. El de las teles actuales.</p><span class="tag si">Actual</span></div>
+      <div class="t5-con"><svg viewBox="0 0 200 130" role="img" aria-label="Conector USB-C"><rect x="40" y="44" width="120" height="44" rx="22" fill="#3B3B58"/><rect x="60" y="60" width="80" height="12" rx="6" fill="#C9C4D0"/></svg><h3>USB-C</h3><p>Móviles actuales. Se enchufa por los dos lados.</p><span class="tag si">Actual</span></div>
+      <div class="t5-con"><svg viewBox="0 0 200 130" role="img" aria-label="Conector microUSB"><path d="M56 48h88l-12 32H68z" fill="#3B3B58"/><path d="M70 56h60l-5 12H75z" fill="#C9C4D0"/></svg><h3>MicroUSB</h3><p>Móviles antiguos. Solo entra en una posición.</p><span class="tag no">Antiguo</span></div>
+      <div class="t5-con"><svg viewBox="0 0 200 130" role="img" aria-label="Conector VGA azul de 15 pines"><path d="M22 28h156l-16 74H38z" fill="#1F5FBF"/><g fill="#0B2A5C"><circle cx="54" cy="46" r="5"/><circle cx="77" cy="46" r="5"/><circle cx="100" cy="46" r="5"/><circle cx="123" cy="46" r="5"/><circle cx="146" cy="46" r="5"/><circle cx="58" cy="65" r="5"/><circle cx="79" cy="65" r="5"/><circle cx="100" cy="65" r="5"/><circle cx="121" cy="65" r="5"/><circle cx="142" cy="65" r="5"/><circle cx="62" cy="84" r="5"/><circle cx="81" cy="84" r="5"/><circle cx="100" cy="84" r="5"/><circle cx="119" cy="84" r="5"/><circle cx="138" cy="84" r="5"/></g></svg><h3>VGA</h3><p>Azul, 15 pines. Vídeo analógico de monitores antiguos, sin sonido.</p><span class="tag no">Antiguo</span></div>
+      <div class="t5-con"><svg viewBox="0 0 200 130" role="img" aria-label="Euroconector ancho"><path d="M10 40h180v50H28L10 72z" fill="#3B3B58"/><g fill="#C9C4D0"><rect x="34" y="52" width="8" height="10"/><rect x="48" y="52" width="8" height="10"/><rect x="62" y="52" width="8" height="10"/><rect x="76" y="52" width="8" height="10"/><rect x="90" y="52" width="8" height="10"/><rect x="104" y="52" width="8" height="10"/><rect x="118" y="52" width="8" height="10"/><rect x="132" y="52" width="8" height="10"/><rect x="146" y="52" width="8" height="10"/><rect x="160" y="52" width="8" height="10"/><rect x="41" y="70" width="8" height="10"/><rect x="55" y="70" width="8" height="10"/><rect x="69" y="70" width="8" height="10"/><rect x="83" y="70" width="8" height="10"/><rect x="97" y="70" width="8" height="10"/><rect x="111" y="70" width="8" height="10"/><rect x="125" y="70" width="8" height="10"/><rect x="139" y="70" width="8" height="10"/><rect x="153" y="70" width="8" height="10"/><rect x="167" y="70" width="8" height="10"/></g></svg><h3>Euroconector</h3><p>También SCART. Ancho y analógico. De las teles antiguas.</p><span class="tag no">Antiguo</span></div>
+    </div>
+    <div class="caja examen"><span class="tt">Para el examen</span>El móvil tiene un conector microUSB o USB-C. La tele tiene entradas HDMI. Por eso el cable es <b>microUSB - HDMI</b> o <b>USB-C - HDMI</b>.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: el móvil en la tele" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Así lo pregunta el examen · pregunta 17 de la demo</p><h2>Un vídeo del móvil en la tele</h2><p class="fuente" style="margin-top:6px">Pregunta 17 de la demo de tuCertiCyL (Junta de Castilla y León).</p></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "¿Cómo conectarías un vídeo que tienes en el móvil al televisor?",
+       "opciones": ["Con un cable USB - Euroconector", "Con un cable microUSB - HDMI", "Con un cable USB-VGA", "No es posible conectar un móvil al televisor"], "correcta": 1,
+       "explicacion": "El móvil tiene un conector microUSB o USB-C. La tele tiene entradas HDMI. El euroconector y el VGA son conectores antiguos. Hoy también puedes usar un cable USB-C - HDMI, un stick HDMI o duplicar la pantalla."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 5.2" data-seccion="5.2">
+  <div class="cab"><p class="etq">5.2 · Necesidades y respuestas tecnológicas</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba t5-preg" data-comp="5.2"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Estás en casa, conectado a tu wifi. Ves un vídeo de una hora en YouTube. ¿Qué pasa con los datos de tu tarifa?",
+       "opciones": ["No se gastan, porque usas la wifi.", "Se gastan igual que sin wifi.", "Se gasta la mitad.", "Solo se gastan si el vídeo está en alta calidad."], "correcta": 0,
+       "explicacion": "Con wifi, el móvil usa la conexión del router. Los datos de tu tarifa se gastan cuando no hay wifi."},
+      {"tipo": "test", "enunciado": "¿Qué son GPRS, 3G, 4G y 5G?",
+       "opciones": ["Generaciones de conexión de datos móviles.", "Tipos de redes wifi del router.", "Versiones de Bluetooth.", "Modelos de teléfono móvil."], "correcta": 0,
+       "explicacion": "La G significa «generación». Son las conexiones de datos de tu compañía de teléfono, desde la más antigua (GPRS) hasta la más rápida (5G)."},
+      {"tipo": "emparejar", "enunciado": "Relaciona cada necesidad con el dispositivo más adecuado.",
+       "instrucciones": "Ordena los elementos de la segunda lista para emparejarlos con los de la primera lista. Arrastra o pulsa dos elementos para cambiarlos de sitio.",
+       "pares": [["Leer muchas novelas sin cansar la vista", "Ebook"], ["Contar los pasos y medir el pulso al correr", "Smartwatch"], ["Ver YouTube en la pantalla grande del salón", "Smart TV"], ["Pasar un documento en papel al ordenador", "Escáner"], ["Escribir un trabajo largo con teclado, en clase", "Portátil"]],
+       "explicacion": "Cada dispositivo está pensado para un uso. Antes de elegir, piensa para qué lo vas a usar y dónde."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 5.3 Soluciones creativas ======================= -->
+
+<section class="competencia" data-label="5.3 Soluciones creativas con tecnologías digitales" data-seccion="5.3" data-deck-id="c53" data-deck-section="5.3">
+  <div class="izq">
+    <p class="n">5.3</p>
+    <h2>Soluciones creativas con tecnologías digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: qué aplicación usar para una encuesta a cientos de personas.</p>
+    <img class="ico" src="img/ia/comp-53.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Elegir una aplicación para dibujar, diseñar, componer música, grabar y editar vídeo, calcular o escribir.</li>
+      <li>Insertar un gráfico SmartArt en Word o PowerPoint.</li>
+      <li>Insertar formas en un documento.</li>
+      <li>Explicar qué es un código QR, para qué sirve y cómo leerlo con seguridad.</li>
+      <li>Saber qué son un smartwatch, la Internet TV, un dron y una impresora 3D.</li>
+    </ol>
+    <span class="estado-comp" data-comp="5.3"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Una aplicación para cada idea (1)" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas · ya lo sabes</p><h2>Una aplicación para cada idea (1)</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Idea</th><th>En el ordenador</th><th>En el móvil o en la web</th></tr>
+      <tr><td>Dibujar y pintar</td><td>Paint, Krita (libre)</td><td>—</td></tr>
+      <tr><td>Retocar fotos</td><td>GIMP, Photoshop</td><td>Snapseed, editor de Google Fotos</td></tr>
+      <tr><td>Diseñar carteles, infografías y publicaciones</td><td>Canva (en la web)</td><td>App de Canva. Tiene plantillas gratis y de pago. Descargas en PNG, JPG o PDF.</td></tr>
+      <tr><td>Grabar y editar vídeo</td><td>Clipchamp (viene con Windows 11), Shotcut, OpenShot</td><td>CapCut</td></tr>
+      <tr><td>Grabar y editar audio o un pódcast</td><td>Audacity (libre)</td><td>Grabadora del móvil</td></tr>
+      <tr><td>Componer música</td><td>MuseScore (partituras, libre)</td><td>GarageBand (iPhone y Mac), BandLab</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Una aplicación para cada idea (2) e insertar formas" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas · ya lo sabes</p><h2>Una aplicación para cada idea (2)</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Idea</th><th>En el ordenador</th><th>En el móvil o en la web</th></tr>
+      <tr><td>Calcular</td><td>Calculadora de Windows, Excel o Calc</td><td>Calculadora del móvil</td></tr>
+      <tr><td>Escribir</td><td>Word, Writer</td><td>Documentos de Google</td></tr>
+      <tr><td>Hacer una encuesta y recoger las respuestas</td><td>—</td><td>Google Forms, Microsoft Forms</td></tr>
+      <tr><td>Programar</td><td>Scratch</td><td>Scratch en la web</td></tr>
+    </table>
+    <div class="cols centro">
+      <div class="ruta-bloque"><span class="donde">Insertar formas (ya lo sabes)</span><div class="ruta"><span>Insertar</span><i>›</i><span class="disp">Formas</span></div><p class="peq">En Word, PowerPoint y Excel. En LibreOffice: <b>Insertar › Forma</b>.</p></div>
+      <ul class="lista peq"><li>Haz clic y arrastra para dibujarla.</li><li>Con <kbd>Mayús</kbd> pulsada, la forma no se deforma.</li><li>Clic derecho › <b>Agregar texto</b>.</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="SmartArt" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>SmartArt</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">SmartArt</span><p>SmartArt es una herramienta de Microsoft Office que convierte una lista de ideas en un esquema con formas y flechas. Está en Word, PowerPoint, Excel y Outlook.</p></div>
+    <div class="t5-sa">
+      <div class="t5-sa-caja"><h3>Proceso</h3><div class="t5-sa-proc"><span>Rellena la solicitud</span><i></i><span>Adjunta los papeles</span><i></i><span>Envíala</span></div><p class="nota">Pasos en orden. Ejemplo: cómo pedir una beca.</p></div>
+      <div class="t5-sa-caja"><h3>Ciclo</h3><div class="t5-sa-ciclo"><svg viewBox="0 0 250 200" aria-hidden="true"><circle cx="125" cy="100" r="68" fill="none" stroke="#A9D18E" stroke-width="6" stroke-dasharray="40 30"/></svg><span style="left:79px;top:0">Usar</span><span style="left:158px;top:96px">Separar</span><span style="left:0;top:96px">Fabricar</span></div><p class="nota">Algo que se repite. Ejemplo: el reciclaje.</p></div>
+      <div class="t5-sa-caja"><h3>Jerarquía</h3><div class="t5-sa-jer"><div class="n1">Dirección</div><div class="n2"><span>Jefatura de estudios</span><span>Secretaría</span></div></div><p class="nota">Quién depende de quién. Ejemplo: el organigrama del instituto.</p></div>
+    </div>
+    <p class="peq">Otras categorías: <b>Lista</b> (ideas sin orden), <b>Relación</b>, <b>Matriz</b>, <b>Pirámide</b> e <b>Imagen</b>.</p>
+  </div>
+</section>
+
+<section class="s" data-label="No confundas SmartArt con WordArt, formas o gráficos" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>No lo confundas</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><div style="height:120px;display:grid;place-items:center;font:800 64px/1 Georgia,serif;color:#4472C4;-webkit-text-stroke:2px #1F3864;text-shadow:4px 4px 0 #B4C7E7">Hola</div><h3>WordArt</h3><p>Es texto decorado: con relleno, borde o sombra. No hace esquemas.</p></div>
+      <div class="tarjeta"><div style="height:120px;display:grid;place-items:center"><svg width="150" height="110" viewBox="0 0 150 110" aria-hidden="true"><path d="M10 20h90l40 35-40 35H10z" fill="#ED7D31"/></svg></div><h3>Forma</h3><p>Es una figura suelta: un círculo, una flecha o una estrella.</p></div>
+      <div class="tarjeta"><div style="height:120px;display:grid;place-items:center"><svg width="150" height="110" viewBox="0 0 150 110" aria-hidden="true"><rect x="15" y="60" width="26" height="45" fill="#4472C4"/><rect x="55" y="25" width="26" height="80" fill="#ED7D31"/><rect x="95" y="45" width="26" height="60" fill="#A5A5A5"/></svg></div><h3>Gráfico</h3><p>Muestra datos numéricos en barras o sectores. Se hace con números.</p></div>
+    </div>
+    <div class="caja"><span class="tt">LibreOffice</span>LibreOffice no tiene SmartArt. Abre los SmartArt de Office. Para un esquema nuevo, usa formas.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Insertar un SmartArt en Word (1)" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Insertar un SmartArt en Word (1)</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 700px;gap:48px">
+      <div class="t5-col">
+        <ol class="pasos peq">
+          <li>Haz clic donde quieres el esquema.</li>
+          <li>Pestaña <b>Insertar</b> › grupo Ilustraciones › <b>SmartArt</b>.</li>
+          <li>Se abre la ventana <b>Elegir un gráfico SmartArt</b>. Elige la categoría en la columna de la izquierda. Por ejemplo, <b>Proceso</b>.</li>
+          <li>Elige un diseño, por ejemplo <b>Proceso básico</b>, y pulsa <b>Aceptar</b>.</li>
+        </ol>
+        <div class="ruta" style="font-size:22px"><span>Insertar</span><i>›</i><span>SmartArt</span><i>›</i><span>Proceso</span><i>›</i><span>Proceso básico</span><i>›</i><span class="disp">Aceptar</span></div>
+      </div>
+      <div class="t5-col" style="gap:12px">
+        <div class="maqueta-movil t5-maqueta" data-plantilla="#t5-word-smartart" data-pantalla="proceso" style="zoom:.71"></div>
+        <p class="cap">Word de Microsoft 365: ventana «Elegir un gráfico SmartArt».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Insertar un SmartArt en Word (2)" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Insertar un SmartArt en Word (2)</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 700px;gap:48px">
+      <div class="t5-col">
+        <ol class="pasos peq" style="counter-reset:paso 4">
+          <li>Escribe en el <b>panel de texto</b> o en cada forma donde pone [Texto]. <kbd>Intro</kbd> añade una forma. <kbd>Tab</kbd> la baja de nivel.</li>
+          <li>Cambia los colores y el estilo en la pestaña <b>Diseño de SmartArt</b>: <b>Cambiar colores</b> y <b>Estilos SmartArt</b>.</li>
+        </ol>
+        <div class="caja"><span class="tt">En PowerPoint</span>También puedes seleccionar un texto con viñetas y pulsar <b>Inicio › Convertir en SmartArt</b>.</div>
+        <div class="caja examen"><span class="tt">Word 2016</span>En las pantallas antiguas, la pestaña se llama <b>Herramientas de SmartArt › Diseño</b>.</div>
+      </div>
+      <div class="t5-col" style="gap:12px">
+        <div class="maqueta-movil t5-maqueta" data-plantilla="#t5-word-smartart" data-pantalla="final" style="zoom:.71"></div>
+        <p class="cap">SmartArt «Proceso básico» recién insertado, con su panel de texto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Código QR" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Código QR</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div class="t5-col">
+        <div class="def"><span class="t">Código QR</span><p>Un código QR es un código de barras cuadrado que guarda información y se lee con la cámara del móvil.</p><p class="peq">QR viene del inglés <i>Quick Response</i>, «respuesta rápida». Es la evolución del código de barras y guarda más datos.</p></div>
+        <p class="peq"><b>Qué puede guardar:</b> una dirección web, la contraseña de la wifi, un contacto, un texto, una ubicación o un pago.</p>
+        <p class="peq"><b>Dónde lo ves:</b> en cartas de restaurantes, entradas, billetes de tren o de avión y folletos. También sirve para vincular WhatsApp Web o para compartir la wifi del móvil.</p>
+      </div>
+      <div class="t5-col" style="align-items:center;gap:14px">
+        <img class="t5-qr" src="img/qr-tucerticyl.png" alt="Código QR que lleva a la web tucerticyl.es">
+        <p class="cap" style="text-align:center">Este QR lleva a tucerticyl.es.<br>Pruébalo con la cámara del móvil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Leer y crear un código QR" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Leer y crear un código QR</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="t5-col">
+        <p class="peq gris" style="font-weight:700">LEERLO</p>
+        <div style="display:grid;grid-template-columns:1fr 330px;gap:28px;align-items:start">
+          <div class="t5-col">
+            <ol class="pasos peq"><li>Abre la cámara del móvil. También sirve el botón <b>Escáner QR</b> de los ajustes rápidos.</li><li>Enfoca el código.</li><li>Mira la dirección que aparece. Tócala solo si es de confianza.</li></ol>
+            <p class="peq">También lo lee <b>Google Lens</b>.</p>
+          </div>
+          <figure class="foto cred-arriba" style="height:547px"><img src="img/capturas/android-escaner-qr.webp" alt="Pantalla del móvil enfocando un código QR en una pared. Abajo aparece Abrir con Chrome, la dirección tucerticyl.es y el botón Abrir"><figcaption class="credito">Escáner QR de Android leyendo el código de tucerticyl.es. Abajo aparecen la dirección y el botón Abrir. Captura propia en el emulador de Android Studio (24-10-2026).</figcaption></figure>
+        </div>
+      </div>
+      <div class="t5-col">
+        <p class="peq gris" style="font-weight:700">CREARLO</p>
+        <p class="peq">Con un generador web, como Unitag. O con Chrome, para la página que estás viendo:</p>
+        <div class="ruta" style="font-size:22px"><span>⋮</span><i>›</i><span>Enviar, guardar y compartir</span><i>›</i><span class="disp">Crear código QR</span></div>
+        <div class="caja"><span class="tt">Las 3 esquinas</span>Los 3 cuadrados de las esquinas sirven para que el lector encuentre el código. No los tapes ni deformes la imagen.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cuidado con los QR falsos: quishing" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Cuidado con los QR falsos</h2><p class="entrada">Un QR puede llevar a una web falsa. Esta estafa se llama <b>quishing</b>: phishing (tema 4) con códigos QR.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div class="t5-col" style="gap:20px">
+        <p class="peq"><b>Ejemplos:</b> una pegatina falsa encima del QR de un parquímetro o de un cartel. Una carta o un correo con un QR para «verificar tu cuenta».</p>
+        <ol class="pasos peq">
+          <li>Mira la dirección que muestra la cámara antes de abrirla.</li>
+          <li>Si no es la web oficial, no entres.</li>
+          <li>No escribas contraseñas ni datos de la tarjeta desde un QR de la calle.</li>
+          <li>No instales aplicaciones desde un QR.</li>
+          <li>Comprueba que no hay una pegatina encima del código.</li>
+        </ol>
+      </div>
+      <img class="ico m" src="img/ia/quishing.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Drones e impresoras 3D" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Drones e impresoras 3D</h2></div>
+  <div class="cuerpo">
+    <div class="cols t5-ico-fijo">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/dron.webp" alt=""><h3>Dron</h3><p>Un <b>dron</b> es una aeronave sin piloto a bordo. Se maneja a distancia con un mando o con el móvil.</p><p><b>Usos:</b> fotos y vídeos aéreos, agricultura, rescates, revisar tejados y torres eléctricas.</p><p><b>Normas:</b> en España los regula AESA (Agencia Estatal de Seguridad Aérea). No se vuela sobre grupos de personas ni cerca de aeropuertos. Para volar muchos drones, tienes que registrarte como operador en AESA.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/impresora-3d.webp" alt=""><h3>Impresora 3D</h3><p>Una <b>impresora 3D</b> fabrica un objeto sólido capa a capa a partir de un diseño en 3D del ordenador.</p><p>Normalmente usa plástico fundido, que se llama filamento.</p><p><b>Usos:</b> piezas de repuesto, prototipos, prótesis y maquetas.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Pago con el móvil, realidad virtual y más" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Pago con el móvil, realidad virtual y más</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas t5-ico-fijo" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/nfc.webp" alt=""><h3>Pago con el móvil (NFC)</h3><p>El <b>NFC</b> (comunicación de campo cercano) permite pagar acercando el móvil o el reloj al datáfono.</p><p>Apps: Google Wallet y Apple Pay.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/realidad-virtual.webp" alt=""><h3>Realidad virtual</h3><p>Usa unas gafas que muestran un mundo en 3D a tu alrededor. Ejemplo: Meta Quest.</p><p>El metaverso usa esta tecnología.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/smartwatch.webp" alt=""><h3>Smartwatch e Internet TV</h3><p>Ya los has visto en la 5.2.</p><p>El temario dice «iWatch»: es el Apple Watch. La Internet TV es ver la tele por Internet (streaming).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: una encuesta a cientos de personas" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Así lo pregunta el examen · pregunta 19 de la demo</p><h2>Una encuesta a cientos de personas</h2><p class="fuente" style="margin-top:6px">Pregunta 19 de la demo de tuCertiCyL (Junta de Castilla y León).</p></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Necesitas hacer un sondeo para recabar información de cientos de personas. ¿Qué aplicación utilizarías?",
+       "opciones": ["Google Form", "Microsoft Excel", "Microsoft Word", "Adobe Photoshop"], "correcta": 0,
+       "explicacion": "Google Forms (la demo dice «Google Form») crea encuestas online. Envías un enlace y las respuestas de cientos de personas llegan solas a una tabla. Excel sirve para calcular, Word para escribir textos y Photoshop para retocar fotos."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 5.3" data-seccion="5.3">
+  <div class="cab"><p class="etq">5.3 · Soluciones creativas</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba t5-preg" data-comp="5.3"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Qué es un código QR?",
+       "opciones": ["Un código de barras cuadrado que guarda información, como una dirección web. Se lee con la cámara del móvil.", "Un virus que se instala al hacer una foto.", "Una conexión inalámbrica, como el Bluetooth.", "Un formato de imagen, como JPG."], "correcta": 0,
+       "explicacion": "Un QR guarda una web, la contraseña de la wifi o un contacto. Antes de abrirlo, mira la dirección que muestra la cámara."},
+      {"tipo": "test", "enunciado": "¿Qué hace una impresora 3D?",
+       "opciones": ["Fabrica objetos sólidos capa a capa a partir de un diseño del ordenador.", "Imprime fotos en relieve sobre papel.", "Imprime con tres colores a la vez.", "Imprime documentos tres veces más rápido."], "correcta": 0,
+       "explicacion": "La impresora 3D funde plástico y lo coloca en capas. Así fabrica piezas, maquetas o prótesis."},
+      {"tipo": "simulacion", "html": "#t5-word-smartart",
+       "enunciado": "Inserta en el documento un gráfico SmartArt de tipo «Proceso básico».",
+       "instrucciones": "Haz la tarea en la pantalla. No puedes usar atajos de teclado.",
+       "explicacion": "SmartArt está en la pestaña **Insertar**, grupo Ilustraciones. En la ventana «Elegir un gráfico SmartArt», la categoría **Proceso** sirve para mostrar pasos en orden. Eliges **Proceso básico** y pulsas **Aceptar**."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 5.4 Necesidades de competencias digitales ======================= -->
+
+<section class="competencia" data-label="5.4 Identificar necesidades de competencias digitales" data-seccion="5.4" data-deck-id="c54" data-deck-section="5.4">
+  <div class="izq">
+    <p class="n">5.4</p>
+    <h2>Identificar necesidades de competencias digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: cómo son los cursos MOOC.</p>
+    <img class="ico" src="img/ia/comp-54.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Reconocer qué no sabes hacer todavía con la tecnología.</li>
+      <li>Saber que otras personas usan herramientas que tú no conoces, y aprender de ellas.</li>
+      <li>Explicar qué es un curso online y sus ventajas.</li>
+      <li>Saber qué es un MOOC.</li>
+      <li>Conocer el programa CyL Digital.</li>
+    </ol>
+    <span class="estado-comp" data-comp="5.4"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Nadie lo sabe todo" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>Nadie lo sabe todo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ul class="lista">
+        <li>Nadie sabe usar todas las herramientas digitales.</li>
+        <li>La tecnología cambia y lo que aprendes se queda viejo. Ejemplo: Internet Explorer no tiene soporte desde junio de 2022. Si lo usas, no recibe actualizaciones de seguridad.</li>
+        <li>Otras personas usan herramientas que tú no conoces. Ejemplo: tu compañera hace carteles con Canva en 10 minutos. Pídele que te enseñe.</li>
+        <li>Reconocer lo que no sabes es el primer paso para aprender.</li>
+      </ul>
+      <img class="ico m" src="img/ia/foro.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cinco pasos para mejorar tus competencias" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>Cinco pasos para mejorar tus competencias</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <ol class="pasos">
+        <li>Haz un test de autodiagnóstico.</li>
+        <li>Mira en qué áreas fallas más.</li>
+        <li>Busca quién o qué te puede enseñar: un compañero, un tutorial, un curso online.</li>
+        <li>Practica lo que has aprendido.</li>
+        <li>Repite el test para ver si has mejorado.</li>
+      </ol>
+      <div class="t5-col">
+        <figure class="foto" style="height:330px"><img src="img/capturas/diagnostico-digcomp.webp" alt="Página Diagnóstico DigComp de tuCertiCyL"><figcaption class="credito">Página «Diagnóstico DigComp» de tucerticyl.es, capturada el 24-10-2026. Imagen: tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+        <div class="caja"><span class="tt">Test de autodiagnóstico</span>Un <b>test de autodiagnóstico</b> es un test que te dice qué sabes y qué no. Haz el «Diagnóstico DigComp» en <b>tucerticyl.es/diagnostico-digcomp</b>. También sirve la demo del examen: <b>tucerticyl.es/demo</b>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Curso online" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>El curso online</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Curso online</span><p>Un curso online es un curso que se hace por Internet, en una plataforma con vídeos, textos, ejercicios y foros. También se llama formación online o e-learning.</p></div>
+    <div class="cols">
+      <div class="tarjeta c-ok"><h3>Ventajas</h3><ul class="lista peq"><li>Estudias a tu ritmo, a cualquier hora y desde cualquier lugar.</li><li>Puedes repetir los vídeos.</li><li>No te desplazas.</li><li>Muchos son gratis y algunos dan certificado.</li></ul></div>
+      <div class="tarjeta"><h3>Qué necesitas</h3><ul class="lista peq"><li>Un dispositivo: ordenador, tableta o móvil.</li><li>Conexión a Internet.</li><li>Organizarte tú: decidir cuándo estudias.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Webinars, tutoriales y plataformas" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>Otros formatos y plataformas</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas t5-ico-fijo" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/comp-54.webp" alt=""><h3>Webinar</h3><p>Un <b>webinar</b> (seminario web) es una charla en directo por Internet con un experto.</p><p>Puedes preguntar por el chat o con el micrófono.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/video.webp" alt=""><h3>Tutoriales en vídeo</h3><p>Vídeos cortos que enseñan una tarea paso a paso.</p><p>Por ejemplo, en YouTube.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/portatil.webp" alt=""><h3>Plataformas</h3><p>Webs con muchos cursos online:</p><p>Udemy, Aula Fácil, Google Actívate y CyL Digital.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="MOOC" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>MOOC</h2></div>
+  <div class="cuerpo">
+    <div class="t5-fila-ico">
+      <div class="def"><span class="t">MOOC</span><p>MOOC son las siglas en inglés de <i>Massive Open Online Course</i>: curso online masivo y abierto.</p></div>
+      <img class="ico p" src="img/ia/mooc.webp" alt="">
+    </div>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Masivo</h3><p>Sin límite de alumnos: sin límite de inscripciones.</p></div>
+      <div class="tarjeta"><h3>Abierto</h3><p>Gratis y para cualquier persona.</p></div>
+      <div class="tarjeta"><h3>Online</h3><p>Por Internet y a tu ritmo.</p></div>
+    </div>
+    <p class="peq">Muchos MOOC dan un certificado al aprobar. A veces el certificado se paga aparte.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Plataformas de MOOC y trampas del examen" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>Plataformas de MOOC y trampas del examen</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Plataformas de MOOC</h3><ul class="lista peq"><li>Miríadax</li><li>edX</li><li>Coursera</li><li>UNED Abierta</li><li><b>cylx</b>, de CyL Digital. Allí está el curso «Soy competente digital», del que salen los materiales de este curso.</li></ul></div>
+      <table class="tabla peq">
+        <tr><th>Si la opción dice…</th><th>No es un MOOC porque…</th></tr>
+        <tr><td>«por videoconferencias en directo»</td><td>Eso es un webinar.</td></tr>
+        <tr><td>«de pago»</td><td>Un MOOC es abierto: gratis.</td></tr>
+        <tr><td>«para pequeños grupos»</td><td>Un MOOC es masivo: sin límite de alumnos.</td></tr>
+      </table>
+    </div>
+    <div class="caja examen"><span class="tt">Para el examen</span>MOOC = online + gratis + sin límite de inscripciones.</div>
+  </div>
+</section>
+
+<section class="s" data-label="El programa CyL Digital" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>El programa CyL Digital</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div class="t5-col">
+        <div class="def"><span class="t">CyL Digital</span><p>CyL Digital es el programa de la Junta de Castilla y León para formar a la ciudadanía en tecnologías digitales. Su web es <b>cyldigital.es</b>.</p></div>
+        <ul class="lista peq">
+          <li>Cursos presenciales en los <b>Espacios CyL Digital</b> de las 9 capitales de provincia y en centros rurales asociados.</li>
+          <li>Formación online y autoformación en <b>cylx.cyldigital.es</b>, con MOOC como «Soy competente digital».</li>
+          <li>Charlas en directo (webinars) y asesoramiento tecnológico.</li>
+          <li>Certificación de competencias digitales con <b>tuCertiCyL</b>. Algunos exámenes se hacen en los Espacios CyL Digital.</li>
+        </ul>
+      </div>
+      <div class="t5-col">
+        <figure class="foto" style="height:400px"><img src="img/capturas/cyldigital.webp" alt="Página de inicio de cyldigital.es con formación presencial, formación online, certificación, Espacios CyL Digital y asesoramiento"><figcaption class="credito">Página de inicio de cyldigital.es, capturada el 24-10-2026. Imagen: CyL Digital (Junta de Castilla y León).</figcaption></figure>
+        <div class="caja ok"><span class="tt">Gratis</span>La formación de CyL Digital es gratuita.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: los cursos MOOC" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Así lo pregunta el examen · pregunta 20 de la demo</p><h2>Los cursos MOOC</h2><p class="fuente" style="margin-top:6px">Pregunta 20 de la demo de tuCertiCyL (Junta de Castilla y León).</p></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t5-preg"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Los cursos MOOC son un buen recurso para mejorar tus competencias digitales. ¿Cuáles son las características típicas de un curso MOOC?",
+       "opciones": ["Cursos gratuitos por videoconferencias en directo.", "Cursos online, gratuitos, sin límite de inscripciones.", "Cursos online de pago de prestigiosas universidades.", "Cursos online, gratuitos, para pequeños grupos."], "correcta": 1,
+       "explicacion": "MOOC significa curso online masivo y abierto. Masivo quiere decir sin límite de alumnos. Abierto quiere decir gratis."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 5.4" data-seccion="5.4">
+  <div class="cab"><p class="etq">5.4 · Necesidades de competencias digitales</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba t5-preg" data-comp="5.4"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Cuál es una ventaja de la formación online?",
+       "opciones": ["Estudias a tu ritmo, a cualquier hora y desde cualquier lugar.", "No necesitas dispositivo ni conexión a Internet.", "Siempre es de pago.", "Tienes que ir a un aula todos los días a la misma hora."], "correcta": 0,
+       "explicacion": "Un curso online se hace por Internet, cuando y donde tú quieras. Muchos son gratis."},
+      {"tipo": "test", "enunciado": "¿Qué es CyL Digital?",
+       "opciones": ["Un programa de la Junta de Castilla y León que ofrece formación en tecnologías digitales, presencial y online.", "Una tienda online de ordenadores.", "Una aplicación de la Junta para pedir cita con el médico.", "Una compañía de teléfono móvil."], "correcta": 0,
+       "explicacion": "CyL Digital tiene cursos en los Espacios CyL Digital y cursos online. Su web es cyldigital.es."},
+      {"tipo": "ordenar", "enunciado": "Quieres mejorar tus competencias digitales. Ordena los pasos.",
+       "orden": ["Haz un test de autodiagnóstico.", "Mira en qué áreas fallas más.", "Busca quién o qué te puede enseñar: un compañero, un tutorial, un curso online.", "Practica lo que has aprendido.", "Repite el test para ver si has mejorado."],
+       "explicacion": "Primero descubres qué no sabes. Después aprendes, practicas y compruebas si has mejorado."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= Repaso del área y cierre ======================= -->
+
+<section class="s" data-label="Resumen del tema" data-seccion="R" data-deck-section="R">
+  <div class="cab"><p class="etq">Repaso del área 5</p><h2>Resumen del tema</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas t5-resumen" style="--n:4">
+      <div class="tarjeta"><h3>5.1 Problemas técnicos</h3><ul class="lista"><li>Antes de pedir ayuda, reinicia y comprueba.</li><li>Al servicio técnico: modelo, número de serie, mensaje de error y lo que has probado.</li><li>Manual y servicio oficial: web del fabricante › Soporte.</li><li>Busca el mensaje exacto. Comprueba lo que dice la IA.</li></ul></div>
+      <div class="tarjeta"><h3>5.2 Dispositivos y apps</h3><ul class="lista"><li>Elige el dispositivo según el uso.</li><li>Con wifi no gastas datos.</li><li>GPRS, 3G, 4G y 5G: generaciones de datos móviles.</li><li>Encuesta: Google Forms.</li><li>Libres: Writer, Calc, Impress, GIMP y Linux.</li><li>Móvil a la tele: cable microUSB - HDMI.</li></ul></div>
+      <div class="tarjeta"><h3>5.3 Soluciones creativas</h3><ul class="lista"><li>Canva, Audacity, Clipchamp, GIMP.</li><li>SmartArt: Insertar › SmartArt.</li><li>QR: mira la dirección antes de abrirlo. Cuidado con el quishing.</li><li>Dron, impresora 3D, NFC y realidad virtual.</li></ul></div>
+      <div class="tarjeta"><h3>5.4 Seguir aprendiendo</h3><ul class="lista"><li>Haz un autodiagnóstico y aprende de otros.</li><li>Curso online: a tu ritmo.</li><li>MOOC: online, gratis, sin límite de inscripciones.</li><li>CyL Digital: formación gratuita.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Test de repaso del área" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 5 · preguntas del curso «Soy competente digital», CyL Digital</p><h2>Test de repaso</h2></div>
+  <div class="cuerpo">
+    <div class="repaso-test t5-preg"><script type="application/json">[
+      {"comp": "5.1", "tipo": "test", "enunciado": "Te compras un ordenador nuevo y guardas su estado actual. Así puedes volver a él si un día el equipo falla. ¿Cómo se llama esta medida?",
+       "opciones": ["Resetear", "Formatear", "Crear un punto de restauración", "Crear un rol de Administrador del sistema"], "correcta": 2,
+       "explicacion": "Un punto de restauración guarda el estado de Windows en un momento. Si algo falla después, el equipo vuelve a ese estado."},
+      {"comp": "5.1", "tipo": "test", "enunciado": "Una aplicación del móvil te falla. Has buscado una actualización, pero todavía no la hay. ¿Qué es lo más adecuado?",
+       "opciones": ["Contactar con el desarrollador para que te avise cuando haya una actualización", "Formatear el móvil y dejarlo con los valores de fábrica", "Probar a desinstalar la aplicación y volver a instalarla", "Una vez que la aplicación da fallos, no hay solución"], "correcta": 2,
+       "explicacion": "Al desinstalar y volver a instalar, la aplicación empieza de cero. Formatear el móvil borra todo y no hace falta."},
+      {"comp": "5.1", "tipo": "test", "barajar": false, "imagen": "img/cyl/config-win10.png", "enunciado": "Compartes el ordenador de casa con tu familia. ¿En qué opción de Configuración creas un usuario para cada persona?",
+       "opciones": ["Sistema", "Dispositivos", "Personalización", "Cuentas"], "correcta": 3,
+       "explicacion": "En **Cuentas** creas un usuario para cada persona. Así cada uno tiene sus archivos y su configuración."},
+      {"comp": "5.1", "tipo": "test", "barajar": false, "enunciado": "¿Dónde puedes encontrar soluciones a problemas con la tecnología?",
+       "opciones": ["Foros", "Blogs", "Redes sociales", "Todas las respuestas son correctas"], "correcta": 3,
+       "explicacion": "En foros, blogs y redes sociales otras personas explican cómo han resuelto el mismo problema. Comprueba la fecha y la fuente."},
+      {"comp": "5.1", "tipo": "test", "barajar": false, "enunciado": "Tienes una duda de ciberseguridad y quieres consultar al 017 de INCIBE. ¿Por qué medios puedes comunicarte?",
+       "opciones": ["WhatsApp", "Telegram", "Formulario web", "Todas son correctas"], "imagenes": ["img/cyl/whatsapp.png", "img/cyl/telegram.png", "img/cyl/formulario-web.png", null], "correcta": 3,
+       "explicacion": "El 017 atiende por teléfono, por WhatsApp (900 116 117), por Telegram (@INCIBE017) y con un formulario en su web."},
+      {"comp": "5.2", "tipo": "test", "enunciado": "Vas a comprar una impresora. Usas el ordenador en el salón, pero la impresora tiene que ir en otra habitación. ¿Qué solución es la más adecuada?",
+       "opciones": ["Comprar una impresora multifunción profesional", "Comprar una impresora inalámbrica para conectarla por Bluetooth", "Comprar una impresora inalámbrica para conectarla por NFC", "Comprar una impresora inalámbrica para conectarla por wifi"], "correcta": 3,
+       "explicacion": "La wifi llega a otras habitaciones. El Bluetooth tiene poco alcance y el NFC solo funciona a unos centímetros."},
+      {"comp": "5.2", "tipo": "test", "imagen": "img/cyl/bombilla.png", "enunciado": "Te regalan una bombilla inteligente. Instalas la app del fabricante, pero da error al conectarla a tu wifi «Plus», que es de 5 GHz. ¿Qué haces?",
+       "opciones": ["La cambio por otra: debe de tener un defecto de fábrica.", "Pruebo con la red de 2,4 GHz, porque puede que no admita la de 5 GHz.", "Apago y enciendo el router para cambiar la contraseña de la bombilla.", "Reviso el fabricante: si no es el mismo que el del móvil, no conectará."], "correcta": 1,
+       "explicacion": "Muchos aparatos inteligentes solo se conectan a la banda de 2,4 GHz del router. La de 5 GHz es más rápida, pero no todos la admiten."},
+      {"comp": "5.2", "tipo": "test", "imagen": "img/cyl/panel-wifi.png", "enunciado": "¿Tiene conexión a Internet el ordenador de esta imagen?",
+       "opciones": ["No, porque la conexión wifi no es segura", "No, porque no está conectado a ninguna red wifi", "Sí", "No, porque su batería es de menos del 20 %"], "correcta": 2,
+       "explicacion": "La primera red de la lista (MOVISTAR) sale «Conectada». El modo avión está activado, pero la wifi también: puedes encender la wifi con el modo avión puesto."},
+      {"comp": "5.1", "tipo": "test", "barajar": false, "enunciado": "¿En qué dispositivos puedes activar la localización para encontrarlos si los pierdes?",
+       "opciones": ["Ordenadores", "Teléfonos inteligentes", "Relojes inteligentes", "Todas las respuestas son correctas"], "correcta": 3,
+       "explicacion": "Ordenadores, móviles y relojes inteligentes tienen una opción para localizarlos si los pierdes o te los roban."},
+      {"comp": "5.2", "tipo": "test", "barajar": false, "imagen": "img/cyl/moviles.png", "enunciado": "¿Cuál de estos móviles funciona con el sistema operativo iOS?",
+       "opciones": ["El de la figura A", "El de la figura B", "Los dos", "Ninguno"], "correcta": 0,
+       "explicacion": "El móvil A es un iPhone: usa iOS, el sistema de Apple. El B es un Samsung: usa Android."},
+      {"comp": "5.2", "tipo": "test", "barajar": false, "imagen": "img/cyl/traductor.png", "enunciado": "Una persona te habla en un idioma que no entiendes. Abre Google Traductor y te enseña esta pantalla. ¿Qué botón ha pulsado para llegar a ella?",
+       "opciones": ["A", "B", "C", "D"], "imagenes": ["img/cyl/traductor-a.png", "img/cyl/traductor-b.png", "img/cyl/traductor-c.png", "img/cyl/traductor-d.png"], "correcta": 1,
+       "explicacion": "El icono de dos personas abre el modo **Conversación**: el móvil escucha a las dos personas y traduce lo que dice cada una."},
+      {"comp": "5.3", "tipo": "test", "barajar": false, "enunciado": "¿Qué tecnología permite pagar acercando el móvil al datáfono de una tienda?",
+       "opciones": ["A", "B", "C", "D"], "imagenes": ["img/cyl/icono-nfc.png", "img/cyl/icono-bluetooth.png", "img/cyl/icono-datos.png", "img/cyl/icono-wifi.png"], "correcta": 0,
+       "explicacion": "El **NFC** (comunicación de campo cercano) funciona a pocos centímetros. Se usa para pagar con el móvil o con el reloj."},
+      {"comp": "5.3", "tipo": "test", "imagen": "img/cyl/canva.png", "enunciado": "Usas Canva para hacer una presentación. ¿Qué afirmación NO es correcta?",
+       "opciones": ["Puedes guardar la presentación en formato PowerPoint y seguir editándola en PowerPoint", "Puedes presentar el documento en línea", "Puedes obtener un código para insertar la presentación en una página web", "No puedes modificar el documento una vez descargado"], "correcta": 3,
+       "explicacion": "El diseño sigue guardado en Canva: puedes cambiarlo y descargarlo otra vez. Las otras tres frases son ciertas."},
+      {"comp": "5.4", "tipo": "test", "enunciado": "¿Qué característica define a un curso MOOC?",
+       "opciones": ["Son cursos no tutorizados orientados a autodidactas", "Son cursos orientados a trabajar de forma colaborativa", "Son cursos cuyo seguimiento se hace por videoconferencia", "Son gratuitos y flexibles: puedes acceder desde cualquier lugar y en cualquier momento"], "correcta": 3,
+       "explicacion": "Un MOOC es abierto (gratis), masivo (sin límite de alumnos) y online: entras cuando y donde quieras. Tener tutor o no tenerlo, o trabajar en grupo, no es lo que define a un MOOC."},
+      {"comp": "5.3", "tipo": "test", "enunciado": "Quieres mostrar en Word los pasos para apuntarte a un curso, unidos con flechas. ¿Qué herramienta usas?",
+       "opciones": ["SmartArt", "WordArt", "Tabla", "Hipervínculo"], "correcta": 0,
+       "explicacion": "SmartArt convierte una lista en un esquema. El tipo Proceso muestra pasos con flechas. WordArt solo decora un texto."},
+      {"comp": "5.4", "tipo": "test", "enunciado": "Un experto da una charla en directo por Internet. Puedes hacerle preguntas por el chat. ¿Cómo se llama esto?",
+       "opciones": ["Webinar", "MOOC", "Pódcast", "Foro"], "correcta": 0,
+       "explicacion": "Un webinar (seminario web) es una charla en directo por Internet. Un MOOC es un curso online masivo y abierto que haces a tu ritmo."},
+      {"comp": "5.4", "tipo": "test", "enunciado": "Tu compañera hace carteles muy rápido con Canva. Tú no sabes usarlo. ¿Qué es lo más adecuado?",
+       "opciones": ["Pedirle que te enseñe o buscar un tutorial", "Hacer siempre los carteles a mano", "Decir que Canva no sirve para nada", "Esperar a que un día aprendas solo"], "correcta": 0,
+       "explicacion": "Otras personas usan herramientas que tú no conoces. Aprender de ellas, o con un tutorial, es la forma más rápida de mejorar."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 5" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 5</p><h2>Resolución de problemas</h2></div>
+  <div class="cuerpo" style="gap:36px">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta" style="color:var(--texto)"><h3>5.1</h3><p>Problemas técnicos</p><span class="estado-comp" data-comp="5.1"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>5.2</h3><p>Necesidades y respuestas tecnológicas</p><span class="estado-comp" data-comp="5.2"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>5.3</h3><p>Soluciones creativas</p><span class="estado-comp" data-comp="5.3"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>5.4</h3><p>Necesidades de competencias digitales</p><span class="estado-comp" data-comp="5.4"></span></div>
+    </div>
+    <p>Has terminado las 5 áreas. Siguiente paso: el <b>simulacro</b>, con la demo oficial de 20 preguntas y un simulacro de 63 preguntas, como el examen. Si te falta alguna competencia, vuelve a su Comprueba.</p>
+    <div class="botones"><a class="btn sec" href="../">Portada del curso</a><a class="btn ciruela" href="../simulacro/">Ir al simulacro</a><a class="btn sec" href="#c51">Volver al principio del tema</a></div>
+    <p class="peq" style="opacity:.85;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), CC BY-NC. Preguntas 17 a 20 de la demo de tuCertiCyL. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+<script>
+/* Tema 5: cuadro de búsqueda de la web inventada kalimpra.es (simulación de la 5.1).
+   La lupa solo lleva a la ficha del producto si lo escrito es el modelo «J300» (o «Kalimpra J300»).
+   Si no, pulsar la lupa cuenta como un clic fallido. Intro en el cuadro equivale a pulsar la lupa. */
+(function () {
+  'use strict';
+  const valido = (v) => /^(kalimpra )?j ?300$/.test(String(v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim());
+  document.addEventListener('input', (e) => {
+    const inp = e.target.closest && e.target.closest('.t5-buscador input');
+    if (!inp) return;
+    const lupa = inp.closest('.t5-buscador').querySelector('.t5-lupa');
+    if (valido(inp.value)) lupa.dataset.ir = 'ficha'; else delete lupa.dataset.ir;
+  });
+  document.addEventListener('keydown', (e) => {
+    const inp = e.target.closest && e.target.closest('.t5-buscador input');
+    if (!inp) return;
+    e.stopPropagation();
+    if (e.key === 'Enter') { e.preventDefault(); inp.closest('.t5-buscador').querySelector('.t5-lupa').click(); }
+  }, true);
+})();
+</script>
+</body>
+</html>

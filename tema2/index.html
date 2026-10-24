@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 2 · Comunicación y colaboración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+/* ---------- Tema 2: estilos propios (prefijo t2-) ---------- */
+/* Índice con 6 competencias */
+.t2-indice .indice-comp { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.t2-indice .indice-comp a { grid-template-columns: 100px 1fr; padding: 22px 26px; gap: 20px; }
+.t2-indice .indice-comp .ico { width: 100px; }
+.t2-indice .indice-comp h3 { font-size: 29px; }
+.t2-indice .indice-comp p { font-size: 21px; color: var(--gris); margin: -4px 0 8px; line-height: 1.3; }
+/* Resumen con 6 tarjetas */
+.t2-resumen .tarjeta { padding: 20px 26px; gap: 8px; }
+.t2-resumen .tarjeta h3 { font-size: 28px; }
+.t2-resumen .lista.peq { font-size: 23px; gap: 8px; }
+.t2-resumen .lista > li { padding-left: 36px; }
+.t2-resumen .lista > li::before { left: 4px; width: 14px; height: 14px; }
+/* Marcas de WhatsApp */
+.t2-tick { width: 64px; height: 36px; display: block; }
+/* Flechas de llamadas */
+.t2-fl { font-weight: 800; font-family: 'Segoe UI Symbol', 'Segoe UI', sans-serif; }
+.t2-fl.hecha { color: #188038; } .t2-fl.recibida { color: #1A73E8; } .t2-fl.perdida { color: #C5221F; }
+.t2-leyenda { display: flex; flex-direction: column; gap: 10px; font-size: var(--type-small); background: var(--blanco); border-radius: 20px; padding: 18px 26px; box-shadow: var(--sombra); }
+.t2-leyenda .t2-fl { display: inline-block; width: 40px; font-size: 30px; }
+/* Pequeño título gris de bloque */
+.t2-bloque { font-size: var(--type-caption); font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: .05em; }
+.t2-iconos { display: flex; gap: 26px; align-items: center; }
+.t2-iconos img { width: 120px; height: auto; }
+.t2-nota { font-size: 22px; color: var(--gris); }
+
+/* ---------- App Teléfono de Android (pantallas recreadas) ---------- */
+.t2-i { width: 22px; height: 22px; fill: currentColor; display: block; }
+.t2-tel-top { display: flex; align-items: center; gap: 10px; padding: 8px 16px 10px; }
+.t2-tel-top .tit { flex: 1; font-size: 22px; font-weight: 500; color: #1F1F1F; }
+.t2-tel-top .bt { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; font-size: 20px; color: #444746; }
+.t2-tel-buscar { margin: 0 14px 6px; background: #E9EEF6; border-radius: 26px; padding: 11px 18px; color: #444746; font-size: 15px; display: flex; gap: 10px; align-items: center; }
+.t2-tel-sec { padding: 12px 20px 4px; color: #444746; font-size: 13px; font-weight: 600; }
+.t2-tel-favs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 10px 16px; }
+.t2-tel-favs div { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; }
+.t2-tel-favs .av { width: 72px; height: 72px; border-radius: 24px; display: grid; place-items: center; color: #fff; font-size: 26px; font-weight: 600; }
+.t2-tel-fila { display: flex; align-items: center; gap: 6px; padding: 0 8px 0 0; }
+.t2-tel-zona { flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; padding: 10px 6px 10px 18px; cursor: pointer; }
+.t2-tel-zona .av, .t2-tel-cont .av { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 17px; flex: none; }
+.t2-tel-zona .txt { flex: 1; min-width: 0; }
+.t2-tel-zona .n { font-size: 16px; font-weight: 500; color: #1F1F1F; }
+.t2-tel-zona .m { font-size: 13px; color: #444746; display: flex; align-items: center; gap: 6px; }
+.t2-tel-llamar { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; color: #0B57D0; cursor: pointer; }
+.t2-tel-cont { display: flex; align-items: center; gap: 14px; padding: 9px 18px; font-size: 16px; }
+.t2-tel-letra { padding: 8px 20px 0; color: #0B57D0; font-size: 13px; font-weight: 600; }
+.t2-tel-nav { position: absolute; left: 0; right: 0; bottom: 0; height: 70px; display: flex; border-top: 1px solid #E8EAED; background: #F8FAFD; }
+.t2-tel-nav span { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; color: #444746; cursor: pointer; }
+.t2-tel-nav span b { display: grid; place-items: center; padding: 3px 18px; border-radius: 16px; }
+.t2-tel-nav span.on { color: #0B57D0; font-weight: 600; }
+.t2-tel-nav span.on b { background: #D3E3FD; }
+.t2-tel-fab { position: absolute; right: 18px; bottom: 88px; width: 58px; height: 58px; border-radius: 18px; background: #D3E3FD; color: #0B57D0; display: grid; place-items: center; font-size: 32px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.t2-tel-det { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0 12px; }
+.t2-tel-det .grande { width: 96px; height: 96px; border-radius: 50%; background: #A8C7FA; color: #fff; display: grid; place-items: center; }
+.t2-tel-det .grande .t2-i { width: 56px; height: 56px; }
+.t2-tel-det .num { font-size: 24px; color: #1F1F1F; margin-top: 8px; }
+.t2-tel-det .sub { font-size: 14px; color: #444746; }
+.t2-tel-acc { display: flex; justify-content: center; gap: 30px; padding: 4px 0 14px; border-bottom: 1px solid #E8EAED; }
+.t2-tel-acc span { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13px; color: #0B57D0; }
+.t2-tel-acc i { width: 52px; height: 52px; border-radius: 50%; background: #E9EEF6; display: grid; place-items: center; }
+.t2-tel-lista div { padding: 15px 24px; font-size: 16px; color: #1F1F1F; cursor: pointer; }
+.t2-tel-form-top { display: flex; align-items: center; gap: 10px; padding: 8px 12px 14px; }
+.t2-tel-form-top .x { width: 40px; height: 40px; display: grid; place-items: center; font-size: 22px; color: #444746; }
+.t2-tel-form-top .tit { flex: 1; font-size: 20px; color: #1F1F1F; }
+.t2-tel-guardar { background: #0B57D0; color: #fff; border-radius: 20px; padding: 9px 20px; font-size: 15px; font-weight: 500; cursor: pointer; }
+.t2-tel-foto { width: 96px; height: 96px; border-radius: 50%; background: #E9EEF6; margin: 0 auto 14px; display: grid; place-items: center; color: #444746; }
+.t2-tel-campo { padding: 7px 20px; }
+.t2-tel-campo label { display: block; font-size: 12px; color: #444746; margin: 0 0 4px 4px; }
+.t2-tel-campo input, .t2-tel-campo .fijo { width: 100%; font: 400 16px Roboto, 'Segoe UI', sans-serif; padding: 11px 14px; border: 1px solid #747775; border-radius: 6px; color: #1F1F1F; background: #fff; }
+.t2-tel-campo input:focus { outline: 2px solid #0B57D0; border-color: #0B57D0; }
+.t2-tel-ficha { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 0 18px; }
+.t2-tel-ficha .grande { width: 110px; height: 110px; border-radius: 50%; background: #E861A7; color: #fff; display: grid; place-items: center; font-size: 46px; font-weight: 600; }
+.t2-tel-ficha .nom { font-size: 26px; color: #1F1F1F; }
+.t2-tel-aviso { margin: 14px 18px; background: #E6F4EA; color: #0D652D; border-radius: 12px; padding: 12px 16px; font-size: 14px; text-align: center; }
+
+/* ---------- WhatsApp: chat, menú Adjuntar, ubicación y permisos del grupo ---------- */
+.t2-wa-cab { display: flex; align-items: center; gap: 8px; padding: 6px 8px 8px; background: #fff; border-bottom: 1px solid #E9EDEF; }
+.t2-wa-cab .info { flex: 1; min-width: 0; }
+.t2-wa-cab .info b { display: block; font-size: 16px; font-weight: 600; }
+.t2-wa-cab .info small { display: block; font-size: 12px; color: #667781; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t2-wa-cab .bt { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: #111B21; font-size: 19px; cursor: pointer; flex: none; }
+.t2-wa-cab .wa-av { width: 38px; height: 38px; font-size: 13px; }
+.t2-wa-fondo { position: absolute; top: 86px; left: 0; right: 0; bottom: 60px; background: #EFEAE2; padding: 10px 10px; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+.t2-wa-fecha { align-self: center; background: #fff; color: #54656F; font-size: 11.5px; border-radius: 8px; padding: 4px 10px; margin-bottom: 4px; }
+.t2-wa-msg { max-width: 80%; padding: 6px 10px 17px; border-radius: 10px; font-size: 14.5px; position: relative; background: #fff; align-self: flex-start; box-shadow: 0 1px 1px rgba(0,0,0,.12); min-width: 96px; }
+.t2-wa-msg.yo { align-self: flex-end; background: #D9FDD3; }
+.t2-wa-msg .de { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 1px; }
+.t2-wa-msg small { position: absolute; right: 8px; bottom: 3px; font-size: 10.5px; color: #667781; display: flex; align-items: center; gap: 3px; }
+.t2-wa-msg .tk { color: #53BDEB; font-weight: 700; letter-spacing: -3px; font-size: 12px; }
+.t2-wa-msg .tk.gris { color: #8696A0; }
+.t2-wa-msg .mapa-mini { width: 210px; height: 120px; border-radius: 8px; margin-bottom: 4px; }
+.t2-wa-barra { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; display: flex; align-items: center; gap: 6px; padding: 0 7px; background: #EFEAE2; }
+.t2-wa-caja { flex: 1; height: 46px; background: #fff; border-radius: 23px; display: flex; align-items: center; gap: 2px; padding: 0 6px; color: #8696A0; font-size: 16px; }
+.t2-wa-caja .txt { flex: 1; padding-left: 4px; }
+.t2-wa-caja .ic { width: 36px; height: 36px; display: grid; place-items: center; color: #54656F; cursor: pointer; border-radius: 50%; font-size: 20px; }
+.t2-wa-mic { width: 48px; height: 48px; border-radius: 50%; background: #1DAA61; color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; }
+.t2-wa-velo { position: absolute; inset: 0; background: rgba(0,0,0,.18); }
+.t2-wa-adj { position: absolute; left: 8px; right: 8px; bottom: 66px; background: #fff; border-radius: 22px; padding: 18px 4px 14px; display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 16px; box-shadow: 0 6px 24px rgba(0,0,0,.25); z-index: 2; }
+.t2-wa-adj div { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 13px; color: #3B4A54; cursor: pointer; padding: 2px 0; }
+.t2-wa-adj i { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 24px; }
+.t2-wa-mapa { position: relative; height: 270px;
+  background: linear-gradient(90deg, transparent 44%, #fff 44%, #fff 48%, transparent 48%),
+              linear-gradient(0deg, transparent 58%, #fff 58%, #fff 62%, transparent 62%),
+              linear-gradient(125deg, transparent 28%, #FDE9A8 28%, #FDE9A8 31%, transparent 31%),
+              radial-gradient(circle at 78% 24%, #C9E7C0 0 16%, transparent 16.5%),
+              radial-gradient(circle at 18% 78%, #C9E7C0 0 12%, transparent 12.5%),
+              #E9F0E4; }
+.t2-wa-mapa .pin { position: absolute; left: 46%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: #1A73E8; border: 3px solid #fff; box-shadow: 0 0 0 10px rgba(26,115,232,.22); }
+.t2-wa-op { display: flex; gap: 14px; align-items: center; padding: 11px 16px; cursor: pointer; font-size: 15.5px; }
+.t2-wa-op i { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 19px; background: #1DAA61; color: #fff; flex: none; }
+.t2-wa-op i.gris { background: #E9EDEF; }
+.t2-wa-op small { display: block; color: #667781; font-size: 12.5px; }
+.t2-off { background: #B0B7BB !important; }
+.t2-off::after { right: auto !important; left: 3px; }
+
+/* Diapositivas con preguntas: más compactas, para que quepan con la explicación a la vista */
+.t2-preg .cab { margin-bottom: 26px; }
+.t2-preg .comprueba { gap: 18px; }
+.t2-preg .preg { gap: 14px; }
+.t2-preg .preg .enun { font-size: 29px; line-height: 1.3; }
+.t2-preg .preg .instr { font-size: 22px; }
+.t2-preg .preg .opciones { gap: 10px; }
+.t2-preg .opcion { padding: 10px 22px; font-size: 25px; border-radius: 16px; }
+.t2-preg .opcion .marca { width: 30px; height: 30px; font-size: 18px; }
+.t2-preg .preg .fb { padding: 12px 22px; font-size: 23px; }
+.t2-preg .preg .fb .fb-tit { font-size: 24px; margin-bottom: 2px; }
+.t2-preg .preg .btn { font-size: 23px; padding: 12px 28px; }
+.t2-preg .reto-archivo { padding: 10px 20px; }
+.t2-preg .preg.con-img, .t2-preg .preg.sim-dos { row-gap: 14px; }
+.t2-preg .preg.con-img > .img-enun { max-height: 480px; max-width: 560px; }
+.t2-preg .preg .img-enun { max-height: 200px; }
+.t2-preg .parejas .fija, .t2-preg .parejas .mov, .t2-preg .orden .mov { min-height: 56px; font-size: 23px; }
+.t2-preg .fuente { margin-top: 0; }
+/* Tablas con un icono delante del texto de la celda */
+.t2-ico-fila { float: left; height: 50px; width: 50px; object-fit: contain; margin: -6px 14px 0 0; }
+/* Captura con números sobre los campos (coinciden con los números de la tabla) */
+.t2-marcas img { height: auto; }
+.t2-m, .t2-n { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--area); color: #fff; font: 700 22px/1 'Lexend', sans-serif; flex: none; }
+.t2-m { position: absolute; margin: -19px 0 0 -19px; box-shadow: 0 0 0 4px #fff, 0 4px 12px rgba(0, 0, 0, .25); }
+.t2-aro { position: absolute; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 4px solid var(--area); }
+.t2-tabla-n .t2-n { width: 32px; height: 32px; font-size: 19px; margin-right: 12px; vertical-align: middle; }
+.t2-tabla-n td:first-child { white-space: nowrap; }
+/* Pasos con icono y flecha (certificado digital) */
+.t2-pasos { display: flex; align-items: stretch; margin-top: -12px; }
+.t2-pasos .p { flex: 1; display: grid; grid-template-columns: 82px 1fr; gap: 16px; align-items: center; background: var(--blanco); border-radius: 22px; box-shadow: var(--sombra); padding: 10px 22px 10px 14px; font-size: var(--type-caption); line-height: 1.3; }
+.t2-pasos .p img { width: 82px; height: 82px; object-fit: contain; }
+.t2-pasos .p .t2-n { width: 32px; height: 32px; font-size: 19px; margin-right: 10px; vertical-align: 2px; }
+.t2-pasos .fl { flex: none; width: 54px; position: relative; }
+.t2-pasos .fl::before { content: ''; position: absolute; left: 8px; right: 20px; top: 50%; border-top: 5px solid var(--area); transform: translateY(-50%); }
+.t2-pasos .fl::after { content: ''; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 11px solid transparent; border-left: 16px solid var(--area); border-right: 0; }
+.t2-lista-2col { display: block; columns: 2; column-gap: 56px; }
+.t2-lista-2col > li { break-inside: avoid; margin-bottom: 12px; }
+</style>
+</head>
+<body class="area-2">
+
+<!-- Plantilla: app Teléfono de Android (simulación del Comprueba 2.1 y maquetas de las diapositivas de llamadas) -->
+<template id="t2-telefono">
+  <div class="movil">
+    <div class="pantalla-html" data-id="favoritos">
+      <div class="wa-barra-estado"><span>10:32</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-top"><span class="tit">Teléfono</span><span class="bt">⋮</span></div>
+      <div class="t2-tel-buscar">🔍 Buscar contactos y lugares</div>
+      <div class="t2-tel-sec">Favoritos</div>
+      <div class="t2-tel-favs">
+        <div><span class="av" style="background:#E861A7">M</span>Mamá</div>
+        <div><span class="av" style="background:#007CC2">P</span>Papá</div>
+        <div><span class="av" style="background:#8FA72F">A</span>Abuela</div>
+      </div>
+      <div class="t2-tel-nav">
+        <span class="on"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 17.3l6.2 3.7-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.4 4.7-1.6 7z"/></svg></b>Favoritos</span>
+        <span data-ir="recientes"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7z"/></svg></b>Recientes</span>
+        <span data-ir="contactos"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg></b>Contactos</span>
+        <span><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M6 2.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 8.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 14.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 5.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6z"/></svg></b>Teclado</span>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="recientes">
+      <div class="wa-barra-estado"><span>10:32</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-top"><span class="tit">Recientes</span><span class="bt">⋮</span></div>
+      <div class="t2-tel-buscar">🔍 Buscar contactos y lugares</div>
+      <div class="t2-tel-sec">Hoy</div>
+      <div class="t2-tel-fila"><div class="t2-tel-zona" data-ir="detalles"><span class="av" style="background:#A8C7FA"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg></span><div class="txt"><div class="n" style="color:#C5221F">612 345 678</div><div class="m"><span class="t2-fl perdida">↙</span>Perdida · 10:15</div></div></div><span class="t2-tel-llamar"><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span></div>
+      <div class="t2-tel-fila"><div class="t2-tel-zona"><span class="av" style="background:#E861A7">M</span><div class="txt"><div class="n">Mamá</div><div class="m"><span class="t2-fl hecha">↗</span>Realizada · 9:02</div></div></div><span class="t2-tel-llamar"><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span></div>
+      <div class="t2-tel-sec">Ayer</div>
+      <div class="t2-tel-fila"><div class="t2-tel-zona"><span class="av" style="background:#F3C51A">P</span><div class="txt"><div class="n">Pizzería Roma</div><div class="m"><span class="t2-fl recibida">↙</span>Recibida · 21:30</div></div></div><span class="t2-tel-llamar"><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span></div>
+      <div class="t2-tel-fila"><div class="t2-tel-zona"><span class="av" style="background:#007CC2">P</span><div class="txt"><div class="n">Papá</div><div class="m"><span class="t2-fl recibida">↙</span>Recibida · 14:10</div></div></div><span class="t2-tel-llamar"><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span></div>
+      <div class="t2-tel-nav">
+        <span><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 17.3l6.2 3.7-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.4 4.7-1.6 7z"/></svg></b>Favoritos</span>
+        <span class="on"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7z"/></svg></b>Recientes</span>
+        <span data-ir="contactos"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg></b>Contactos</span>
+        <span><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M6 2.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 8.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 14.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 5.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6z"/></svg></b>Teclado</span>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="detalles">
+      <div class="wa-barra-estado"><span>10:33</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-top"><span class="bt">←</span><span class="tit"></span><span class="bt">⋮</span></div>
+      <div class="t2-tel-det"><span class="grande"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg></span><div class="num">612 345 678</div><div class="sub">España · Llamada perdida hoy, 10:15</div></div>
+      <div class="t2-tel-acc"><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></i>Llamar</span><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg></i>Mensaje</span><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></i>Vídeo</span></div>
+      <div class="t2-tel-lista">
+        <div data-ir="crear">Crear contacto</div>
+        <div>Añadir a un contacto</div>
+        <div>Enviar mensaje</div>
+        <div>Historial</div>
+        <div>Bloquear o denunciar como spam</div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="crear" data-valida>
+      <div class="wa-barra-estado"><span>10:33</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-form-top"><span class="x">✕</span><span class="tit">Crear contacto</span><span class="t2-tel-guardar" data-guardar="ficha">Guardar</span></div>
+      <div class="t2-tel-foto"><svg class="t2-i" style="width:40px;height:40px" viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 2 7.2 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.2L15 2H9z"/></svg></div>
+      <div class="t2-tel-campo" data-ir="crear"><label>Nombre</label><input type="text" autocomplete="off" spellcheck="false" data-campo="nombre" data-esperado="Academia Inglés" aria-label="Nombre"></div>
+      <div class="t2-tel-campo" data-ir="crear"><label>Apellidos</label><input type="text" autocomplete="off" spellcheck="false" aria-label="Apellidos"></div>
+      <div class="t2-tel-campo" data-ir="crear"><label>Empresa</label><input type="text" autocomplete="off" spellcheck="false" aria-label="Empresa"></div>
+      <div class="t2-tel-campo" data-ir="crear"><label>Teléfono · Móvil</label><div class="fijo">612 345 678</div></div>
+    </div>
+    <div class="pantalla-html" data-id="contactos">
+      <div class="wa-barra-estado"><span>10:32</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-top"><span class="tit">Contactos</span><span class="bt">⋮</span></div>
+      <div class="t2-tel-buscar">🔍 Buscar contactos</div>
+      <div class="t2-tel-letra">A</div>
+      <div class="t2-tel-cont"><span class="av" style="background:#8FA72F">A</span>Abuela</div>
+      <div class="t2-tel-letra">M</div>
+      <div class="t2-tel-cont"><span class="av" style="background:#E861A7">M</span>Mamá</div>
+      <div class="t2-tel-cont"><span class="av" style="background:#0090A8">M</span>Marta</div>
+      <div class="t2-tel-letra">P</div>
+      <div class="t2-tel-cont"><span class="av" style="background:#007CC2">P</span>Papá</div>
+      <div class="t2-tel-cont"><span class="av" style="background:#F3C51A">P</span>Pizzería Roma</div>
+      <span class="t2-tel-fab" data-ir="crear-b">+</span>
+      <div class="t2-tel-nav">
+        <span><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 17.3l6.2 3.7-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.4 4.7-1.6 7z"/></svg></b>Favoritos</span>
+        <span data-ir="recientes"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7z"/></svg></b>Recientes</span>
+        <span class="on"><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg></b>Contactos</span>
+        <span><b><svg class="t2-i" viewBox="0 0 24 24"><path d="M6 2.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 8.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM6 14.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 5.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6z"/></svg></b>Teclado</span>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="crear-b" data-valida>
+      <div class="wa-barra-estado"><span>10:33</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-form-top"><span class="x">✕</span><span class="tit">Crear contacto</span><span class="t2-tel-guardar" data-guardar="ficha">Guardar</span></div>
+      <div class="t2-tel-foto"><svg class="t2-i" style="width:40px;height:40px" viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 2 7.2 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.2L15 2H9z"/></svg></div>
+      <div class="t2-tel-campo" data-ir="crear-b"><label>Nombre</label><input type="text" autocomplete="off" spellcheck="false" data-campo="nombre" data-esperado="Academia Inglés" aria-label="Nombre"></div>
+      <div class="t2-tel-campo" data-ir="crear-b"><label>Apellidos</label><input type="text" autocomplete="off" spellcheck="false" aria-label="Apellidos"></div>
+      <div class="t2-tel-campo" data-ir="crear-b"><label>Empresa</label><input type="text" autocomplete="off" spellcheck="false" aria-label="Empresa"></div>
+      <div class="t2-tel-campo" data-ir="crear-b"><label>Teléfono · Móvil</label><input type="tel" autocomplete="off" data-tipo="tel" data-esperado="612345678" aria-label="Teléfono"></div>
+    </div>
+    <div class="pantalla-html" data-id="ficha" data-final>
+      <div class="wa-barra-estado"><span>10:34</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-tel-top"><span class="bt">←</span><span class="tit"></span><span class="bt">☆</span><span class="bt">⋮</span></div>
+      <div class="t2-tel-ficha"><span class="grande">A</span><span class="nom" data-muestra="nombre">Academia Inglés</span></div>
+      <div class="t2-tel-acc"><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></i>Llamar</span><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg></i>Mensaje</span><span><i><svg class="t2-i" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></i>Vídeo</span></div>
+      <div class="t2-tel-lista"><div>612 345 678<br><small style="color:#444746">Móvil</small></div></div>
+      <div class="t2-tel-aviso">Contacto guardado</div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: WhatsApp en Android, grupo «1.º SMR» (simulación del Comprueba 2.2 y maquetas) -->
+<template id="t2-wa-ubicacion">
+  <div class="movil">
+    <div class="pantalla-html" data-id="chat">
+      <div class="wa-barra-estado"><span>17:07</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-wa-cab"><span class="bt">←</span><span class="wa-av" style="background:#E861A7">1.º</span><div class="info"><b>1.º SMR</b><small>Ana, Dani, Lucía, Tú</small></div><span class="bt"><svg class="t2-i" viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></span><span class="bt"><svg class="t2-i" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></span><span class="bt">⋮</span></div>
+      <div class="t2-wa-fondo">
+        <div class="t2-wa-fecha">HOY</div>
+        <div class="t2-wa-msg"><span class="de" style="color:#C2005E">Ana</span>Quedamos en el museo a las 17:30<small>16:58</small></div>
+        <div class="t2-wa-msg"><span class="de" style="color:#007CC2">Dani</span>Yo ya estoy en la puerta<small>17:02</small></div>
+        <div class="t2-wa-msg yo">Voy de camino<small>17:04 <span class="tk">✓✓</span></small></div>
+        <div class="t2-wa-msg yo">¿Me esperáis en la entrada?<small>17:05 <span class="tk gris">✓✓</span></small></div>
+        <div class="t2-wa-msg yo">Llego en 5 minutos<small>17:06 <span class="tk gris">✓</span></small></div>
+        <div class="t2-wa-msg"><span class="de" style="color:#617518">Lucía</span>¿Dónde estás? Manda tu ubicación<small>17:06</small></div>
+      </div>
+      <div class="t2-wa-barra"><div class="t2-wa-caja"><span class="ic">☺</span><span class="txt">Mensaje</span><span class="ic" data-ir="adjuntar" title="Adjuntar"><svg class="t2-i" viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6h-1.5z"/></svg></span><span class="ic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 2 7.2 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.2L15 2H9z"/></svg></span></div><span class="t2-wa-mic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5c0 3.4 2.7 6.2 6 6.7V21h2v-3.3c3.3-.5 6-3.3 6-6.7h-1.7z"/></svg></span></div>
+    </div>
+    <div class="pantalla-html" data-id="adjuntar">
+      <div class="wa-barra-estado"><span>17:07</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-wa-cab"><span class="bt">←</span><span class="wa-av" style="background:#E861A7">1.º</span><div class="info"><b>1.º SMR</b><small>Ana, Dani, Lucía, Tú</small></div><span class="bt">⋮</span></div>
+      <div class="t2-wa-fondo">
+        <div class="t2-wa-fecha">HOY</div>
+        <div class="t2-wa-msg"><span class="de" style="color:#C2005E">Ana</span>Quedamos en el museo a las 17:30<small>16:58</small></div>
+        <div class="t2-wa-msg"><span class="de" style="color:#007CC2">Dani</span>Yo ya estoy en la puerta<small>17:02</small></div>
+        <div class="t2-wa-msg yo">Voy de camino<small>17:04 <span class="tk">✓✓</span></small></div>
+      </div>
+      <div class="t2-wa-velo"></div>
+      <div class="t2-wa-adj">
+        <div><i style="background:#EDE7FF">📄</i>Documento</div>
+        <div><i style="background:#FFE4EC">📷</i>Cámara</div>
+        <div><i style="background:#F6E5FF">🖼️</i>Galería</div>
+        <div><i style="background:#FFE9DF">🎧</i>Audio</div>
+        <div data-ir="ubicacion"><i style="background:#DFF5E5">📍</i>Ubicación</div>
+        <div><i style="background:#E0F0FF">👤</i>Contacto</div>
+        <div><i style="background:#E2F4F1">📊</i>Encuesta</div>
+        <div><i style="background:#FFEFE0">📅</i>Evento</div>
+      </div>
+      <div class="t2-wa-barra"><div class="t2-wa-caja"><span class="ic">☺</span><span class="txt">Mensaje</span><span class="ic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 0 1-8 0V5a2.5 2.5 0 0 1 5 0v10.5a1 1 0 0 1-2 0V6H10v9.5a2.5 2.5 0 0 0 5 0V5a4 4 0 0 0-8 0v12.5a5.5 5.5 0 0 0 11 0V6h-1.5z"/></svg></span><span class="ic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 2 7.2 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.2L15 2H9z"/></svg></span></div><span class="t2-wa-mic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5c0 3.4 2.7 6.2 6 6.7V21h2v-3.3c3.3-.5 6-3.3 6-6.7h-1.7z"/></svg></span></div>
+    </div>
+    <div class="pantalla-html" data-id="ubicacion">
+      <div class="wa-barra-estado"><span>17:07</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Enviar ubicación</span><span class="bt">🔍</span></div>
+      <div class="t2-wa-mapa"><span class="pin"></span></div>
+      <div class="t2-wa-op"><i>◉</i><span>Compartir ubicación en tiempo real</span></div>
+      <div class="t2-wa-op" data-ir="enviada"><i>📍</i><span>Enviar tu ubicación actual<small>Precisión: 10 metros</small></span></div>
+      <div class="wa-sec">Lugares cercanos</div>
+      <div class="t2-wa-op"><i class="gris">🏫</i><span>IES Ejemplo<small>Calle Ejemplo, 1</small></span></div>
+      <div class="t2-wa-op"><i class="gris">⛲</i><span>Plaza Mayor<small>Plaza Mayor, 1</small></span></div>
+      <div class="t2-wa-op"><i class="gris">🏛️</i><span>Museo de la Ciencia<small>Avenida del Museo, 4</small></span></div>
+    </div>
+    <div class="pantalla-html" data-id="enviada" data-final>
+      <div class="wa-barra-estado"><span>17:08</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="t2-wa-cab"><span class="bt">←</span><span class="wa-av" style="background:#E861A7">1.º</span><div class="info"><b>1.º SMR</b><small>Ana, Dani, Lucía, Tú</small></div><span class="bt">⋮</span></div>
+      <div class="t2-wa-fondo" style="justify-content:flex-end">
+        <div class="t2-wa-msg yo">Llego en 5 minutos<small>17:06 <span class="tk">✓✓</span></small></div>
+        <div class="t2-wa-msg"><span class="de" style="color:#617518">Lucía</span>¿Dónde estás? Manda tu ubicación<small>17:06</small></div>
+        <div class="t2-wa-msg yo"><div class="t2-wa-mapa mapa-mini"><span class="pin"></span></div>Ubicación actual<small>17:08 <span class="tk gris">✓</span></small></div>
+      </div>
+      <div class="t2-wa-barra"><div class="t2-wa-caja"><span class="ic">☺</span><span class="txt">Mensaje</span></div><span class="t2-wa-mic"><svg class="t2-i" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5c0 3.4 2.7 6.2 6 6.7V21h2v-3.3c3.3-.5 6-3.3 6-6.7h-1.7z"/></svg></span></div>
+    </div>
+    <!-- Solo para la maqueta de la diapositiva de grupos (no forma parte de la simulación) -->
+    <div class="pantalla-html" data-id="permisos">
+      <div class="wa-barra-estado"><span>17:10</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Permisos del grupo</span></div>
+      <div class="wa-sec">Los participantes pueden:</div>
+      <div class="wa-item"><span class="t">Editar los ajustes del grupo<small>Nombre, foto y descripción del grupo</small></span><span class="wa-interr t2-off"></span></div>
+      <div class="wa-item"><span class="t">Enviar mensajes</span><span class="wa-interr"></span></div>
+      <div class="wa-item"><span class="t">Añadir otros participantes</span><span class="wa-interr t2-off"></span></div>
+      <div class="wa-sec">Los administradores pueden:</div>
+      <div class="wa-item"><span class="t">Aprobar nuevos participantes<small>Deciden quién entra con el enlace de invitación</small></span><span class="wa-interr"></span></div>
+      <div class="wa-sec">Otras opciones del grupo</div>
+      <div class="wa-item"><span class="i">🔗</span><span class="t">Invitar al grupo mediante enlace</span></div>
+      <div class="wa-item"><span class="i">🔕</span><span class="t">Silenciar notificaciones</span></div>
+    </div>
+  </div>
+</template>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada e índice ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 2</p>
+  <h1>Comunicación y colaboración</h1>
+  <p class="sub">Comunícate, comparte y trabaja en equipo en Internet.</p>
+  <div class="datos"><span class="pill">Área 2</span><span class="pill clara">6 competencias</span><span class="pill clara">3 horas</span><span class="pill clara">18 preguntas en el examen</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s t2-indice" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 2</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp">
+      <a href="#c21"><img class="ico" src="img/ia/interactuar.webp" alt=""><div><span class="n">2.1</span><h3>Interactuar</h3><p>Llamadas, mensajes y correo</p><span class="estado-comp" data-comp="2.1"></span></div></a>
+      <a href="#c22"><img class="ico" src="img/ia/compartir.webp" alt=""><div><span class="n">2.2</span><h3>Compartir</h3><p>Adjuntos y WhatsApp</p><span class="estado-comp" data-comp="2.2"></span></div></a>
+      <a href="#c23"><img class="ico" src="img/ia/ciudadania.webp" alt=""><div><span class="n">2.3</span><h3>Participación ciudadana</h3><p>Certificado digital, DNIe, Cl@ve y trámites</p><span class="estado-comp" data-comp="2.3"></span></div></a>
+      <a href="#c24"><img class="ico" src="img/ia/colaborar.webp" alt=""><div><span class="n">2.4</span><h3>Colaborar</h3><p>Documentos compartidos, roles y herramientas</p><span class="estado-comp" data-comp="2.4"></span></div></a>
+      <a href="#c25"><img class="ico" src="img/ia/netiqueta.webp" alt=""><div><span class="n">2.5</span><h3>Comportamiento digital</h3><p>Netiqueta, respeto y privacidad</p><span class="estado-comp" data-comp="2.5"></span></div></a>
+      <a href="#c26"><img class="ico" src="img/ia/identidad.webp" alt=""><div><span class="n">2.6</span><h3>Identidad digital</h3><p>Lo que publicas tú y lo que publican de ti</p><span class="estado-comp" data-comp="2.6"></span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Esta área tiene 18 preguntas: 3 por competencia (2 de conocimientos y 1 de habilidades). Cada competencia termina con un <b>Comprueba</b> como el examen. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<!-- ======================= 2.1 Interactuar ======================= -->
+
+<section class="competencia" data-label="2.1 Interactuar a través de tecnologías digitales" data-seccion="2.1" data-deck-id="c21" data-deck-section="2.1">
+  <div class="izq">
+    <p class="n">2.1</p>
+    <h2>Interactuar a través de tecnologías digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: relacionar el SMS, el chat y el correo con lo que hace cada uno.</p>
+    <img class="ico" src="img/ia/interactuar.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Conocer alternativas al teléfono: la videollamada y las llamadas por Internet (VoIP).</li>
+      <li>Llamar y contestar con el móvil, aunque el número no esté en la agenda.</li>
+      <li>Guardar contactos en la agenda del móvil.</li>
+      <li>Ver las últimas llamadas que has hecho y recibido.</li>
+      <li>Enviar SMS y mensajes de WhatsApp o Telegram, y ver los enviados y los recibidos.</li>
+      <li>Enviar, responder y reenviar correos.</li>
+    </ol>
+    <p class="peq gris" style="margin-top:26px">Mucho de esto ya lo usas. El examen pregunta los nombres exactos.</p>
+    <span class="estado-comp" data-comp="2.1"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Llamadas en el móvil" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Llamadas en el móvil</h2><p class="entrada">En muchos móviles Android, la app <b>Teléfono</b> tiene 4 pestañas: <b>Favoritos</b>, <b>Recientes</b>, <b>Contactos</b> y <b>Teclado</b>. La app Teléfono del iPhone es parecida.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <ol class="pasos peq">
+          <li><b>Llamar a un número que no tienes guardado</b>: abre la pestaña <b>Teclado</b>, marca el número y pulsa el botón verde.</li>
+          <li><b>Contestar</b>: desliza el botón verde o pulsa <b>Responder</b>. Para rechazar la llamada, usa el botón rojo.</li>
+          <li><b>Ver las últimas llamadas</b>: abre la pestaña <b>Recientes</b>.</li>
+        </ol>
+        <div class="t2-leyenda">
+          <span><span class="t2-fl hecha">↗</span>Flecha que sale: llamada que has hecho.</span>
+          <span><span class="t2-fl recibida">↙</span>Flecha que entra: llamada que has recibido.</span>
+          <span><span class="t2-fl perdida">↙</span>En rojo: llamada perdida.</span>
+        </div>
+        <p class="t2-nota">En algunos móviles, como los Google Pixel, Favoritos y Recientes están juntos en la pestaña <b>Inicio</b>.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t2-telefono" data-pantalla="recientes" style="zoom:.8;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Guardar un contacto en la agenda" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Guardar un contacto en la agenda</h2><p class="entrada">La <b>agenda</b> del móvil (la app <b>Contactos</b>) guarda el nombre y el número de las personas que conoces.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="t2-bloque">Un número que te ha llamado, desde Recientes</p>
+        <ol class="pasos peq">
+          <li>Abre la pestaña <b>Recientes</b> y toca el número.</li>
+          <li>Toca <b>Crear contacto</b>.</li>
+          <li>Escribe el nombre en <b>Nombre</b>.</li>
+          <li>Pulsa <b>Guardar</b>.</li>
+        </ol>
+        <div class="ruta-bloque"><span class="donde">Otra forma: desde la app Contactos</span><div class="ruta"><span>Contactos</span><i>›</i><span>+</span><i>›</i><span>Nombre y Teléfono</span><i>›</i><span class="disp">Guardar</span></div></div>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t2-telefono" data-pantalla="detalles" style="zoom:.8;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="SMS y mensajería instantánea" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>SMS y mensajería instantánea</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta">
+        <img class="ico p" style="margin:0" src="img/ia/sms.webp" alt="">
+        <h3>SMS</h3>
+        <p>El <b>SMS</b> (servicio de mensajes cortos) es un mensaje de texto que va por la red de telefonía.</p>
+        <ul class="lista peq"><li>No necesita Internet. Solo necesitas cobertura.</li><li>Hasta 160 caracteres por mensaje.</li><li>Se envía al número de teléfono desde la app <b>Mensajes</b>.</li></ul>
+      </div>
+      <div class="tarjeta">
+        <img class="ico p" style="margin:0" src="img/ia/mensajeria.webp" alt="">
+        <h3>Mensajería instantánea</h3>
+        <p>La <b>mensajería instantánea</b> envía mensajes por Internet (datos móviles o wifi). Ejemplos: WhatsApp y Telegram.</p>
+        <ul class="lista peq"><li>Texto, fotos, vídeos, audios, documentos, ubicación y contactos. Grupos, llamadas y videollamadas.</li><li>La otra persona también necesita la app.</li><li>Telegram te deja usar un nombre de usuario sin mostrar tu número.</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Ver los mensajes enviados y recibidos" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Ver los mensajes enviados y recibidos</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p>Abre la conversación. Los mensajes <b>enviados</b> salen a la derecha. Los <b>recibidos</b>, a la izquierda.</p>
+        <table class="tabla">
+          <tr><th>Marca de WhatsApp</th><th>Qué significa</th></tr>
+          <tr><td><svg class="t2-tick" viewBox="0 0 40 22" role="img" aria-label="Un tick gris"><path d="M3 12l5 5L20 4" fill="none" stroke="#8696A0" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td>Enviado. Todavía no le ha llegado: no tiene cobertura o tiene el móvil apagado.</td></tr>
+          <tr><td><svg class="t2-tick" viewBox="0 0 40 22" role="img" aria-label="Dos ticks grises"><path d="M3 12l5 5L20 4M15 15l2 2L29 4" fill="none" stroke="#8696A0" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td>Entregado en su móvil. Todavía no lo ha leído.</td></tr>
+          <tr><td><svg class="t2-tick" viewBox="0 0 40 22" role="img" aria-label="Dos ticks azules"><path d="M3 12l5 5L20 4M15 15l2 2L29 4" fill="none" stroke="#53BDEB" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td>Leído.</td></tr>
+        </table>
+        <p class="peq">Los SMS se ven igual en la app <b>Mensajes</b>: una conversación por persona.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t2-wa-ubicacion" data-pantalla="chat" style="zoom:.9;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Alternativas al teléfono: VoIP y videoconferencia" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Alternativas al teléfono</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:30px">
+        <div class="def"><span class="t">VoIP</span><p>La <b>VoIP</b> (voz sobre IP) es la transmisión de la voz por Internet en lugar de por la red de teléfono tradicional.</p><p class="peq">Ejemplo: una llamada de WhatsApp o de Teams.</p></div>
+        <div class="def"><span class="t">Videoconferencia</span><p>La <b>videoconferencia</b> (o videollamada) es una comunicación con voz e imagen en directo, por Internet, entre 2 o más personas.</p><p class="peq">Necesitas un dispositivo con cámara y micrófono, y conexión a Internet.</p></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:40px;align-items:center">
+        <img class="ico m" src="img/ia/voip.webp" alt="">
+        <img class="ico m" src="img/ia/videollamada.webp" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Herramientas de videoconferencia" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Herramientas de videoconferencia</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 1.05fr">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <ul class="lista peq">
+          <li><b>WhatsApp</b>: videollamadas con un contacto o con un grupo.</li>
+          <li><b>Google Meet</b>: con una cuenta de Google. Está en Gmail y en Google Calendar.</li>
+          <li><b>Microsoft Teams</b>: lo usan centros educativos y empresas.</li>
+          <li><b>Zoom</b>: reuniones a las que entras con un enlace.</li>
+        </ul>
+        <p class="peq">Funciones habituales: compartir pantalla, chat, grabar la reunión, sala de espera y contraseña de la reunión.</p>
+        <div class="caja examen"><span class="tt">Nombres antiguos del examen</span><b>Skype</b> cerró el 5 de mayo de 2025: hoy se usa Teams. <b>Google Hangouts</b> y <b>Google Duo</b> hoy son Google Meet y Google Chat.</div>
+      </div>
+      <figure class="foto" style="height:600px"><img src="img/cyl/outlook-teams.png" alt="Nueva reunión en el calendario de Outlook con el interruptor Reunión de Teams activado"><figcaption class="credito">Reunión en el calendario de Outlook con el interruptor «Reunión de Teams» activado. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Partes de un correo electrónico" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Partes de un correo electrónico</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1.15fr 1fr;gap:48px">
+      <table class="tabla peq t2-tabla-n">
+        <tr><th>Campo</th><th>Para qué sirve</th></tr>
+        <tr><td><span class="t2-n">1</span>Para</td><td>La persona que recibe el correo.</td></tr>
+        <tr><td><span class="t2-n">2</span>CC (con copia)</td><td>Personas que reciben una copia. Todos ven sus direcciones.</td></tr>
+        <tr><td><span class="t2-n">3</span>CCO (con copia oculta)</td><td>Personas que reciben el correo sin que nadie vea su dirección. Úsalo si escribes a muchas personas que no se conocen.</td></tr>
+        <tr><td><span class="t2-n">4</span>Asunto</td><td>El tema del correo en pocas palabras.</td></tr>
+        <tr><td><span class="t2-n">5</span>Cuerpo</td><td>El mensaje.</td></tr>
+        <tr><td><span class="t2-n">6</span>Adjunto</td><td>Un archivo que va con el correo (icono del clip).</td></tr>
+        <tr><td><span class="t2-n">7</span>Firma</td><td>Tu nombre y tus datos, al final.</td></tr>
+      </table>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <figure class="foto t2-marcas"><img src="img/cyl/gmail-cc-cco.png" alt="Mensaje nuevo de Gmail con destinatarios en Para, Cc y CCO. Los números marcan los campos de la tabla."><span class="t2-m" style="left:49.4%;top:15.7%">1</span><span class="t2-m" style="left:19.4%;top:21.9%">2</span><span class="t2-m" style="left:32.0%;top:28.4%">3</span><span class="t2-m" style="left:10.8%;top:35.2%">4</span><span class="t2-m" style="left:35.3%;top:62.1%">5</span><span class="t2-aro" style="left:31.3%;top:93.6%"></span><span class="t2-m" style="left:31.3%;top:86.5%">6</span><span class="t2-m" style="left:10.0%;top:50.7%">7</span><figcaption class="credito">Mensaje nuevo de Gmail con destinatarios en Para, Cc y CCO. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+        <p class="peq">Una dirección de correo tiene la forma <b>usuario@dominio</b>. alumno.prueba.cyl@gmail.com es el usuario «alumno.prueba.cyl» de Gmail. En <b>De</b> sale tu dirección.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Responder, Responder a todos y Reenviar" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Responder, Responder a todos y Reenviar</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Responder</h3><ul class="lista peq"><li>Contesta solo a quien te escribió.</li><li>El asunto empieza por <b>RE:</b>.</li><li>Debajo va el mensaje original.</li><li>No lleva los adjuntos.</li></ul></div>
+      <div class="tarjeta"><h3>Responder a todos</h3><ul class="lista peq"><li>Contesta a quien te escribió y a todas las personas de <b>Para</b> y <b>CC</b>.</li><li>No llega a las personas de CCO.</li><li>El asunto también empieza por <b>RE:</b>.</li></ul></div>
+      <div class="tarjeta"><h3>Reenviar</h3><ul class="lista peq"><li>Envía el correo a otra persona que eliges tú.</li><li>El asunto empieza por <b>RV:</b> (Outlook) o <b>Fwd:</b> (Gmail).</li><li>Sí lleva los adjuntos.</li></ul></div>
+    </div>
+    <div class="caja"><span class="tt">Consejo</span>Usa <b>Responder a todos</b> solo si todas las personas necesitan tu respuesta.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde están los botones de responder y reenviar" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Dónde están los botones</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="ruta-bloque"><span class="donde">Gmail</span><div class="ruta"><span>Abre el correo</span><i>›</i><span>Debajo del mensaje</span><i>›</i><span class="disp">Responder · Responder a todos · Reenviar</span></div></div>
+        <p class="peq">También están en la flecha y en <b>⋮</b>, arriba a la derecha del mensaje.</p>
+        <figure class="foto cred-arriba" style="height:400px;width:495px"><img src="img/capturas/gmail-responder.webp" alt="Correo abierto en Gmail con un archivo adjunto y, debajo, los botones Responder, Responder a todos y Reenviar"><figcaption class="credito">Correo abierto en Gmail con los botones Responder, Responder a todos y Reenviar debajo. Captura propia con una cuenta de prueba (24-10-2026).</figcaption></figure>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="ruta-bloque"><span class="donde">Outlook</span><div class="ruta"><span>Abre el correo</span><i>›</i><span>Inicio</span><i>›</i><span class="disp">Responder · Responder a todos · Reenviar</span></div></div>
+        <p class="peq">En Outlook 2016 están en la pestaña <b>Inicio</b>, en el grupo <b>Responder</b>.</p>
+        <figure class="foto" style="height:318px"><img src="img/capturas/outlook-responder.webp" alt="Outlook con un correo seleccionado. En la pestaña Inicio, el grupo Responder tiene los botones Responder, Responder a todos y Reenviar, marcados con un recuadro"><figcaption class="credito">Outlook en la web con la cinta clásica: pestaña Inicio, grupo Responder. Captura propia (24-10-2026); el remitente está difuminado.</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué medio uso en cada caso" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Qué medio uso en cada caso</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th style="width:24%">Medio</th><th>Cómo funciona</th><th style="width:34%">Cuándo lo usas</th></tr>
+      <tr><td><img class="t2-ico-fila" src="img/ia/sms.webp" alt="">SMS</td><td><b>Se envía desde un dispositivo móvil</b>, sin Internet.</td><td>Un aviso corto cuando no tienes datos.</td></tr>
+      <tr><td><img class="t2-ico-fila" src="img/ia/mensajeria.webp" alt="">Mensajería instantánea y chat</td><td><b>Se produce una comunicación instantánea</b> (en tiempo real). En una sala de chat también hablas con personas que no están en tus contactos.</td><td>Una conversación rápida con amigos o con un grupo.</td></tr>
+      <tr><td><img class="t2-ico-fila" src="img/ia/correo.webp" alt="">Correo electrónico</td><td>La otra persona lo lee cuando quiere. Antes de enviarlo, <b>tienes que escribir el destinatario y el asunto</b>.</td><td>Mensajes formales, con archivos y no urgentes: al profesorado, a una empresa, a la Administración.</td></tr>
+      <tr><td><img class="t2-ico-fila" src="img/ia/videollamada.webp" alt="">Llamada y videollamada</td><td>Voz, o voz e imagen, en directo.</td><td>Temas urgentes o difíciles de explicar por escrito.</td></tr>
+    </table>
+    <div class="caja examen"><span class="tt">En el examen</span>Las frases en negrita son las que usa la pregunta 9 de la demo. En realidad, Gmail y Outlook dejan enviar un correo sin asunto, pero escríbelo siempre.</div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: SMS, chat y correo" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Así lo pregunta el examen · pregunta 9 de la demo</p><h2>Relaciona cada herramienta</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "emparejar",
+       "enunciado": "Relaciona cada una de las siguientes características con la herramienta a la que corresponden",
+       "pares": [["SMS", "Se envían desde un dispositivo móvil"], ["Chat", "Se produce una comunicación instantánea"], ["Email", "Tengo que escribir el destinatario y asunto antes de enviar el mensaje"]],
+       "explicacion": "El SMS se envía desde el móvil, por la red de telefonía. El chat también se usa en el móvil, pero lo que lo define es la comunicación instantánea. En el correo (email), el examen dice que escribes el destinatario y el asunto antes de enviarlo. En el examen arrastras las frases de la segunda lista y pulsas **Guardar**."}
+    </script></div>
+    <p class="fuente">Pregunta 9 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.1" data-seccion="2.1">
+  <div class="cab"><p class="etq">2.1 · Interactuar</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.1"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Qué es la VoIP?",
+       "opciones": ["Un tipo de SMS que funciona sin cobertura.", "La transmisión de la voz a través de Internet.", "Una tarjeta SIM para hacer llamadas al extranjero.", "Un programa para guardar los contactos del móvil."], "correcta": 1,
+       "explicacion": "VoIP significa «voz sobre IP». Es hablar por Internet, como en una llamada de WhatsApp o de Teams. No usa la red de teléfono tradicional."},
+      {"tipo": "test", "enunciado": "Has recibido un correo con un archivo adjunto. Quieres mandar ese correo, con su archivo, a otra persona. ¿Qué botón pulsas?",
+       "opciones": ["Responder.", "Responder a todos.", "Reenviar.", "Archivar."], "correcta": 2, "barajar": false,
+       "explicacion": "**Reenviar** manda el correo a la persona que tú eliges, con sus archivos adjuntos. **Responder** y **Responder a todos** contestan a quien te escribió y no llevan los adjuntos."},
+      {"tipo": "simulacion", "html": "#t2-telefono",
+       "enunciado": "Hoy te ha llamado el número 612 345 678. Es la academia de inglés. Guarda ese número en la agenda con el nombre «Academia Inglés».",
+       "instrucciones": "Toca la pantalla del móvil. Para escribir, pulsa en el campo y usa el teclado. Solo puedes equivocarte una vez.",
+       "explicacion": "Desde **Recientes** puedes guardar un número que te ha llamado. Toca el número, elige **Crear contacto**, escribe el nombre y pulsa **Guardar**. También vale: **Contactos** › **+** › nombre y número › **Guardar**."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 2.2 Compartir ======================= -->
+
+<section class="competencia" data-label="2.2 Compartir a través de tecnologías digitales" data-seccion="2.2" data-deck-id="c22" data-deck-section="2.2">
+  <div class="izq">
+    <p class="n">2.2</p>
+    <h2>Compartir a través de tecnologías digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo sale una simulación: enviar un archivo por correo.</p>
+    <img class="ico" src="img/ia/compartir.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Enviar archivos adjuntos por correo electrónico.</li>
+      <li>Enviar un archivo por correo desde el escritorio de Windows.</li>
+      <li>Compartir archivos grandes con un enlace.</li>
+      <li>Enviar por WhatsApp archivos, fotos, vídeos y audios.</li>
+      <li>Enviar por WhatsApp tu ubicación y un contacto.</li>
+    </ol>
+    <span class="estado-comp" data-comp="2.2"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Adjuntar un archivo en Gmail" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Adjuntar un archivo a un correo</h2><p class="entrada">Un <b>archivo adjunto</b> es un archivo que envías dentro de un correo: un PDF, una foto, un documento…</p></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="t2-bloque">Gmail (en el navegador)</p>
+        <ol class="pasos peq">
+          <li>Pulsa <b>Redactar</b>.</li>
+          <li>Escribe <b>Para</b> y <b>Asunto</b>.</li>
+          <li>Pulsa el clip <b>Adjuntar archivos</b>.</li>
+          <li>Elige el archivo y pulsa <b>Abrir</b>.</li>
+          <li>Espera a que se cargue y pulsa <b>Enviar</b>.</li>
+        </ol>
+      </div>
+      <figure class="foto cred-arriba" style="height:560px;width:583px;justify-self:center"><img src="img/capturas/gmail-adjuntar.webp" alt="Ventana de mensaje nuevo en Gmail con un documento adjunto. El clip Adjuntar archivos está marcado con un círculo"><figcaption class="credito">Mensaje nuevo en Gmail con un documento adjunto. El clip «Adjuntar archivos» está marcado con un círculo. Captura propia con una cuenta de prueba (24-10-2026).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Adjuntar en Outlook y enviar archivos grandes" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Adjuntar en Outlook y enviar archivos grandes</h2></div>
+  <div class="cuerpo">
+    <div class="ruta-bloque"><span class="donde">Outlook de escritorio</span><div class="ruta"><span>Nuevo correo electrónico</span><i>›</i><span>Adjuntar archivo</span><i>›</i><span>Examinar este PC</span><i>›</i><span>elige el archivo</span><i>›</i><span>Insertar</span><i>›</i><span class="disp">Enviar</span></div></div>
+    <p class="peq">En Outlook 2016 la opción se llama <b>Examinar este equipo</b>. También puedes arrastrar el archivo desde el Explorador de archivos hasta la ventana del mensaje.</p>
+    <div class="cols">
+      <div class="tarjeta"><h3>Límite de tamaño</h3><p>Gmail admite <b>25 MB</b> de adjuntos en cada correo. Si el archivo es mayor, Gmail lo sube a Google Drive y envía un enlace.</p><p>Outlook.com admite 20 MB.</p></div>
+      <div class="tarjeta c-ok"><h3>Archivo grande: envía un enlace</h3><ol class="pasos peq"><li>Sube el archivo a Google Drive, OneDrive o Dropbox.</li><li>Clic derecho sobre el archivo › <b>Compartir</b> › <b>Copiar enlace</b>.</li><li>Pega el enlace en el correo.</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Enviar un archivo desde el escritorio (Windows 10)" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Enviar un archivo desde el escritorio</h2><p class="entrada">Es el camino corto de la pregunta 4 de la demo. Las pantallas son de Windows 10, como en el examen.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro" style="grid-template-columns:1fr 1fr">
+      <ol class="pasos peq">
+        <li>Haz clic derecho sobre el archivo. Por ejemplo, CV.pdf.</li>
+        <li>Pulsa <b>Enviar a</b>.</li>
+        <li>Pulsa <b>Destinatario de correo</b>.</li>
+        <li>Se abre un correo nuevo con el archivo ya adjunto.</li>
+        <li>Escribe <b>Para</b> y <b>Asunto</b>.</li>
+        <li>Pulsa <b>Enviar</b>.</li>
+      </ol>
+      <figure class="foto" style="height:620px"><img src="img/cyl/q04-enviar-a.png" alt="Menú del clic derecho de Windows 10 con Enviar a y Destinatario de correo"><figcaption class="credito">Clic derecho › Enviar a › Destinatario de correo en Windows 10. Pantalla de la pregunta 4 de la demo de tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Enviar un archivo desde el escritorio (Windows 11)" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Desde el escritorio en Windows 11</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="ruta-bloque"><span class="donde">Windows 11</span><div class="ruta"><span>clic derecho</span><i>›</i><span>Mostrar más opciones</span><i>›</i><span>Enviar a</span><i>›</i><span class="disp">Destinatario de correo</span></div></div>
+        <div class="caja aviso"><span class="tt">Importante</span>Solo funciona si el ordenador tiene configurado un programa de correo de escritorio, como Outlook clásico o Thunderbird.</div>
+        <p class="peq">Windows 11 tiene además el botón <b>Compartir</b> en el menú del clic derecho. Envía el archivo con Outlook o con otra aplicación.</p>
+      </div>
+      <figure class="foto" style="height:600px;width:528px;justify-self:center"><img src="img/capturas/win11-enviar-a.webp" alt="Menú del clic derecho de Windows 11 con Enviar a abierto. En el submenú está marcada la opción Destinatario de correo"><figcaption class="credito">Windows 11: clic derecho › Mostrar más opciones › Enviar a › Destinatario de correo. Captura propia (24-10-2026).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Compartir por WhatsApp: el clip" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Compartir por WhatsApp: el clip</h2><p class="entrada">En un chat, pulsa el clip (<b>Adjuntar</b>). Está a la derecha del cuadro <b>Mensaje</b>.</p></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1.2fr 1fr;gap:48px">
+      <table class="tabla peq">
+        <tr><th>Opción</th><th>Qué envía</th></tr>
+        <tr><td>Documento</td><td>Un archivo: PDF, Word, Excel, zip… Hasta 2 GB.</td></tr>
+        <tr><td>Cámara</td><td>Una foto o un vídeo que haces en ese momento.</td></tr>
+        <tr><td>Galería</td><td>Fotos y vídeos guardados. Con el icono <b>1</b> (Ver una vez), la otra persona solo puede verlos una vez.</td></tr>
+        <tr><td>Audio</td><td>Un archivo de sonido o de música guardado.</td></tr>
+        <tr><td>Ubicación</td><td>Un punto del mapa.</td></tr>
+        <tr><td>Contacto</td><td>Los datos de una persona de tu agenda.</td></tr>
+        <tr><td>Encuesta</td><td>Una pregunta con opciones para un grupo.</td></tr>
+      </table>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <figure class="foto" style="height:430px"><img src="img/cyl/whatsapp-clip.png" alt="Menú del clip de WhatsApp Web (1) y de WhatsApp en Android (2)"><figcaption class="credito">Menú del clip en WhatsApp Web (1) y en WhatsApp para Android (2). Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+        <p class="peq">El icono de la cámara del cuadro <b>Mensaje</b> abre la cámara directamente. El orden de las opciones cambia según la versión.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Enviar un audio o un contacto por WhatsApp" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Enviar un audio o un contacto por WhatsApp</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/audio.webp" alt=""><h3>Audio (nota de voz)</h3>
+        <ol class="pasos peq"><li>Abre el chat.</li><li>Mantén pulsado el micrófono mientras hablas.</li><li>Suelta el micrófono: el audio se envía.</li></ol>
+        <p>Para grabar sin mantener el dedo, desliza hacia arriba hasta el candado. Para cancelar, desliza hacia la izquierda.</p></div>
+      <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/contacto.webp" alt=""><h3>Contacto</h3>
+        <ol class="pasos peq"><li>Pulsa el clip.</li><li>Pulsa <b>Contacto</b>.</li><li>Elige la persona.</li><li>Pulsa el botón de enviar.</li></ol>
+        <p>La otra persona recibe el nombre y el número. Puede guardarlo en su agenda con un toque.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Enviar tu ubicación por WhatsApp" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Enviar tu ubicación por WhatsApp</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <ol class="pasos peq">
+          <li>Pulsa el clip.</li>
+          <li>Pulsa <b>Ubicación</b>.</li>
+          <li>Elige una opción:
+            <ul class="lista peq" style="margin-top:10px">
+              <li><b>Enviar tu ubicación actual</b>: envía un punto fijo del mapa.</li>
+              <li><b>Compartir ubicación en tiempo real</b>: se actualiza mientras te mueves, durante 15 minutos, 1 hora u 8 horas.</li>
+            </ul>
+          </li>
+          <li>Pulsa el botón de enviar.</li>
+        </ol>
+        <div class="caja aviso"><span class="tt">Seguridad</span>Comparte la ubicación en tiempo real solo con personas de confianza.</div>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t2-wa-ubicacion" data-pantalla="ubicacion" style="zoom:.9;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: envía tu CV por correo" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Así lo pregunta el examen · pregunta 4 de la demo</p><h2>Simulación: envía tu CV por correo</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "simulacion", "sim": "q04-email", "ancho": 900,
+       "enunciado": "Envía el archivo CV.pdf por email al correo \"imprimir@copisteria.com\" con el asunto \"Imprimir CV\" y el cuerpo del mensaje vacío.",
+       "instrucciones": "Haz la tarea en la pantalla. No uses atajos de teclado. Para escribir, haz clic en el campo y usa el teclado. Estas pantallas son las de la demo oficial del examen (Windows 10 y Outlook 2016).",
+       "explicacion": "Camino corto: clic derecho en **CV** › **Enviar a** › **Destinatario de correo**. Escribe la dirección en **Para** y el texto en **Asunto**, igual que en el enunciado, y pulsa **Enviar**. También vale abrir **Outlook 2016** con doble clic › **Nuevo correo electrónico** › **Adjuntar archivo** › **Examinar este equipo** › **CV** › **Insertar**."}
+    </script></div>
+    <p class="fuente">Pantallas de la pregunta 4 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.2" data-seccion="2.2">
+  <div class="cab"><p class="etq">2.2 · Compartir</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.2"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Quieres enviar por correo un vídeo de 300 MB. Gmail solo deja adjuntar 25 MB. ¿Qué haces?",
+       "opciones": ["Lo adjunto igualmente. El correo no tiene límite de tamaño.", "Lo subo a Google Drive o a OneDrive y envío el enlace.", "Lo envío por SMS.", "Cambio la extensión del archivo a .txt."], "correcta": 1,
+       "explicacion": "Un archivo tan grande no cabe como adjunto. Súbelo a la nube y envía el enlace. La otra persona lo descarga desde ese enlace."},
+      {"tipo": "test", "enunciado": "En WhatsApp quieres enviar un mensaje de voz. ¿Qué haces?",
+       "opciones": ["Mantengo pulsado el micrófono mientras hablo y lo suelto al terminar.", "Pulso el clip y elijo «Contacto».", "Pulso el icono del teléfono de la parte de arriba.", "Pulso una vez el icono de la cámara."], "correcta": 0,
+       "explicacion": "El mensaje de voz se graba mientras mantienes pulsado el micrófono. Al soltarlo, se envía. El teléfono de arriba hace una llamada."},
+      {"tipo": "simulacion", "html": "#t2-wa-ubicacion",
+       "enunciado": "Estás en el chat del grupo «1.º SMR» de WhatsApp. Envía tu ubicación actual al grupo.",
+       "instrucciones": "Toca la pantalla del móvil. Solo puedes equivocarte una vez.",
+       "explicacion": "Pulsa el clip, después **Ubicación** y después **Enviar tu ubicación actual**. La ubicación en tiempo real es otra opción: sigue enviando dónde estás durante un tiempo."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 2.3 Participación ciudadana ======================= -->
+
+<section class="competencia" data-label="2.3 Participación ciudadana" data-seccion="2.3" data-deck-id="c23" data-deck-section="2.3">
+  <div class="izq">
+    <p class="n">2.3</p>
+    <h2>Participación ciudadana a través de las tecnologías digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: para qué sirve el PIN del DNI electrónico.</p>
+    <img class="ico" src="img/ia/ciudadania.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar qué es una sede electrónica.</li>
+      <li>Explicar qué son el certificado digital, el DNI electrónico (DNIe) y Cl@ve, y para qué sirven.</li>
+      <li>Saber para qué sirve el PIN del DNIe.</li>
+      <li>Encontrar en las webs de la Administración y de las empresas la información para hacer un trámite en persona: cita previa, dirección, horario y documentos.</li>
+    </ol>
+    <span class="estado-comp" data-comp="2.3"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Tres formas de identificarte en Internet" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Tres formas de identificarte en Internet</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Sede electrónica</span><p>Una <b>sede electrónica</b> es la web oficial de un organismo público donde haces trámites por Internet. Por ejemplo, la de la Agencia Tributaria, la Seguridad Social o la DGT.</p><p class="peq">Para hacer un trámite tienes que demostrar quién eres. Tienes 3 formas:</p></div>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta con-ico"><img src="img/ia/certificado.webp" alt=""><h3>Certificado digital</h3><p>Un archivo instalado en tu ordenador o en tu móvil.</p><p>Lo emite la FNMT.</p><p>Solo necesitas el navegador.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/dnie.webp" alt=""><h3>DNI electrónico</h3><p>El chip de tu DNI.</p><p>Lo expide la Policía Nacional.</p><p>Necesitas un lector de tarjetas o un móvil con NFC, y el PIN.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/clave.webp" alt=""><h3>Cl@ve</h3><p>Una clave del Gobierno de España: un PIN o una contraseña.</p><p>Te registras una vez.</p><p>Necesitas tu móvil.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="El certificado digital" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>El certificado digital</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Certificado digital</span><p>Un <b>certificado digital</b> es un documento electrónico con tus datos, emitido por una entidad oficial. Te identifica en Internet y te permite firmar documentos.</p></div>
+    <p class="t2-bloque">Cómo se obtiene (sede de la FNMT)</p>
+    <div class="t2-pasos">
+      <div class="p"><img src="img/ia/correo.webp" alt=""><p><b class="t2-n">1</b>Lo solicitas por Internet y recibes un código por correo.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/oficina-registro.webp" alt=""><p><b class="t2-n">2</b>Demuestras quién eres en una oficina de registro, o con tu DNIe.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/descarga-certificado.webp" alt=""><p><b class="t2-n">3</b>Lo descargas en el mismo ordenador y navegador.</p></div>
+    </div>
+    <ul class="lista peq t2-lista-2col">
+      <li>El más usado es el certificado de persona física de la <b>FNMT</b> (Fábrica Nacional de Moneda y Timbre). Es gratuito.</li>
+      <li>Lo pueden pedir los mayores de 18 años y los menores emancipados, con DNI o NIE.</li>
+      <li>Dura 4 años. Haz una copia de seguridad con contraseña.</li>
+      <li>Sirve, por ejemplo, para la declaración de la renta o el informe de vida laboral.</li>
+      <li>Una firma con certificado digital, con DNIe o con Cl@ve Firma vale lo mismo que tu firma a mano.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="s" data-label="El DNI electrónico (DNIe)" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>El DNI electrónico (DNIe)</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1fr">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">DNIe</span><p>El <b>DNIe</b> es el DNI con chip. Lo expide la Policía Nacional.</p></div>
+        <p>El chip guarda 2 certificados:</p>
+        <ul class="lista">
+          <li><b>De autenticación</b>: demuestra quién eres.</li>
+          <li><b>De firma</b>: sustituye a tu firma a mano.</li>
+        </ul>
+      </div>
+      <div class="tarjeta">
+        <h3>Qué necesitas para usarlo en Internet</h3>
+        <div class="t2-iconos"><img src="img/ia/lector.webp" alt=""><img src="img/ia/nfc.webp" alt=""></div>
+        <ul class="lista peq">
+          <li>Un lector de tarjetas conectado al ordenador, o un móvil con <b>NFC</b>. El NFC es una conexión sin cables que funciona al acercar el DNI al móvil.</li>
+          <li>El <b>CAN</b>: el número de 6 cifras impreso en el DNI.</li>
+          <li>El <b>PIN</b>: la contraseña del chip.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="El PIN del DNIe" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>El PIN del DNIe</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">PIN del DNIe</span><p>El <b>PIN</b> del DNIe es la contraseña del chip. Sin el PIN no puedes identificarte ni firmar en Internet con el DNIe.</p></div>
+        <ul class="lista peq">
+          <li>Te lo dan en un sobre cerrado cuando te haces el DNI.</li>
+          <li>Si lo olvidas o lo quieres cambiar, ve a un <b>Punto de Actualización del DNIe (PAD)</b>. Está en la oficina del DNI.</li>
+        </ul>
+        <div class="tarjeta c-ko"><h3>Lo que no hace el PIN</h3><ul class="lista peq"><li>No localiza el DNI.</li><li>No sirve para sacar dinero del cajero.</li><li>No bloquea el DNI a distancia. Si lo pierdes, lo denuncias en la Policía.</li></ul></div>
+      </div>
+      <img class="ico g" src="img/ia/dnie.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cl@ve" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Cl@ve</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="def"><span class="t">Cl@ve</span><p><b>Cl@ve</b> es el sistema del Gobierno de España para identificarte en las sedes electrónicas con una clave. No necesitas certificado ni lector de tarjetas.</p></div>
+        <p class="peq">Te registras una vez: por videollamada, con certificado o DNIe, o en una oficina. Se usa en la Agencia Tributaria, la Seguridad Social, el SEPE y la DGT.</p>
+        <div class="tarjetas" style="--n:2">
+          <div class="tarjeta"><h3>Cl@ve PIN</h3><p>Un código temporal que recibes en la app <b>Cl@ve</b> (antes, app Cl@ve PIN) o por SMS. Sirve para un trámite y caduca.</p></div>
+          <div class="tarjeta"><h3>Cl@ve permanente</h3><p>Usuario (tu DNI o NIE) y contraseña. Para quien hace trámites a menudo.</p></div>
+        </div>
+      </div>
+      <figure class="foto" style="height:470px"><img src="img/cyl/ss-identificate.png" alt="Pantalla Identifícate de la Seguridad Social con Cl@ve permanente, Cl@ve PIN, vía SMS y DNIe o certificado"><figcaption class="credito">Pantalla «Identifícate» de la Seguridad Social. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Antes de ir a una oficina, mira su web" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Antes de ir a una oficina, mira su web</h2><p class="entrada">Muchos trámites se hacen en persona: renovar el DNI, ir al médico o inscribirte para buscar empleo. En la web del organismo encuentras lo que necesitas para ir.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/cita.webp" alt=""><h3>Cita previa</h3><p>Pide día y hora. Así no esperas en la oficina.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/ubicacion.webp" alt=""><h3>Dirección y horario</h3><p>Busca la oficina más cercana y cuándo abre.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/certificado.webp" alt=""><h3>Documentos</h3><p>Lo que tienes que llevar: DNI, tarjeta sanitaria, un formulario…</p></div>
+    </div>
+    <p class="peq">Las empresas también lo publican. Por ejemplo, en la web o en la app de tu banco tienes el buscador de oficinas y cajeros, con su horario.</p>
+    <div class="caja aviso"><span class="tt">Usa la web oficial</span>Muchas webs de la Administración terminan en <b>.gob.es</b>. Las de la Junta de Castilla y León, en <b>jcyl.es</b>. Terminar en <b>.es</b> no basta: cualquiera puede comprar una dirección .es. La web <b>administracion.gob.es</b> reúne los trámites de todas las Administraciones.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Quién se encarga de cada trámite" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Quién se encarga de cada trámite</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Trámite</th><th>Organismo o entidad</th></tr>
+      <tr><td>Cita con el médico de familia o la enfermera</td><td>Sacyl (sanidad pública de Castilla y León)</td></tr>
+      <tr><td>Hacer o renovar el DNI o el pasaporte</td><td>Policía Nacional</td></tr>
+      <tr><td>Inscribirte como demandante de empleo, orientación y cursos</td><td>ECYL (Servicio Público de Empleo de Castilla y León)</td></tr>
+      <tr><td>Prestación por desempleo (el paro)</td><td>SEPE (Servicio Público de Empleo Estatal)</td></tr>
+      <tr><td>Pensiones y Tarjeta Sanitaria Europea</td><td>Seguridad Social</td></tr>
+      <tr><td>Ayuda con la declaración de la renta</td><td>Agencia Tributaria (Hacienda)</td></tr>
+      <tr><td>Examen o carnet de conducir</td><td>DGT (Dirección General de Tráfico)</td></tr>
+      <tr><td>Abrir una cuenta o hablar con tu gestor</td><td>Tu banco</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Pedir cita previa en una web oficial" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Pedir cita previa en una web oficial</h2><p class="entrada">Ejemplo: una cita con tu médico de familia en Sacyl.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <ol class="pasos peq">
+        <li>Entra en la web oficial del organismo.</li>
+        <li>Pulsa <b>Cita previa</b>.</li>
+        <li>Identifícate con los datos que te pide. En Sacyl, los datos de tu tarjeta sanitaria.</li>
+        <li>Elige el profesional, el día y la hora.</li>
+        <li>Confirma y guarda el justificante: una captura de pantalla o el PDF.</li>
+        <li>Si no puedes ir, anula la cita en la misma web.</li>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:30px">
+        <img class="ico m" src="img/ia/cita.webp" alt="">
+        <div class="caja aviso"><span class="tt">Cuidado</span>La cita previa en las webs oficiales es gratis. Hay webs falsas que cobran por la cita o piden datos bancarios. No las uses.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: el PIN del DNIe" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Así lo pregunta el examen · pregunta 5 de la demo</p><h2>El PIN del DNIe</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "¿Para qué sirve el PIN del DNIe?",
+       "opciones": ["Para geoposicionar el DNI electrónico en caso de robo o extravío.", "Para acceder a las funcionalidades del DNIe en trámites online que requieran identificación o firma electrónica.", "Para sacar dinero del cajero utilizando el DNI electrónico.", "Para bloquear o revocar en remoto los certificados digitales del DNI electrónico en caso de robo o extravío."], "correcta": 1,
+       "explicacion": "El PIN es la contraseña del chip. Sin el PIN no puedes identificarte ni firmar en Internet con el DNIe. El DNIe no tiene GPS ni es una tarjeta del banco. Si lo pierdes, lo denuncias en la Policía: el PIN no lo bloquea."}
+    </script></div>
+    <p class="fuente">Pregunta 5 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.3" data-seccion="2.3">
+  <div class="cab"><p class="etq">2.3 · Participación ciudadana</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.3"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Qué dos certificados guarda el chip del DNI electrónico?",
+       "opciones": ["Uno para identificarte (autenticación) y otro para firmar.", "Uno de vacunas y otro de estudios.", "Uno de la Seguridad Social y otro de Hacienda.", "El PIN y el PUK."], "correcta": 0,
+       "explicacion": "El chip del DNIe lleva un certificado de autenticación, para demostrar quién eres, y otro de firma, para firmar documentos en Internet."},
+      {"tipo": "test", "enunciado": "¿Qué es Cl@ve?",
+       "opciones": ["Un sistema del Gobierno para identificarte en las webs de la Administración con un PIN o una contraseña.", "La contraseña de la wifi de los edificios públicos.", "Una aplicación para pagar con el móvil en las tiendas.", "El código para desbloquear la tarjeta SIM."], "correcta": 0,
+       "explicacion": "Con Cl@ve haces trámites por Internet en Hacienda, la Seguridad Social o la DGT. No necesitas certificado digital ni lector de tarjetas."},
+      {"tipo": "emparejar", "enunciado": "Quieres hacer estos trámites en persona. Antes pides cita previa en Internet. Relaciona cada trámite con la web donde pides la cita.",
+       "pares": [["Cita con tu médico de familia", "Sacyl (sanidad pública de Castilla y León)"], ["Renovar el DNI", "Cita previa del DNI (Policía Nacional)"], ["Inscribirte como demandante de empleo", "ECYL (Servicio Público de Empleo de Castilla y León)"], ["Ayuda para hacer la declaración de la renta", "Agencia Tributaria"]],
+       "explicacion": "Cada trámite tiene su organismo. Busca siempre la web oficial de ese organismo. La cita previa en las webs oficiales es gratis."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 2.4 Colaborar ======================= -->
+
+<section class="competencia" data-label="2.4 Colaborar a través de tecnologías digitales" data-seccion="2.4" data-deck-id="c24" data-deck-section="2.4">
+  <div class="izq">
+    <p class="n">2.4</p>
+    <h2>Colaborar a través de tecnologías digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo sale un reto: encontrar un comentario en un documento de Word.</p>
+    <img class="ico" src="img/ia/colaborar.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar las ventajas de trabajar en equipo con herramientas digitales.</li>
+      <li>Conocer herramientas para colaborar: Google Drive, OneDrive, Teams, Trello…</li>
+      <li>Conocer los roles de un trabajo en equipo: lector, comentador, editor y supervisor.</li>
+      <li>Compartir un documento y elegir qué puede hacer cada persona.</li>
+      <li>Dar y recibir comentarios en un documento compartido.</li>
+      <li>Usar el correo y la mensajería para trabajar en grupo.</li>
+    </ol>
+    <span class="estado-comp" data-comp="2.4"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Trabajo colaborativo: ventajas" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>El trabajo colaborativo y sus ventajas</h2><p class="entrada">El <b>trabajo colaborativo</b> es el trabajo que hacen varias personas juntas sobre un mismo documento o proyecto. Con las <b>TIC</b> (tecnologías de la información y la comunicación) se hace en la nube.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>A la vez</h3><p>Varias personas escriben a la vez en el mismo archivo. Cada una tiene un cursor de un color.</p></div>
+      <div class="tarjeta"><h3>Una sola versión</h3><p>No hay que enviar copias por correo.</p></div>
+      <div class="tarjeta"><h3>Desde cualquier sitio</h3><p>Desde cualquier lugar y dispositivo con Internet. Ahorras desplazamientos.</p></div>
+      <div class="tarjeta"><h3>Se guarda solo</h3><p>No hay botón <b>Guardar</b>.</p></div>
+      <div class="tarjeta"><h3>Historial de versiones</h3><p>Muestra quién cambió cada parte. Puedes recuperar una versión anterior.</p></div>
+      <div class="tarjeta"><h3>Comentarios y chat</h3><p>Hablas con tu grupo dentro del mismo documento.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Herramientas para colaborar en la Red" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Herramientas para colaborar en la Red</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th style="width:38%">Herramienta</th><th>Para qué sirve</th></tr>
+      <tr><td>Google Drive: Documentos, Hojas de cálculo y Presentaciones de Google</td><td>Documentos compartidos. Con una cuenta de Google tienes 15 GB gratis.</td></tr>
+      <tr><td>OneDrive: Word, Excel y PowerPoint en la web (Microsoft 365)</td><td>Documentos compartidos. Con una cuenta de Microsoft tienes 5 GB gratis.</td></tr>
+      <tr><td>Microsoft Teams</td><td>Equipos con chat, canales, archivos y videollamadas. Lo usan centros educativos y empresas.</td></tr>
+      <tr><td>Google Calendar</td><td>Calendario compartido.</td></tr>
+      <tr><td>Doodle</td><td>Votar la fecha de una reunión.</td></tr>
+      <tr><td>Trello</td><td>Tablero de tareas en columnas: «Por hacer», «En proceso» y «Hecho».</td></tr>
+      <tr><td>OneNote</td><td>Bloc de notas compartido. Se organiza en secciones, y cada sección en páginas.</td></tr>
+      <tr><td>Slack</td><td>Mensajería para equipos de trabajo.</td></tr>
+    </table>
+    <p class="t2-nota">Office 365 es el nombre antiguo de Microsoft 365. Jamboard, la pizarra de Google, cerró a finales de 2024.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Roles en un trabajo colaborativo" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Roles en un trabajo colaborativo</h2><p class="entrada">Un <b>rol</b> es lo que cada persona puede hacer en un documento compartido.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta con-ico" style="grid-template-columns:64px 1fr"><img src="img/ia/rol-lector.webp" alt="" style="width:64px"><h3>Lector</h3><p>Solo puede ver el documento.</p><p>Google Drive: <b>Lector</b>.<br>OneDrive: <b>Puede ver</b>.</p></div>
+      <div class="tarjeta con-ico" style="grid-template-columns:64px 1fr"><img src="img/ia/rol-comentador.webp" alt="" style="width:64px"><h3>Comentador o revisor</h3><p>Ve el documento y escribe comentarios o sugerencias. No cambia el texto.</p><p>Google Drive: <b>Comentador</b>.<br>Word en la web: <b>Puede revisar</b>.</p></div>
+      <div class="tarjeta con-ico" style="grid-template-columns:64px 1fr"><img src="img/ia/rol-editor.webp" alt="" style="width:64px"><h3>Editor</h3><p>Cambia el contenido.</p><p>Google Drive: <b>Editor</b>.<br>OneDrive: <b>Puede editar</b>.</p></div>
+      <div class="tarjeta con-ico" style="grid-template-columns:64px 1fr"><img src="img/ia/rol-supervisor.webp" alt="" style="width:64px"><h3>Supervisor</h3><p>Coordina: reparte el trabajo, revisa, acepta o rechaza los cambios y decide quién entra.</p><p>Suele ser el <b>propietario</b>: la persona que creó el archivo.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Regla</span>Da a cada persona el rol mínimo que necesita.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Compartir un documento en Google Drive" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Compartir un documento en Google Drive</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>Abre el documento y pulsa <b>Compartir</b>, arriba a la derecha.</li>
+          <li>Escribe el correo de cada persona.</li>
+          <li>Elige el rol: <b>Lector</b>, <b>Comentador</b> o <b>Editor</b>.</li>
+          <li>Pulsa <b>Enviar</b>. Les llega un correo con el enlace.</li>
+        </ol>
+        <p class="peq">Otra forma: en <b>Acceso general</b>, cambia <b>Restringido</b> por <b>Cualquier persona con el enlace</b>. Elige el rol y pulsa <b>Copiar enlace</b>. Pégalo en un correo o en WhatsApp.</p>
+        <div class="ruta-bloque"><span class="donde">OneDrive y Word en la web</span><div class="ruta" style="font-size:24px"><span>Compartir</span><i>›</i><span>correo</span><i>›</i><span>Puede editar o Puede ver</span><i>›</i><span class="disp">Enviar</span></div></div>
+      </div>
+      <figure class="foto" style="height:600px;width:600px;justify-self:center"><img src="img/capturas/drive-compartir.webp" alt="Cuadro Compartir de Google Drive. En Acceso general pone Cualquier persona con el enlace y está abierta la lista de roles: Lector, Comentador y Editor"><figcaption class="credito">Cuadro «Compartir» de Google Drive con el acceso general «Cualquier persona con el enlace» y la lista de roles abierta. Captura propia con una cuenta de prueba (24-10-2026).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Comentarios en Word" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Comentarios en Word</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Comentario</span><p>Un <b>comentario</b> es una nota pegada a una parte del texto. No cambia el texto. Sirve para opinar, preguntar o proponer.</p></div>
+    <div class="cols">
+      <ol class="pasos peq">
+        <li>Selecciona el texto.</li>
+        <li>Pulsa <b>Revisar</b> › <b>Nuevo comentario</b>.</li>
+        <li>Escribe y pulsa <b>Publicar</b>.</li>
+        <li>Para contestar, pulsa <b>Responder</b> dentro del comentario.</li>
+        <li>Cuando el tema está resuelto, pulsa <b>Resolver</b>.</li>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <p class="peq">Los comentarios salen en el margen derecho, con el nombre de quien los escribe. En algunas versiones de Word solo salen su inicial y un número. Por ejemplo, <b>[A1]</b> es el primer comentario de Ana.</p>
+        <div class="caja examen"><span class="tt">Si no ves los comentarios</span>Pulsa <b>Revisar</b> y elige <b>Todas las marcas</b>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="El control de cambios en Word" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>El control de cambios en Word</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Control de cambios</span><p>El <b>control de cambios</b> marca en color lo que cada persona añade o borra. Así otra persona lo puede aceptar o rechazar.</p></div>
+    <div class="cols" style="grid-template-columns:1fr 1.1fr">
+      <ol class="pasos peq">
+        <li>Activa <b>Revisar</b> › <b>Control de cambios</b>.</li>
+        <li>Escribe. Lo añadido sale subrayado y lo borrado, tachado. Cada persona tiene un color.</li>
+        <li>Para verlo todo: <b>Revisar</b> › <b>Todas las marcas</b>.</li>
+        <li>Para decidir, pulsa <b>Aceptar</b> o <b>Rechazar</b> en cada cambio. Con <b>Anterior</b> y <b>Siguiente</b> pasas de uno a otro.</li>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <figure class="foto" style="height:300px"><img src="img/capturas/word-marcas.webp" alt="Documento de Word con un comentario en el margen y una palabra tachada y otra subrayada"><figcaption class="credito">Documento de Word con todas las marcas: un comentario de Ana y un cambio de Pablo con su comentario. Imagen propia.</figcaption></figure>
+        <p class="t2-nota">[A1] es un comentario de Ana. [P2] es un comentario de Pablo: ha cambiado «Burgos» por «Valladolid». La palabra borrada sale tachada y la nueva, subrayada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Comentarios y cambios en Google Docs y LibreOffice" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>En Google Docs y en LibreOffice</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="gap:28px">
+      <div class="tarjeta"><h3>Google Docs</h3><ul class="lista peq">
+        <li><b>Comentario</b>: selecciona el texto y pulsa el icono <b>Añadir comentario</b> (o <b>Insertar</b> › <b>Comentario</b>).</li>
+        <li>Escribe <b>@</b> y un nombre para avisar a esa persona: le llega un correo.</li>
+        <li>Modo <b>Sugerencias</b> (el lápiz de arriba a la derecha): tus cambios quedan marcados. El propietario o un editor los acepta (✓) o los rechaza (✗).</li></ul></div>
+      <figure class="foto" style="height:340px"><img src="img/capturas/docs-comentario-sugerencia.webp" alt="Documento de Google Docs. La palabra piensa está tachada y al lado aparece piénsalo bien en verde. A la derecha, un comentario con una @mención y el aviso de que se enviará un correo"><figcaption class="credito">Google Docs: un cambio sugerido (en verde, con la palabra antigua tachada) y un comentario con @mención antes de enviarlo. Captura propia con una cuenta de prueba (24-10-2026).</figcaption></figure>
+    </div>
+    <div class="tarjeta"><h3>LibreOffice Writer</h3><ul class="lista peq">
+      <li><b>Comentario</b>: <b>Insertar</b> › <b>Comentario</b> (Ctrl+Alt+C).</li>
+      <li><b>Cambios</b>: <b>Editar</b> › <b>Seguimiento de cambios</b> › <b>Grabar</b> (Ctrl+Mayús+C).</li>
+      <li>Para aceptar o rechazar: <b>Editar</b> › <b>Seguimiento de cambios</b> › <b>Gestionar</b>.</li></ul></div>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo dar y recibir comentarios" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Cómo dar y recibir comentarios</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta c-ok"><h3>Un comentario útil</h3><ul class="lista peq"><li>Es concreto: dice qué parte y qué cambiarías.</li><li>Es amable. Critica el texto, no a la persona.</li><li>Propone una solución.</li></ul><p>«Falta la fuente de este dato. ¿La añades al final?»</p></div>
+      <div class="tarjeta c-ko"><h3>Un comentario que no ayuda</h3><ul class="lista peq"><li>No dice qué está mal.</li><li>Ofende.</li><li>No propone nada.</li></ul><p>«Esto está fatal.»</p></div>
+      <div class="tarjeta"><h3>Cuando recibes un comentario</h3><ol class="pasos peq"><li>Léelo entero.</li><li>Contesta con <b>Responder</b>.</li><li>Haz el cambio o explica por qué no.</li><li>Pulsa <b>Resolver</b> cuando esté hecho.</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="El correo para trabajar en grupo" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>El correo para trabajar en grupo</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <p>Un <b>grupo de contactos</b> es una lista de direcciones con un nombre. Escribes el nombre del grupo en <b>Para</b> y el correo llega a todos.</p>
+        <div class="ruta-bloque"><span class="donde">Gmail</span><div class="ruta" style="font-size:24px"><span>Contactos de Google</span><i>›</i><span>selecciona los contactos</span><i>›</i><span>Administrar etiquetas</span><i>›</i><span class="disp">crea una etiqueta</span></div></div>
+        <div class="ruta-bloque"><span class="donde">Outlook</span><div class="ruta" style="font-size:24px"><span>Contactos</span><i>›</i><span class="disp">Nueva lista de contactos</span></div></div>
+      </div>
+      <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/correo.webp" alt=""><h3>Consejos</h3><ul class="lista peq">
+        <li>Usa un asunto claro: «Trabajo de Historia, grupo 3».</li>
+        <li>Usa <b>Responder a todos</b> para que todo el grupo siga la conversación.</li>
+        <li>Si escribes a muchas personas que no se conocen, usa <b>CCO</b>.</li>
+        <li>Mejor que adjuntar el archivo: comparte el enlace del documento en la nube. Así todos trabajan en la misma versión.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Grupos de WhatsApp y otras apps" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Grupos de WhatsApp y otras apps</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="ruta-bloque"><span class="donde">Crear un grupo de WhatsApp</span><div class="ruta" style="font-size:24px"><span>⋮</span><i>›</i><span>Nuevo grupo</span><i>›</i><span>participantes</span><i>›</i><span class="disp">nombre del grupo</span></div></div>
+        <ul class="lista peq">
+          <li>En la descripción, pon el objetivo y las normas del grupo.</li>
+          <li>En <b>Permisos del grupo</b> eliges quién puede enviar mensajes: todos o solo los administradores.</li>
+          <li>No añadas a nadie sin preguntar. Con el <b>enlace de invitación</b> entra quien quiere.</li>
+          <li>Responde citando el mensaje y menciona a una persona con <b>@nombre</b>.</li>
+          <li>Si hay muchos mensajes, usa <b>Silenciar notificaciones</b>.</li>
+        </ul>
+        <p class="peq"><b>Teams</b>: un equipo por grupo y un canal por tema. <b>Telegram</b>: en los grupos escriben todos; en los canales solo publica el administrador.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t2-wa-ubicacion" data-pantalla="permisos" style="zoom:.86;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: el comentario de un documento" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Así lo pregunta el examen · pregunta 6 de la demo</p><h2>Reto: el comentario de un documento</h2></div>
+  <div class="cuerpo" style="gap:14px">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/q06-Word-colaborativo.docx", "barajar": false,
+       "enunciado": "Estás trabajando en un documento colaborativo, en el que se ha eliminado un texto e incorporado como comentario. Indica de qué texto se trata.",
+       "instrucciones": "Descarga el archivo y ábrelo con Word, sin cerrar el navegador. Es una plantilla de Microsoft en inglés.",
+       "pista": ["Abre el archivo descargado con Word.", "Pulsa **Revisar** y elige **Todas las marcas**.", "Lee el comentario del margen derecho."],
+       "opciones": ["Comments like this one, for example!", "Author", "Replying to comments", "To review the changes in your document,"], "correcta": 0,
+       "explicacion": "La palabra clave es «comentario». El comentario del margen dice «Comments like this one, for example!». «To review the changes in your document,» es un texto borrado con control de cambios, no un comentario. «Author» (Autor) es quien hizo los cambios. «Replying to comments» es el texto donde está pegado el comentario."}
+    </script></div>
+    <p class="fuente">Pregunta 6 de la demo de tuCertiCyL (Junta de Castilla y León). Archivo de la demo.</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.4" data-seccion="2.4">
+  <div class="cab"><p class="etq">2.4 · Colaborar</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.4"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Compartes un documento de Google Docs con tu grupo. Quieres que lo lean y escriban comentarios, pero que no cambien el texto. ¿Qué rol les das?",
+       "opciones": ["Lector.", "Comentador.", "Editor.", "Propietario."], "correcta": 1, "barajar": false,
+       "explicacion": "El comentador puede leer y comentar, pero no cambia el texto. El lector solo puede leer. El editor puede cambiarlo todo."},
+      {"tipo": "test", "enunciado": "¿Cuál es una ventaja de trabajar en un documento compartido en la nube?",
+       "opciones": ["Varias personas trabajan a la vez en la misma versión del documento.", "Funciona siempre sin conexión a Internet.", "Nadie puede ver quién ha hecho cada cambio.", "Cada persona tiene que enviar su copia por correo."], "correcta": 0,
+       "explicacion": "En la nube hay una sola versión y todos trabajan a la vez. El historial de versiones muestra quién ha cambiado cada parte."},
+      {"tipo": "reto", "archivo": "retos/T2-reto-trabajo-grupo.docx", "barajar": false,
+       "enunciado": "Descarga el archivo «T2-reto-trabajo-grupo.docx» y ábrelo. Lucía ha escrito un comentario. ¿Qué día propone para entregar el trabajo?",
+       "pista": ["Abre el archivo descargado con Word.", "Pulsa **Revisar** y elige **Todas las marcas**.", "Busca en el margen derecho el comentario de Lucía. Si solo ves iniciales, es el comentario **[L1]**."],
+       "opciones": ["El lunes 10 de mayo.", "El miércoles 12 de mayo.", "El viernes 14 de mayo.", "El lunes 17 de mayo."], "correcta": 2,
+       "explicacion": "Los comentarios están en el margen derecho. Si no los ves, pulsa **Revisar** y **Todas las marcas**. El comentario de Lucía dice: «Propongo entregarlo el viernes 14 de mayo»."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 2.5 Comportamiento digital ======================= -->
+
+<section class="competencia" data-label="2.5 Comportamiento digital" data-seccion="2.5" data-deck-id="c25" data-deck-section="2.5">
+  <div class="izq">
+    <p class="n">2.5</p>
+    <h2>Comportamiento digital</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: subir a una red social una foto en la que sale otra persona.</p>
+    <img class="ico" src="img/ia/netiqueta.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Conocer y aplicar la netiqueta: las normas de buena conducta en Internet.</li>
+      <li>No escribir todo en mayúsculas, cuidar la ortografía y no escribir en horas de descanso.</li>
+      <li>Participar con educación y respeto, sin expresiones ofensivas.</li>
+      <li>Saber qué hacer ante mensajes de odio o de acoso.</li>
+      <li>Respetar la privacidad de otras personas.</li>
+      <li>Pedir permiso antes de compartir fotos o vídeos de otras personas.</li>
+    </ol>
+    <span class="estado-comp" data-comp="2.5"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Netiqueta" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>La netiqueta</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">Netiqueta</span><p>La <b>netiqueta</b> es el conjunto de normas de buena conducta en Internet: en el correo, los chats, los foros y las redes sociales.</p><p class="peq">La palabra une «net» (red, en inglés) y «etiqueta» (normas de buena educación).</p></div>
+        <div class="caja"><span class="tt">Regla general</span>Trata a los demás como quieres que te traten, igual que fuera de Internet. Detrás de cada pantalla hay una persona con sentimientos.</div>
+        <p class="peq">Cada sitio tiene además sus propias normas: un grupo de WhatsApp, un foro, una red social. Léelas antes de participar.</p>
+      </div>
+      <img class="ico g" src="img/ia/netiqueta.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Normas de netiqueta: cómo escribes" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Normas de netiqueta: cómo escribes</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Norma</th><th style="width:25%">Mal</th><th style="width:28%">Bien</th></tr>
+      <tr><td>No escribas todo en mayúsculas: se lee como un grito.</td><td>«MAÑANA HAY EXAMEN»</td><td>«Mañana hay examen»</td></tr>
+      <tr><td>Cuida la ortografía y no abuses de las abreviaturas.</td><td>«q tl, xfa pasa l trabajo»</td><td>«¿Qué tal? Por favor, pásame el trabajo»</td></tr>
+      <tr><td>Llama a los demás por su <b>nick</b> (su apodo en el foro o la red), no por su nombre real.</td><td>«Gracias, Marcos»</td><td>«Gracias, @gamer_23»</td></tr>
+      <tr><td>Usa <b>emoticonos de refuerzo</b> para que se entienda el tono. Sin abusar y no en mensajes formales.</td><td>«Era broma»</td><td>«Era broma 😉»</td></tr>
+      <tr><td>En el correo, escribe un asunto claro y breve.</td><td>«Hola»</td><td>«Trabajo de Historia, grupo 3»</td></tr>
+    </table>
+    <p class="peq">Algunos emoticonos: 😉 es broma · 🤙 llámame · 👍 de acuerdo · 👏 aplausos.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Normas de netiqueta: cuándo y qué envías" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Normas de netiqueta: cuándo y qué envías</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta con-ico"><img src="img/ia/reloj-noche.webp" alt=""><h3>Respeta los horarios</h3><p>No escribas de madrugada ni en horas de descanso. En el correo puedes programar el envío.</p><p>Un mensaje al grupo de clase a las 2:00 → mejor a las 18:00.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/correo.webp" alt=""><h3>Usa CCO con muchas personas</h3><p>Si escribes a muchas personas que no se conocen, usa CCO. Así no muestras sus direcciones.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/megafono.webp" alt=""><h3>No envíes cadenas, spam ni bulos</h3><p>Un <b>bulo</b> es una noticia falsa que se difunde para engañar. Antes de reenviar algo, comprueba que es verdad.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/mensajeria.webp" alt=""><h3>En los grupos, cita el mensaje</h3><p>Responde citando el mensaje. Así todos saben a qué contestas.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Participa con educación y respeto" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Participa con educación y respeto</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <p>No uses expresiones ofensivas sobre:</p>
+        <ul class="lista peq"><li>la religión;</li><li>el origen o la raza;</li><li>las ideas políticas;</li><li>la orientación sexual;</li><li>el aspecto físico o la discapacidad.</li></ul>
+        <div class="caja"><span class="tt">Regla</span>Critica las ideas, no a las personas.</div>
+      </div>
+      <div class="tarjeta c-ko"><h3>También es delito en Internet</h3><ul class="lista peq">
+        <li>Las amenazas.</li>
+        <li>Los insultos graves (injurias).</li>
+        <li>Las acusaciones falsas de un delito (calumnias).</li>
+        <li>El acoso.</li>
+        <li>El <b>delito de odio</b>: animar al odio o a la violencia contra personas por su religión, su origen o su orientación sexual.</li></ul>
+        <p>En Internet no eres anónimo del todo: la policía puede saber quién escribe.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Si ves mensajes de odio o de acoso" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Si ves mensajes de odio o de acoso</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Troll</span><p>Un <b>troll</b> es una persona que provoca en Internet para crear peleas. No le contestes.</p></div>
+    <ol class="pasos peq">
+      <li>No compartas el mensaje.</li>
+      <li>Usa el botón <b>Denunciar</b> de la red social o de la app.</li>
+      <li>Si es grave, cuéntaselo a un adulto de confianza.</li>
+      <li>Pide ayuda al <b>017</b>, la línea de ayuda en ciberseguridad del INCIBE. Es gratis.</li>
+      <li>También puedes avisar a la Policía Nacional o a la Guardia Civil. Por ejemplo, con la app AlertCops.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="s" data-label="Respeta la privacidad de los demás" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Respeta la privacidad de los demás</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="caja ok"><span class="tt">Regla</span>Pide siempre permiso antes de publicar o reenviar una foto o un vídeo en el que sale otra persona. También antes de mandarlo por correo o por WhatsApp.</div>
+        <ul class="lista peq">
+          <li>Aunque no la etiquetes. Aunque no tenga cuenta en esa red social.</li>
+          <li>Tampoco compartas sin permiso capturas de conversaciones privadas, audios de otras personas, su teléfono, su dirección o su ubicación.</li>
+          <li>Si la persona tiene menos de 14 años, el permiso lo dan sus padres o tutores.</li>
+          <li>Si alguien te pide que borres una foto suya, bórrala.</li>
+        </ul>
+        <p class="t2-nota">Lo protege la Constitución Española (artículo 18): derecho a la intimidad y a la propia imagen. También lo protegen el Reglamento europeo de protección de datos (RGPD) y la ley española de protección de datos (LOPDGDD).</p>
+      </div>
+      <img class="ico g" src="img/ia/permiso-foto.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: una foto con otra persona" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Así lo pregunta el examen · pregunta 7 de la demo</p><h2>Una foto con otra persona</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Si subes una foto con otra persona a una red social...",
+       "opciones": ["Debes pedirle permiso.", "Solo debes pedirle permiso si la etiquetas.", "No pasa nada si esa persona no tiene cuenta en dicha red social.", "Puedes subirla, ya que si él tiene cuenta en esa red social, tendrá configurada la privacidad para decidir si se muestra o no."], "correcta": 0,
+       "explicacion": "Siempre hay que pedir permiso. Las otras 3 opciones ponen excepciones que no existen: etiquetar o no a la persona, que tenga cuenta o no en esa red social y su configuración de privacidad no cambian la regla."}
+    </script></div>
+    <p class="fuente">Pregunta 7 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.5" data-seccion="2.5">
+  <div class="cab"><p class="etq">2.5 · Comportamiento digital</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.5"><script type="application/json">[
+      {"tipo": "test", "enunciado": "En el grupo de clase alguien escribe: «MAÑANA NO HAY CLASE». ¿Qué norma de netiqueta no cumple?",
+       "opciones": ["No escribir todo en mayúsculas, porque se lee como un grito.", "Usar emoticonos de refuerzo.", "Llamar a los demás por su nick.", "Usar el correo para los temas formales."], "correcta": 0,
+       "explicacion": "En Internet, escribir todo en mayúsculas se entiende como gritar. Usa las mayúsculas solo al empezar una frase y en los nombres."},
+      {"tipo": "test", "enunciado": "¿Cuál de estas acciones en Internet puede ser un delito?",
+       "opciones": ["Usar emoticonos en un correo a un amigo.", "Publicar mensajes que animan al odio contra personas por su religión o su origen.", "Escribir con alguna falta de ortografía.", "Enviar un correo a las 22:00."], "correcta": 1,
+       "explicacion": "Animar al odio contra personas por su religión, su origen o su orientación sexual es un delito de odio. Es delito dentro y fuera de Internet."},
+      {"tipo": "emparejar", "enunciado": "Relaciona cada mensaje con la norma de netiqueta que no cumple.",
+       "pares": [["«HOLA, ¿ALGUIEN TIENE LOS APUNTES?»", "No escribas todo en mayúsculas."], ["«q tl, xfa pasa l trabajo»", "Cuida la ortografía y no abuses de las abreviaturas."], ["Un mensaje al grupo de clase a las 3:00 de la madrugada", "Respeta los horarios de descanso."], ["Reenviar al grupo la foto de un compañero sin preguntarle", "Pide permiso antes de compartir fotos de otras personas."]],
+       "explicacion": "Cada mensaje rompe una norma distinta. Antes de enviar, revisa cómo escribes, a qué hora escribes y qué compartes de otras personas."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 2.6 Identidad digital ======================= -->
+
+<section class="competencia" data-label="2.6 Gestión de la identidad digital" data-seccion="2.6" data-deck-id="c26" data-deck-section="2.6">
+  <div class="izq">
+    <p class="n">2.6</p>
+    <h2>Gestión de la identidad digital</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: qué pauta evitar para que las empresas encuentren una buena imagen tuya.</p>
+    <img class="ico" src="img/ia/identidad.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar qué es tu identidad digital: lo que publicas tú y lo que publican otras personas sobre ti.</li>
+      <li>Distinguir la huella digital y la reputación online.</li>
+      <li>Conocer los beneficios y los riesgos de mostrar tu identidad en Internet.</li>
+      <li>Entender que lo que pasa en Internet tiene consecuencias fuera de Internet.</li>
+      <li>Distinguir buenas y malas prácticas para cuidar tu identidad digital.</li>
+      <li>Revisar tu huella y pedir que se borre lo que te perjudica.</li>
+    </ol>
+    <span class="estado-comp" data-comp="2.6"></span>
+  </div>
+</section>
+
+<section class="s" data-label="La identidad digital" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>La identidad digital</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:3fr 1fr">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">Identidad digital</span><p>La <b>identidad digital</b> es toda la información que hay en Internet sobre una persona: datos, fotos, comentarios, noticias, aficiones y amistades.</p></div>
+        <div class="tarjetas" style="--n:2">
+          <div class="tarjeta"><h3>Lo que publicas tú</h3><p>Tus perfiles, tus fotos, tus comentarios y tus «me gusta».</p></div>
+          <div class="tarjeta"><h3>Lo que publican otros de ti</h3><p>Una foto en la que te etiqueta un amigo, la web de tu instituto, una noticia de un periódico.</p></div>
+        </div>
+        <div class="caja examen"><span class="tt">Para el examen</span>Las dos partes forman tu identidad digital.</div>
+      </div>
+      <img class="ico m" src="img/ia/identidad.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Huella digital y reputación online" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Huella digital y reputación online</h2></div>
+  <div class="cuerpo">
+    <div class="def" style="display:grid;grid-template-columns:1fr 96px;gap:30px;align-items:center;padding-top:24px;padding-bottom:24px"><div><span class="t">Huella digital</span><p>La <b>huella digital</b> es el rastro que dejas al usar Internet. Crece con el tiempo y es difícil de borrar.</p></div><img class="ico xp" src="img/ia/huella-digital.webp" alt=""></div>
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>Huella activa</h3><p>La que dejas a propósito: publicaciones, comentarios, «me gusta», formularios, aceptar cookies.</p></div>
+      <div class="tarjeta"><h3>Huella pasiva</h3><p>La que se recoge sin que te des cuenta: las webs que visitas, tu dirección IP, tu ubicación.</p></div>
+    </div>
+    <div class="def"><span class="t">Reputación online</span><p>La <b>reputación online</b> es la opinión que los demás se forman de ti por lo que encuentran en Internet.</p></div>
+  </div>
+</section>
+
+<section class="s" data-label="Beneficios y riesgos de mostrarte en Internet" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Beneficios y riesgos de mostrarte en Internet</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1.15fr">
+      <div class="tarjeta c-ok"><h3>Beneficios</h3><ul class="lista peq">
+        <li>Encontrar trabajo o prácticas con un perfil profesional o un portafolio de trabajos.</li>
+        <li>Hacer contactos y aprender en grupos.</li>
+        <li>Dar a conocer lo que haces. La <b>marca personal</b> es la imagen que los demás tienen de ti.</li>
+        <li>Mantener el contacto con amigos y familia.</li></ul></div>
+      <div class="tarjeta c-ko"><h3>Riesgos</h3><ul class="lista peq">
+        <li><b>Suplantación de identidad</b>: alguien se hace pasar por ti con tus fotos y tus datos.</li>
+        <li>Ciberacoso.</li>
+        <li>Pérdida de privacidad: tu dirección, tu instituto, tus horarios, tu ubicación.</li>
+        <li>Mala reputación por una foto o un comentario antiguo.</li>
+        <li>Estafas con tus datos.</li>
+        <li>Pérdida de control: lo que publicas se puede copiar y reenviar, aunque después lo borres.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que pasa en Internet tiene consecuencias fuera" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Lo que pasa en Internet tiene consecuencias fuera</h2><p class="entrada">El mundo dentro y fuera de Internet está conectado. Lo que publicas lo leen personas reales y afecta a tu vida diaria.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Al buscar trabajo</h3><p>Muchas empresas miran las redes sociales de las personas que se presentan a un puesto.</p></div>
+      <div class="tarjeta"><h3>Un vídeo y un despido</h3><p>Una trabajadora de una guardería de Estados Unidos perdió su empleo. Había dicho en un vídeo de Facebook que odiaba estar rodeada de niños.</p></div>
+      <div class="tarjeta"><h3>Denuncias</h3><p>Un mensaje ofensivo puede acabar en una denuncia.</p></div>
+      <div class="tarjeta"><h3>Ciberacoso</h3><p>El acoso por Internet hace daño fuera de la pantalla.</p></div>
+      <div class="tarjeta"><h3>Una captura basta</h3><p>Con una captura de pantalla, algo «privado» deja de serlo.</p></div>
+      <div class="tarjeta c-ok"><h3>También para bien</h3><p>Un perfil profesional cuidado o un proyecto publicado pueden darte un trabajo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Buenas y malas prácticas en la identidad digital" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Buenas y malas prácticas</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta c-ok"><h3>Buenas prácticas</h3><ul class="lista peq">
+        <li>Perfiles personales en privado. Revisa su configuración de privacidad.</li>
+        <li>Un perfil profesional aparte, con información actualizada y útil. Por ejemplo, en LinkedIn (desde los 16 años).</li>
+        <li>Piensa antes de publicar: «¿Me importaría que lo viera mi profesor o una empresa?».</li>
+        <li>Contraseñas seguras y distintas.</li>
+        <li>Busca tu nombre en Internet de vez en cuando.</li>
+        <li>Pide que borren lo que te perjudica.</li></ul></div>
+      <div class="tarjeta c-ko"><h3>Malas prácticas</h3><ul class="lista peq">
+        <li>Perfiles abiertos al público con tu vida privada.</li>
+        <li>Publicar tu dirección, tu teléfono, tu DNI, tus horarios o tu ubicación en tiempo real.</li>
+        <li>Fotos comprometidas, aunque sean «solo para amigos».</li>
+        <li>Insultar o discutir en público.</li>
+        <li>Aceptar a desconocidos.</li>
+        <li>Usar la misma contraseña en todo.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Revisa tu huella digital" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Revisa tu huella digital</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <ol class="pasos peq">
+        <li>Abre una ventana de incógnito (Ctrl+Mayús+N en Chrome y Edge). Así los resultados no dependen de tu historial.</li>
+        <li>Busca en Google tu nombre y apellidos entre comillas. Mira también <b>Imágenes</b>. Esta búsqueda se llama <b>egosurfing</b>.</li>
+        <li>Crea una alerta en <b>Google Alerts</b> con tu nombre. Te llega un correo cuando aparece algo nuevo.</li>
+        <li>Si algo te perjudica, pide a la web que lo publicó que lo borre.</li>
+        <li><b>Derecho al olvido</b>: pide al buscador que quite el enlace (formulario de Google o de Bing). La información sigue en la web original.</li>
+        <li>Si no te hacen caso, reclama a la <b>AEPD</b> (Agencia Española de Protección de Datos).</li>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:26px;align-items:center">
+        <img class="ico m" src="img/ia/lupa.webp" alt="">
+        <figure class="foto cred-arriba" style="height:340px;width:488px"><img src="img/capturas/google-alerts.webp" alt="Google Alerts con la búsqueda Alumno Prueba entre comillas, las opciones de frecuencia, fuentes, idioma, región, cantidad y correo, y el botón Crear alerta"><figcaption class="credito">Google Alerts: alerta para el nombre «Alumno Prueba» entre comillas, con las opciones abiertas. Captura propia con una cuenta de prueba (24-10-2026).</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Así lo pregunta el examen: tu perfil para las empresas" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Así lo pregunta el examen · pregunta 8 de la demo</p><h2>Tu perfil para las empresas</h2></div>
+  <div class="cuerpo" style="gap:14px">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Imagina que quieres potenciar tu perfil digital, de forma que las posibles empresas que quieran contratarte en el futuro, cuando busquen información sobre ti en Internet, localicen una identidad digital interesante y positiva sobre ti. ¿Cuál de estas pautas has de evitar?",
+       "opciones": ["Mantener en abierto perfiles privados en las mismas u otras redes sociales para comentar, compartir y publicar ahí el contenido que desee sobre mi vida privada.", "Crear un perfil de carácter profesional en Facebook y otro en Twitter que vaya orientado hacia tus metas profesionales.", "Contar con un perfil actualizado en una red orientada al empleo como LinkedIn.", "Publicar, compartir y comentar solo información relevante en las cuentas de carácter profesional."], "correcta": 0,
+       "explicacion": "La pregunta pide lo que hay que **evitar**. Mantener abiertos los perfiles con tu vida privada es una mala práctica: los puede ver cualquier empresa. Las otras 3 opciones son buenas prácticas: perfiles profesionales, LinkedIn actualizado y publicar solo información relevante. Twitter hoy se llama X. Lee bien si te piden lo correcto o lo que hay que evitar."}
+    </script></div>
+    <p class="fuente">Pregunta 8 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Comprueba 2.6" data-seccion="2.6">
+  <div class="cab"><p class="etq">2.6 · Identidad digital</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="2.6"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Qué forma tu identidad digital?",
+       "opciones": ["Solo lo que publicas tú en tus redes sociales.", "Lo que publicas tú y lo que publican otras personas sobre ti.", "Solo la foto de tu perfil.", "Solo los datos de tu DNI."], "correcta": 1,
+       "explicacion": "Tu identidad digital es toda la información sobre ti que hay en Internet. Incluye lo que publican tus amigos, tu instituto o un periódico."},
+      {"tipo": "test", "enunciado": "Tienes un perfil público con tu dirección, el nombre de tu instituto y muchas fotos. ¿Qué riesgo tiene?",
+       "opciones": ["Que alguien use tus fotos y tus datos para hacerse pasar por ti.", "Que tu móvil gaste más batería.", "Que tu perfil se borre solo.", "Ninguno, porque lo has publicado tú."], "correcta": 0,
+       "explicacion": "Con tus fotos y tus datos, otra persona puede crear un perfil falso y hacerse pasar por ti. Esto se llama suplantación de identidad."},
+      {"tipo": "ordenar", "enunciado": "Ordena los pasos para revisar tu huella digital y pedir que se borre algo que te perjudica.",
+       "orden": ["Abre una ventana de incógnito en el navegador.", "Busca tu nombre y apellidos entre comillas en Google.", "Revisa los resultados en «Todo» y en «Imágenes».", "Pide a la web que publicó la información que la borre.", "Si no te responden, reclama a la Agencia Española de Protección de Datos (AEPD)."],
+       "explicacion": "Primero buscas qué hay sobre ti. Después pides que lo borre quien lo publicó. La AEPD es el último paso, si no te hacen caso."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= Repaso del área y cierre ======================= -->
+
+<section class="s t2-resumen" data-label="Resumen del tema" data-seccion="R" data-deck-section="R">
+  <div class="cab"><p class="etq">Repaso del área 2</p><h2>Resumen del tema</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas peq" style="--n:3">
+      <div class="tarjeta"><h3>2.1 Interactuar</h3><ul class="lista peq"><li>SMS: sin Internet. Mensajería: con Internet.</li><li>VoIP: voz por Internet.</li><li>Correo: Para, CC y CCO. Reenviar lleva los adjuntos.</li></ul></div>
+      <div class="tarjeta"><h3>2.2 Compartir</h3><ul class="lista peq"><li>Adjunto: el clip (Gmail, 25 MB).</li><li>Clic derecho › Enviar a › Destinatario de correo.</li><li>WhatsApp: clip › Documento, Galería, Ubicación, Contacto. Audio: mantén pulsado el micrófono.</li></ul></div>
+      <div class="tarjeta"><h3>2.3 Participación ciudadana</h3><ul class="lista peq"><li>Certificado digital (FNMT), DNIe y Cl@ve sirven para identificarte.</li><li>El PIN es la contraseña del chip del DNIe.</li><li>Cita previa en la web oficial.</li></ul></div>
+      <div class="tarjeta"><h3>2.4 Colaborar</h3><ul class="lista peq"><li>Documentos compartidos en la nube.</li><li>Roles: lector, comentador, editor y supervisor.</li><li>Revisar › Todas las marcas.</li></ul></div>
+      <div class="tarjeta"><h3>2.5 Comportamiento</h3><ul class="lista peq"><li>Netiqueta: no todo en mayúsculas, ortografía, nicks, emoticonos, horarios.</li><li>Respeto, sin expresiones ofensivas.</li><li>Pide permiso para compartir fotos de otros.</li></ul></div>
+      <div class="tarjeta"><h3>2.6 Identidad digital</h3><ul class="lista peq"><li>Lo que publicas tú + lo que publican de ti.</li><li>Perfil personal privado y perfil profesional cuidado.</li><li>Derecho al olvido.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s t2-preg" data-label="Test de repaso del área" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 2 · preguntas del curso «Soy competente digital», CyL Digital</p><h2>Test de repaso</h2></div>
+  <div class="cuerpo">
+    <div class="repaso-test"><script type="application/json">[
+      {"comp": "2.1", "tipo": "test", "enunciado": "En WhatsApp, tu mensaje tiene un solo tick gris. ¿Qué significa?",
+       "opciones": ["Lo ha leído.", "Le ha llegado, pero no lo ha leído.", "Se ha enviado, pero todavía no le ha llegado: no tiene cobertura o tiene el móvil apagado.", "Lo ha reenviado."], "correcta": 2,
+       "explicacion": "Un tick gris: enviado. Dos ticks grises: entregado en su móvil. Dos ticks azules: leído."},
+      {"comp": "2.1", "tipo": "test", "enunciado": "Quieres hacer una videollamada de WhatsApp con las 6 personas de tu grupo de clase. ¿Cuál es la forma más rápida?",
+       "opciones": ["Abres el chat del grupo y pulsas el botón de videollamada.", "Envías un SMS a cada persona.", "Llamas por teléfono a cada persona por separado.", "No se puede: WhatsApp solo hace videollamadas de 2 personas."], "correcta": 0,
+       "explicacion": "En el chat de un grupo, el botón de videollamada llama a todos los participantes a la vez."},
+      {"comp": "2.2", "tipo": "test", "enunciado": "En WhatsApp quieres enviar una foto que la otra persona solo pueda ver una vez. ¿Cómo lo haces?",
+       "opciones": ["Eliges la foto en la Galería y pulsas el icono «1» antes de enviarla.", "Envías la foto y después la borras.", "Envías la foto como Documento.", "Envías la foto por SMS."], "correcta": 0,
+       "explicacion": "Antes de enviar una foto o un vídeo, el icono «1» activa «Ver una vez». La otra persona lo abre una vez y desaparece."},
+      {"comp": "2.1", "tipo": "test", "enunciado": "Respondes al correo de una empresa. Quieres que tu jefe lo reciba sin que la empresa lo vea. ¿Dónde escribes el correo de tu jefe?",
+       "opciones": ["En el campo «RE:».", "En CC.", "Configuras un reenvío automático.", "En CCO (copia oculta)."], "correcta": 3,
+       "explicacion": "Las direcciones de CCO no las ve nadie. En CC, la empresa vería la dirección de tu jefe."},
+      {"comp": "2.1", "tipo": "test", "enunciado": "Respondes a un correo en Outlook. ¿Qué afirmación es falsa?",
+       "opciones": ["Al responder no van los adjuntos; al reenviar, sí.", "En «Para» sale la persona que te escribió.", "En la respuesta no aparece el texto del correo original.", "El asunto empieza por «RE:»."], "correcta": 2,
+       "explicacion": "Es falsa porque el texto del correo original sí aparece, debajo de tu respuesta."},
+      {"comp": "2.2", "tipo": "test", "barajar": false, "imagen": "img/cyl/whatsapp-clip.png", "enunciado": "¿Cuál de estas dos imágenes es WhatsApp Web?",
+       "opciones": ["La imagen 1.", "La imagen 2.", "Las dos.", "Ninguna: las dos son de la app del móvil."], "correcta": 0,
+       "explicacion": "La imagen 1 es WhatsApp Web, en el navegador del ordenador: el menú del clip sale en una columna. La imagen 2 es la app de Android: el menú sale en una cuadrícula con el nombre de cada opción."},
+      {"comp": "2.1", "tipo": "test", "imagen": "img/cyl/gmail-cc-cco.png", "enunciado": "Martín escribe este correo: Para Antonio, María José y Sergio; CC Amador; CCO Marta y Noelia. ¿Qué es verdad?",
+       "opciones": ["Todos ven las direcciones de todos.", "Marta y Noelia no ven ninguna dirección.", "Amador no ve las direcciones de Marta y Noelia.", "Antonio, María José y Sergio solo ven su dirección y la de Martín."], "correcta": 2,
+       "explicacion": "Las direcciones de CCO no las ve nadie. Amador ve las de Para y CC, pero no las de Marta y Noelia. Marta y Noelia sí ven las de Para y CC."},
+      {"comp": "2.1", "tipo": "test", "imagen": "img/cyl/outlook-teams.png", "enunciado": "Creas esta reunión en el calendario de Outlook. ¿Con qué programa será la videoconferencia?",
+       "opciones": ["Google Meet.", "Skype.", "Zoom.", "Microsoft Teams."], "correcta": 3,
+       "explicacion": "El interruptor «Reunión de Teams» está activado. Skype ya no existe: cerró en 2025."},
+      {"comp": "2.1", "tipo": "test", "barajar": false, "enunciado": "En la barra de Gmail tienes estos botones. ¿Cuál usas para hacer una videollamada?",
+       "opciones": ["Chat", "Spaces", "Meet", "Enviados"], "imagenes": ["img/cyl/gmail-chat.png", "img/cyl/gmail-spaces.png", "img/cyl/gmail-meet.png", "img/cyl/gmail-enviados.png"], "correcta": 2,
+       "explicacion": "Meet es la videoconferencia de Google. Chat es para escribir mensajes y Enviados son los correos que has mandado."},
+      {"comp": "2.3", "tipo": "test", "enunciado": "¿Qué afirmación es falsa?",
+       "opciones": ["Cl@ve sirve para personas físicas y para empresas (personas jurídicas).", "La FNMT emite certificados para personas físicas.", "Para usar Cl@ve PIN o Cl@ve permanente, antes tienes que registrarte en Cl@ve.", "El DNIe tiene un certificado de autenticación y otro de firma."], "correcta": 0,
+       "explicacion": "Es falsa porque Cl@ve es solo para personas físicas. Las empresas usan certificados digitales."},
+      {"comp": "2.3", "tipo": "test", "enunciado": "¿Qué forma de identificarte necesita un aparato para leerla?",
+       "opciones": ["Certificado digital en el navegador", "Cl@ve PIN", "DNI electrónico", "Cl@ve permanente"], "imagenes": ["img/cyl/cert-navegador.png", "img/cyl/clave-pin.png", "img/cyl/dni-ejemplo.png", "img/cyl/clave-permanente.png"], "correcta": 2,
+       "explicacion": "El chip del DNIe se lee con un lector de tarjetas o con un móvil con NFC. El certificado está instalado en el navegador, y Cl@ve usa un PIN o una contraseña."},
+      {"comp": "2.3", "tipo": "test", "barajar": false, "imagen": "img/cyl/ss-identificate.png", "enunciado": "En la web de la Seguridad Social quieres pedir tu informe de vida laboral. Te sale esta pantalla. ¿Con qué te puedes identificar?",
+       "opciones": ["Solo con Cl@ve.", "Solo con DNIe o certificado.", "Solo vía SMS.", "Con cualquiera de las opciones de la imagen."], "correcta": 3,
+       "explicacion": "La pantalla ofrece 4 formas de identificarte: Cl@ve permanente, Cl@ve PIN, vía SMS y DNIe o certificado. Vale cualquiera."},
+      {"comp": "2.4", "tipo": "test", "barajar": false, "imagen": "img/cyl/onenote.png", "imagenArriba": true, "enunciado": "En este bloc de notas de OneNote, ¿cómo se llama la sección?",
+       "opciones": ["MOOC Competencias Digitales", "Área 1", "Búsqueda de información", "Librería"], "correcta": 1,
+       "explicacion": "El bloc de notas (MOOC Competencias Digitales) tiene secciones (Área 1), y cada sección tiene páginas (Búsqueda de información)."},
+      {"comp": "2.5", "tipo": "test", "barajar": false, "enunciado": "¿Qué emoticono significa «Llámame»?",
+       "opciones": ["1", "2", "3", "4"], "imagenes": ["img/cyl/emoji-1.png", "img/cyl/emoji-2.png", "img/cyl/emoji-3.png", "img/cyl/emoji-4.png"], "correcta": 1,
+       "explicacion": "La mano con el pulgar y el meñique estirados (2) imita un teléfono: significa «llámame». Los emoticonos de refuerzo ayudan a entender el tono de un mensaje."},
+      {"comp": "2.6", "tipo": "test", "barajar": false, "enunciado": "¿Qué es la identidad digital?",
+       "opciones": ["La información publicada en Internet sobre cada persona.", "La opinión que tiene de ti alguien cuando habla contigo.", "Solo las imágenes tuyas que hay en Internet.", "Ninguna es correcta."], "correcta": 0,
+       "explicacion": "La identidad digital es toda la información que hay en Internet sobre una persona: la que publica ella y la que publican otros."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 2" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 2</p><h2>Comunicación y colaboración</h2></div>
+  <div class="cuerpo" style="gap:32px">
+    <div class="tarjetas" style="--n:3;gap:22px">
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.1</h3><p>Interactuar</p><span class="estado-comp" data-comp="2.1"></span></div>
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.2</h3><p>Compartir</p><span class="estado-comp" data-comp="2.2"></span></div>
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.3</h3><p>Participación ciudadana</p><span class="estado-comp" data-comp="2.3"></span></div>
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.4</h3><p>Colaborar</p><span class="estado-comp" data-comp="2.4"></span></div>
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.5</h3><p>Comportamiento digital</p><span class="estado-comp" data-comp="2.5"></span></div>
+      <div class="tarjeta" style="color:var(--texto);padding:22px 28px"><h3>2.6</h3><p>Identidad digital</p><span class="estado-comp" data-comp="2.6"></span></div>
+    </div>
+    <p>Si te falta alguna competencia, vuelve a su Comprueba y repítelo hasta acertar las 3 preguntas.</p>
+    <div class="botones"><a class="btn sec" href="../">Portada del curso</a><a class="btn ciruela" href="#c21">Volver al principio del tema</a><a class="btn sec" href="../tema3/">Tema 3 · Creación de contenidos</a></div>
+    <p class="peq" style="opacity:.85;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), CC BY-NC. Preguntas 4 a 9 de la demo de tuCertiCyL. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+<script src="sim/q04-email.js"></script>
+<script>
+/* Tema 2: campos de texto en las simulaciones HTML del móvil.
+   El motor común (cdc.js) no comprueba lo que se escribe en una simulación HTML. Aquí, en una
+   .pantalla-html con data-valida, el botón [data-guardar] solo lleva a su pantalla (data-ir) cuando
+   todos los campos con data-esperado coinciden con el enunciado (sin mayúsculas, tildes ni espacios
+   sobrantes; en los teléfonos solo cuentan las cifras). Si se pulsa antes, cuenta como un fallo. */
+(function () {
+  'use strict';
+  const norm = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const cifras = (s) => String(s).replace(/\D/g, '');
+  function valida(p) {
+    const ok = [...p.querySelectorAll('input[data-esperado]')].every((i) =>
+      i.dataset.tipo === 'tel' ? cifras(i.value) === cifras(i.dataset.esperado) : norm(i.value) === norm(i.dataset.esperado));
+    p.querySelectorAll('[data-guardar]').forEach((g) => { if (ok) g.setAttribute('data-ir', g.dataset.guardar); else g.removeAttribute('data-ir'); });
+    const nombre = p.querySelector('input[data-campo="nombre"]');
+    const movil = p.closest('.movil');
+    if (nombre && movil) movil.querySelectorAll('[data-muestra="nombre"]').forEach((e) => { e.textContent = nombre.value.trim() || 'Contacto'; });
+  }
+  document.addEventListener('input', (e) => {
+    const p = e.target.closest && e.target.closest('.pantalla-html[data-valida]');
+    if (p) valida(p);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 3 · Creación de contenidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+/* ===== Tema 3: estilos propios (prefijo t3-) ===== */
+
+/* Área 3 (amarillo): el texto sobre amarillo va en oscuro y el texto en color de área, en un amarillo oscuro legible */
+body.area-3 { --t3-oscuro: #6E5300; --t3-medio: #A07A00; }
+deck-stage { --deck-section-fg: #1A1838; }
+body.area-3 .cab .etq, body.area-3 .def .t, body.area-3 .clave, body.area-3 .ruta > i, body.area-3 .competencia .dcha h3,
+body.area-3 .competencia .dcha li::before, body.area-3 .indice-comp .n, body.area-3 .pill.clara, body.area-3 .btn.sec,
+body.area-3 .orden .mov::after, body.area-3 .img-slot, body.area-3 .b-num { color: var(--t3-oscuro); }
+body.area-3 .portada .num, body.area-3 .cifra { color: var(--t3-medio); }
+body.area-3 .tabla th, body.area-3 .pasos > li::before, body.area-3 .ruta .disp, body.area-3 .caja:not(.examen):not(.aviso):not(.ok)::before,
+body.area-3 .pill:not(.clara):not(.ciruela), body.area-3 .seccion-pill, body.area-3 .btn:not(.sec):not(.ciruela), body.area-3 .competencia .izq,
+body.area-3 .b-pill, body.area-3 .opcion[aria-pressed="true"] .marca { color: var(--texto); }
+body.area-3 .competencia .izq .examen { background: rgba(255,255,255,.4); }
+body.area-3 section.oscura, body.area-3 section.oscura .cab .etq, body.area-3 section.oscura .cab h2, body.area-3 section.oscura [data-slide-num] { color: var(--texto); }
+body.area-3 section.oscura .seccion-pill { color: var(--t3-oscuro); }
+
+/* Extensiones de archivo */
+.t3-exts { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.t3-exts li { display: flex; align-items: center; gap: 16px; }
+.t3-ext { flex: none; display: inline-block; min-width: 104px; text-align: center; font: 500 22px/1 'JetBrains Mono', monospace; color: #fff; background: var(--c, #5A5873); padding: 8px 10px; border-radius: 10px; }
+.t3-ext.e-w { --c: #2B579A; } .t3-ext.e-x { --c: #217346; } .t3-ext.e-p { --c: #C43E1C; } .t3-ext.e-lo { --c: #3E6A99; }
+.t3-ext.e-pdf { --c: #B30B00; } .t3-ext.e-txt { --c: #5A5873; } .t3-ext.e-img { --c: #007A8F; } .t3-ext.e-aud { --c: #830065; }
+.t3-ext.e-vid { --c: #C2005E; } .t3-ext.e-zip { --c: #6E5300; }
+.t3-exts.fila { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+
+/* Iconos de licencias dibujados (img/cc/*.svg) */
+.t3-cc { width: 56px; height: 56px; vertical-align: middle; display: inline-block; }
+.t3-cc.g { width: 132px; height: 132px; }
+.t3-sello { display: inline-flex; align-items: center; gap: 3px; background: #fff; border: 3px solid var(--texto); border-radius: 12px; padding: 4px 10px 4px 6px; vertical-align: middle; white-space: nowrap; }
+.t3-sello img { width: 34px; height: 34px; display: block; }
+.t3-sello b { font: 600 19px/1 'JetBrains Mono', monospace; margin-left: 8px; }
+.t3-sello.g { gap: 8px; padding: 12px 22px 12px 14px; border-width: 5px; border-radius: 22px; }
+.t3-sello.g img { width: 92px; height: 92px; }
+.t3-sello.g b { font-size: 40px; margin-left: 14px; }
+.t3-fija-ico { width: 46px; height: 46px; margin-right: 14px; flex: none; }
+.t3-cond { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.t3-cond img { width: 130px; height: 130px; margin-bottom: 8px; }
+
+/* Obras protegidas con © */
+.t3-obras { display: grid; grid-template-columns: repeat(2, 240px); gap: 30px; justify-content: center; }
+.t3-obras div { position: relative; background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); height: 240px; display: grid; place-items: center; }
+.t3-obras img { width: 170px; height: 170px; object-fit: contain; }
+.t3-obras div::after { content: '©'; position: absolute; right: -10px; top: -10px; width: 52px; height: 52px; border-radius: 50%; background: var(--texto); color: #fff; font: 700 30px/52px 'Lexend', sans-serif; text-align: center; }
+
+/* Hoja de cálculo recreada (estática) */
+.t3-xl { background: #fff; border: 1px solid #D0D0D0; border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 21px; color: #222; }
+.t3-xl-barra { display: flex; align-items: stretch; border-bottom: 1px solid #D0D0D0; height: 46px; }
+.t3-xl-barra span { display: flex; align-items: center; padding: 0 14px; border-right: 1px solid #D0D0D0; }
+.t3-xl-barra .cel { width: 104px; }
+.t3-xl-barra .fx { font-style: italic; color: #666; font-family: Georgia, serif; }
+.t3-xl-barra .form { border-right: 0; font: 500 20px 'JetBrains Mono', monospace; }
+.t3-xl table { border-collapse: collapse; width: 100%; }
+.t3-xl th { background: #F3F3F3; color: #555; font-weight: 400; border: 1px solid #D9D9D9; padding: 3px 10px; font-size: 17px; }
+.t3-xl th.on { background: #D3F0E0; color: #0E6B38; font-weight: 600; }
+.t3-xl td { border: 1px solid #E1E1E1; padding: 3px 12px; height: 38px; }
+.t3-xl td.n { text-align: right; font-variant-numeric: tabular-nums; }
+.t3-xl td.az { background: #8DB4E2; } .t3-xl td.ve { background: #92D050; }
+.t3-xl td.sel { outline: 3px solid #107C41; outline-offset: -3px; }
+.t3-xl tr.salto td, .t3-xl tr.salto th { height: 26px; color: #999; text-align: center; font-size: 16px; }
+.t3-autosuma { background: #fff; border-radius: 18px; box-shadow: var(--sombra); padding: 20px 24px; font: 22px/1.3 'Segoe UI', Tahoma, sans-serif; }
+.t3-autosuma .bt { display: flex; gap: 12px; align-items: center; font-weight: 600; }
+.t3-autosuma .bt b { font-size: 40px; color: #107C41; line-height: 1; }
+.t3-autosuma ul { list-style: none; padding: 0; margin: 14px 0 0; border: 1px solid #D0D0D0; border-radius: 10px; overflow: hidden; }
+.t3-autosuma li { padding: 8px 18px; }
+.t3-autosuma li + li { border-top: 1px solid #EEE; }
+.t3-autosuma li.on { background: #E6F4EC; font-weight: 600; }
+
+/* Página de Word recreada (solución del reto) */
+.t3-pagina { background: #fff; box-shadow: 0 8px 30px rgba(26,24,56,.18); border-radius: 6px; padding: 38px 52px; font: 21px/1.45 'Calibri', 'Segoe UI', sans-serif; color: #222; }
+.t3-pagina h4 { font: 400 32px/1.2 'Calibri Light', 'Segoe UI', sans-serif; color: #0F4761; margin: 0 0 14px; }
+.t3-pagina p { margin: 0 0 10px; }
+.t3-pagina mark { background: #FCE7A5; padding: 0 3px; border-radius: 3px; color: inherit; }
+.t3-pagina a { color: #0563C1; text-decoration: underline; }
+.t3-pagina table { border-collapse: collapse; margin-top: 6px; font-size: 19px; }
+.t3-pagina td { border: 1px solid #555; padding: 2px 14px; }
+.t3-pagina tr.nueva td { background: #E6F4EC; }
+
+/* Gráfico circular de la solución */
+.t3-tarta { background: #fff; border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px 26px; }
+.t3-tarta svg { width: 100%; height: auto; display: block; }
+
+/* Esquema: cómo llega una web */
+.t3-flujo { display: flex; align-items: flex-start; }
+.t3-flujo .n { width: 220px; flex: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; font-size: 24px; font-weight: 600; line-height: 1.2; }
+.t3-flujo .n img { width: 150px; height: 150px; object-fit: contain; }
+.t3-flujo .n small { font-weight: 400; font-size: 20px; color: var(--gris); }
+.t3-flujo .f { flex: 1; position: relative; margin-top: 66px; text-align: center; font-size: 19px; color: var(--gris); padding-top: 18px; min-width: 60px; }
+.t3-flujo .f::before { content: ''; position: absolute; left: 4px; right: 18px; top: 0; height: 6px; border-radius: 3px; background: var(--area); }
+.t3-flujo .f::after { content: ''; position: absolute; right: 2px; top: -8px; border-left: 20px solid var(--area); border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+
+/* Esquema: qué pasa cuando escribes una dirección (DNS y HTTPS). Mismos nodos y flechas que .t3-flujo */
+.t3-dns { display: grid; grid-template-columns: 300px 1fr 330px; grid-template-rows: auto auto; column-gap: 10px; row-gap: 10px; align-items: center; }
+.t3-dns .n { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; font-size: 24px; font-weight: 600; line-height: 1.2; }
+.t3-dns .n img { width: 84px; height: 84px; object-fit: contain; }
+.t3-dns .n small { font-weight: 400; font-size: 20px; color: var(--gris); }
+.t3-dns .n.pc { grid-row: 1 / span 2; }
+.t3-dns .n.pc img { width: 190px; height: 140px; }
+.t3-barra-url { font: 500 20px/1 'JetBrains Mono', monospace; background: var(--blanco); border: 2px solid var(--linea); border-radius: 999px; padding: 8px 16px; margin: 2px 0 6px; box-shadow: var(--sombra); }
+.t3-dns .flechas { display: flex; flex-direction: column; gap: 16px; padding: 0 10px; }
+.t3-dns .f { position: relative; text-align: center; font-size: 22px; font-weight: 600; color: var(--texto); padding-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.t3-dns .f b { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--area); color: var(--texto); font-size: 22px; flex: none; }
+.t3-dns .f::before { content: ''; position: absolute; left: 4px; right: 18px; bottom: 0; height: 6px; border-radius: 3px; background: var(--area); }
+.t3-dns .f::after { content: ''; position: absolute; right: 2px; bottom: -8px; border-left: 20px solid var(--area); border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+.t3-dns .f.vuelta::before { left: 18px; right: 4px; }
+.t3-dns .f.vuelta::after { right: auto; left: 2px; border-left: 0; border-right: 20px solid var(--area); }
+.t3-dns .f.segura::before { background: var(--ok); }
+.t3-dns .f.segura::after { border-left-color: var(--ok); }
+.t3-dns .f.segura img { width: 44px; height: auto; }
+.t3-defs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; font-size: var(--type-caption); }
+.t3-defs p { background: var(--blanco); border-radius: 22px; box-shadow: var(--sombra); padding: 14px 22px; }
+.t3-defs b:first-child { color: var(--t3-oscuro); }
+
+/* Licencias de software: cuadro de 2 x 2 (gratis o de pago; código cerrado o abierto) */
+.t3-matriz { display: grid; grid-template-columns: 170px 1fr 1fr; grid-template-rows: auto 1fr 1fr; gap: 16px 20px; }
+.t3-matriz .eje { font-size: 28px; font-weight: 700; color: var(--t3-oscuro); text-align: center; align-self: end; line-height: 1.2; }
+.t3-matriz .eje small { display: block; font-size: 22px; font-weight: 400; color: var(--gris); margin-top: 4px; }
+.t3-matriz .eje.fila { align-self: center; text-align: right; }
+.t3-matriz .celda { background: var(--blanco); border-radius: 22px; box-shadow: var(--sombra); border-left: 10px solid var(--linea); padding: 16px 26px; font-size: var(--type-caption); display: flex; flex-direction: column; gap: 4px; }
+.t3-matriz .celda h3 { font-size: 28px; }
+.t3-matriz .celda h3:not(:first-child) { margin-top: 10px; }
+.t3-matriz .celda .ej { color: var(--gris); }
+.t3-matriz .celda .ej::before { content: 'Ejemplos: '; font-weight: 600; }
+.t3-matriz .celda.abierto { border-left-color: var(--area); }
+.t3-matriz .celda.recuerda { border-left-color: var(--area); background: var(--area-claro); }
+
+/* Partes de una dirección web */
+.t3-url { display: flex; justify-content: center; align-items: flex-start; gap: 4px; }
+.t3-url .p { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.t3-url .p b { font: 500 60px/1 'JetBrains Mono', monospace; padding: 14px 10px; border-radius: 16px; background: var(--c); color: #1A1838; }
+.t3-url .p span { font-size: 22px; text-align: center; max-width: 240px; color: var(--texto); line-height: 1.25; }
+.t3-url .dom { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+.t3-url .dom > div { display: flex; gap: 4px; }
+.t3-url .llave { border: 4px solid var(--area); border-top: 0; border-radius: 0 0 18px 18px; height: 22px; margin: 0 8px; }
+.t3-url .dom .t { text-align: center; font-weight: 700; font-size: 26px; color: var(--t3-oscuro); }
+
+/* Ventanas de Microsoft 365 recreadas (Word y PowerPoint): uso docente */
+.ventana.t3-of { font-family: 'Segoe UI', Tahoma, sans-serif; color: #242424; font-size: 13px; }
+.t3-of .pantalla-html { background: #fff; }
+.t3-tit { height: 34px; display: flex; align-items: center; gap: 14px; padding: 0 12px; color: #fff; font-size: 12.5px; background: var(--t3-app); white-space: nowrap; }
+.t3-tit .ap { width: 20px; height: 20px; border-radius: 4px; background: #fff; color: var(--t3-app); font-weight: 800; display: grid; place-items: center; font-size: 12px; }
+.t3-tit .nom { flex: 1; text-align: center; font-weight: 600; }
+.t3-tit .bus { background: rgba(255,255,255,.2); border-radius: 6px; padding: 3px 80px 3px 10px; }
+.t3-tit .usu { width: 24px; height: 24px; border-radius: 50%; background: #F3C51A; color: #1A1838; display: grid; place-items: center; font-size: 10.5px; font-weight: 700; }
+.t3-tit .ctl { letter-spacing: 16px; }
+.t3-sw { display: inline-block; width: 28px; height: 14px; border-radius: 7px; border: 1.5px solid #fff; vertical-align: middle; position: relative; margin-left: 4px; }
+.t3-sw::after { content: ''; position: absolute; left: 2px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+.t3-tabs { height: 32px; display: flex; align-items: flex-end; gap: 1px; padding: 0 8px; background: #F3F3F3; font-size: 13px; white-space: nowrap; overflow: hidden; }
+.t3-tabs span { padding: 5px 9px 6px; cursor: pointer; border-bottom: 3px solid transparent; border-radius: 4px 4px 0 0; }
+.t3-tabs span:hover { background: #E6E6E6; }
+.t3-tabs span.on { border-bottom-color: var(--t3-app); color: var(--t3-app); font-weight: 600; background: #fff; }
+.t3-tabs span.ctx { color: var(--t3-app); font-weight: 600; }
+.t3-cinta { height: 92px; display: flex; background: #fff; border-bottom: 1px solid #E1E1E1; padding: 5px 4px 0; overflow: hidden; }
+.t3-gr { display: flex; flex-direction: column; padding: 0 7px; border-right: 1px solid #E1E1E1; flex: none; }
+.t3-gr .c { flex: 1; display: flex; align-items: flex-start; gap: 2px; }
+.t3-gr .l { font-size: 11px; color: #616161; text-align: center; padding: 1px 0 4px; white-space: nowrap; }
+.t3-bt { display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 11.5px; padding: 2px 5px; border-radius: 4px; cursor: pointer; text-align: center; line-height: 1.15; min-width: 42px; }
+.t3-bt i { font-style: normal; font-size: 22px; line-height: 30px; }
+.t3-bt:hover, .t3-bp > span:hover { background: #EBEBEB; }
+.t3-bp { display: flex; flex-direction: column; gap: 1px; font-size: 11.5px; }
+.t3-bp > span { padding: 2px 6px; white-space: nowrap; border-radius: 4px; cursor: pointer; }
+.t3-caja { display: inline-block; border: 1px solid #C8C8C8; border-radius: 3px; padding: 0 6px; background: #fff; }
+.t3-est { display: inline-block; width: 74px; height: 50px; border: 1px solid #DADADA; margin-right: 3px; font-size: 11px; padding: 4px; line-height: 1.1; }
+.t3-est.t1 { color: #0F4761; font-size: 13px; } .t3-est.t2 { color: #0F4761; font-size: 12px; }
+.t3-area { position: absolute; top: 158px; left: 0; right: 0; bottom: 24px; background: #E8E8E8; overflow: hidden; }
+.t3-hoja-w { width: 540px; margin: 16px auto 0; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.2); padding: 46px 62px; font: 13px/1.55 'Calibri', 'Segoe UI', sans-serif; min-height: 520px; }
+.t3-hoja-w p { margin: 0 0 9px; }
+.t3-estado { position: absolute; left: 0; right: 0; bottom: 0; height: 24px; background: #F3F3F3; border-top: 1px solid #E1E1E1; display: flex; gap: 20px; align-items: center; padding: 0 12px; font-size: 11.5px; color: #424242; }
+.t3-estado .d { margin-left: auto; }
+.t3-toast { position: absolute; right: 18px; bottom: 36px; background: #fff; border-left: 5px solid #107C10; box-shadow: 0 6px 22px rgba(0,0,0,.25); padding: 12px 18px; font-size: 13.5px; z-index: 3; }
+/* Backstage (menú Archivo) */
+.t3-bs { position: absolute; top: 34px; left: 0; right: 0; bottom: 0; display: flex; }
+.t3-bs-menu { width: 166px; background: var(--t3-app); color: #fff; display: flex; flex-direction: column; padding: 8px 0; font-size: 13.5px; flex: none; }
+.t3-bs-menu span { padding: 7px 20px; cursor: pointer; }
+.t3-bs-menu span:hover { background: rgba(255,255,255,.14); }
+.t3-bs-menu span.on { background: rgba(255,255,255,.26); }
+.t3-bs-menu .atras { font-size: 19px; padding: 4px 20px 10px; }
+.t3-bs-menu hr { border: 0; border-top: 1px solid rgba(255,255,255,.35); margin: 6px 16px; }
+.t3-bs-menu .abajo { margin-top: auto; }
+.t3-bs-panel { flex: 1; padding: 20px 34px; background: #fff; overflow: hidden; position: relative; }
+.t3-bs-panel h3 { font-size: 30px; font-weight: 300; margin: 0 0 18px; }
+.t3-bs-panel h5 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; }
+.t3-nuevos { display: flex; gap: 16px; }
+.t3-nuevos div { width: 104px; font-size: 12px; text-align: center; }
+.t3-nuevos div b { display: block; height: 130px; border: 1px solid #D0D0D0; margin-bottom: 6px; background: #fff; }
+.t3-recientes div { display: grid; grid-template-columns: 26px 1fr 150px; padding: 6px 4px; border-bottom: 1px solid #F0F0F0; font-size: 12.5px; }
+.t3-recientes div span:last-child { color: #666; }
+.t3-exp { display: grid; grid-template-columns: 250px 1fr; gap: 26px; }
+.t3-exp .op { display: flex; gap: 12px; align-items: center; padding: 11px 12px; font-size: 13.5px; cursor: pointer; }
+.t3-exp .op.on { background: #DCDCDC; }
+.t3-exp .op i { font-style: normal; font-size: 22px; }
+.t3-exp h4 { font-size: 17px; font-weight: 600; margin: 6px 0 10px; }
+.t3-exp ul { font-size: 13px; padding-left: 18px; margin: 0 0 20px; color: #424242; line-height: 1.6; }
+.t3-bgr { width: 98px; height: 98px; border: 1px solid #C8C8C8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12.5px; text-align: center; cursor: pointer; line-height: 1.2; }
+.t3-bgr i { font-style: normal; font-size: 30px; }
+.t3-bgr:hover { background: #F0F0F0; }
+.t3-gc { display: grid; grid-template-columns: 250px 1fr; gap: 24px; }
+.t3-gc .lug { display: flex; flex-direction: column; gap: 2px; }
+.t3-gc .lug span { display: flex; gap: 12px; align-items: center; padding: 11px 12px; font-size: 13.5px; cursor: pointer; }
+.t3-gc .lug span.on { background: #DCDCDC; }
+.t3-gc .lug span i { font-style: normal; font-size: 20px; width: 24px; text-align: center; }
+.t3-gc .der .carp { font-size: 13px; color: #444; margin-bottom: 10px; }
+/* Cuadro de diálogo de archivos (estilo Windows 11) */
+.t3-dlg { position: absolute; left: 120px; top: 64px; width: 740px; height: 520px; background: #fff; border: 1px solid #9A9A9A; border-radius: 8px; box-shadow: 0 14px 44px rgba(0,0,0,.38); z-index: 4; display: flex; flex-direction: column; font-size: 12.5px; overflow: hidden; }
+.t3-dlg-tit { height: 32px; display: flex; align-items: center; padding: 0 14px; justify-content: space-between; border-bottom: 1px solid #EEE; flex: none; }
+.t3-dlg-dir { height: 40px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-bottom: 1px solid #E5E5E5; color: #555; flex: none; }
+.t3-dlg-dir .camino { flex: 1; border: 1px solid #D0D0D0; border-radius: 4px; padding: 4px 9px; color: #222; }
+.t3-dlg-dir .bus { width: 180px; border: 1px solid #D0D0D0; border-radius: 4px; padding: 4px 9px; color: #888; }
+.t3-dlg-cuerpo { flex: 1; display: flex; min-height: 0; }
+.t3-dlg-nav { width: 150px; border-right: 1px solid #E5E5E5; padding: 6px 0; display: flex; flex-direction: column; flex: none; }
+.t3-dlg-nav span { padding: 5px 14px; cursor: pointer; white-space: nowrap; }
+.t3-dlg-nav span.on { background: #CCE4F7; }
+.t3-dlg-lista { flex: 1; padding: 4px 10px; overflow: hidden; }
+.t3-dlg-lista .fila { display: grid; grid-template-columns: 1fr 140px 150px; padding: 4px 6px; cursor: pointer; }
+.t3-dlg-lista .fila.enc { color: #666; border-bottom: 1px solid #E5E5E5; cursor: default; }
+.t3-dlg-pie { border-top: 1px solid #E5E5E5; padding: 10px 16px 12px; display: grid; grid-template-columns: 124px 1fr; gap: 7px 10px; align-items: center; background: #F7F7F7; flex: none; position: relative; }
+.t3-dlg-pie label { color: #333; }
+.t3-dlg-pie .campo { border: 1px solid #BDBDBD; background: #fff; padding: 3px 8px; border-radius: 3px; position: relative; cursor: pointer; }
+.t3-dlg-pie .campo.desp::after { content: '⌄'; position: absolute; right: 9px; top: -2px; font-size: 14px; }
+.t3-dlg-pie .opc { grid-column: 2; display: flex; gap: 22px; color: #333; }
+.t3-dlg-bts { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.t3-dlg-bts .b { border: 1px solid #ADADAD; background: #FDFDFD; padding: 5px 18px; border-radius: 4px; cursor: pointer; min-width: 84px; text-align: center; }
+.t3-dlg-bts .b.p { background: #0067C0; color: #fff; border-color: #0067C0; }
+.t3-dlg-bts .b.izq { margin-right: auto; }
+.t3-tipos { position: absolute; left: 150px; bottom: 74px; width: 420px; z-index: 5; background: #fff; border: 1px solid #9A9A9A; box-shadow: 0 6px 18px rgba(0,0,0,.25); padding: 2px 0; }
+.t3-tipos div { padding: 3px 10px; cursor: pointer; }
+.t3-tipos div:hover { background: #E5F1FB; }
+.t3-tipos div.on { background: #CCE4F7; }
+.t3-dlg-mini { display: flex; gap: 18px; padding: 14px; flex-wrap: wrap; align-content: flex-start; }
+.t3-dlg-mini .f { width: 126px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px; cursor: pointer; border: 1px solid transparent; border-radius: 4px; }
+.t3-dlg-mini .f img { width: 112px; height: 84px; object-fit: cover; display: block; }
+.t3-dlg-mini .f.sel { background: #CCE4F7; border-color: #99C9EF; }
+/* PowerPoint */
+.t3-ppt { position: absolute; top: 158px; left: 0; right: 0; bottom: 24px; display: flex; background: #E8E8E8; overflow: hidden; }
+.t3-mini { width: 150px; padding: 12px 8px; display: flex; flex-direction: column; gap: 12px; background: #F3F3F3; flex: none; }
+.t3-mini .m { display: flex; gap: 6px; font-size: 11px; color: #555; }
+.t3-mini .m b { width: 116px; height: 65px; background: #fff; border: 1px solid #CFCFCF; display: block; font-size: 8.5px; padding: 6px; font-weight: 600; color: #333; position: relative; overflow: hidden; }
+.t3-mini .m.on b { outline: 3px solid var(--t3-app); outline-offset: 1px; }
+.t3-mini .m b img { position: absolute; left: 30px; top: 22px; width: 52px; }
+.t3-diapo-zona { flex: 1; display: grid; place-items: center; }
+.t3-diapo { width: 640px; height: 360px; background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.25); position: relative; padding: 30px 40px; }
+.t3-diapo h4 { font: 400 36px/1.1 'Calibri Light', 'Segoe UI', sans-serif; margin: 0; }
+.t3-diapo .ph { position: absolute; left: 40px; right: 40px; top: 96px; bottom: 28px; border: 1.5px dashed #BDBDBD; display: grid; place-items: center; color: #8A8A8A; font-size: 17px; }
+.t3-diapo img.t3-foto { position: absolute; left: 160px; top: 92px; width: 320px; height: 240px; object-fit: cover; outline: 2px solid #6C6C6C; outline-offset: 2px; }
+.t3-menu { position: absolute; z-index: 4; background: #fff; border: 1px solid #C8C8C8; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.22); font-size: 13px; padding: 4px 0; width: 236px; }
+.t3-menu .h { font-weight: 600; padding: 6px 12px; color: #424242; cursor: default; }
+.t3-menu div:not(.h) { padding: 8px 12px 8px 14px; cursor: pointer; display: flex; gap: 10px; }
+.t3-menu div:not(.h):hover { background: #F0F0F0; }
+
+/* Móvil Android recreado */
+.t3-and { position: absolute; inset: 0; font-family: Roboto, 'Segoe UI', sans-serif; color: #1B1B1F; background: #FAF9FD; overflow: hidden; }
+.t3-and .barra { height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-size: 14px; font-weight: 600; }
+.t3-and-fondo { background: linear-gradient(160deg, #FCE7A5 0%, #F3C51A 30%, #EA686B 70%, #830065 100%); color: #fff; }
+.t3-and-fondo .barra { color: #1B1B1F; }
+.t3-and .reloj { text-align: center; margin-top: 46px; font-size: 64px; font-weight: 300; color: #1B1B1F; line-height: 1; }
+.t3-and .fecha { text-align: center; font-size: 16px; color: #1B1B1F; margin-top: 6px; }
+.t3-and .apps { position: absolute; left: 14px; right: 14px; bottom: 116px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 4px; }
+.t3-and .app { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12.5px; text-shadow: 0 1px 3px rgba(0,0,0,.45); cursor: pointer; }
+.t3-and .app i { font-style: normal; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); text-shadow: none; }
+.t3-and .t3-and-busca { position: absolute; left: 20px; right: 20px; bottom: 42px; height: 50px; border-radius: 25px; background: rgba(255,255,255,.9); color: #444; display: flex; align-items: center; padding: 0 20px; font-size: 15px; gap: 12px; text-shadow: none; }
+.t3-and .t3-and-tit { padding: 26px 22px 10px; }
+.t3-and .t3-and-tit h4 { font-size: 32px; font-weight: 400; margin: 0; }
+.t3-and .atras { padding: 10px 18px 0; font-size: 24px; }
+.t3-and .bus { margin: 6px 18px 12px; background: #E9E7EF; border-radius: 26px; padding: 12px 18px; color: #49454F; font-size: 15px; }
+.t3-and .it { display: flex; gap: 18px; align-items: center; padding: 11px 22px; cursor: pointer; }
+.t3-and .it:hover { background: rgba(0,0,0,.04); }
+.t3-and .it .ic { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; flex: none; color: #fff; }
+.t3-and .it .t { flex: 1; font-size: 16.5px; line-height: 1.25; }
+.t3-and .it .t small { display: block; color: #49454F; font-size: 13px; }
+.t3-and .sec { padding: 14px 22px 4px; color: #0B57D0; font-size: 13.5px; font-weight: 600; }
+.t3-and .tx { padding: 8px 22px; color: #49454F; font-size: 14px; }
+.t3-and-sw { width: 50px; height: 30px; border-radius: 15px; border: 2px solid #79747E; background: #E6E0E9; position: relative; flex: none; }
+.t3-and-sw::after { content: ''; position: absolute; left: 5px; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: #79747E; }
+.t3-and-sw.on { background: #0B57D0; border-color: #0B57D0; }
+.t3-and-sw.on::after { left: 23px; top: 3px; width: 20px; height: 20px; background: #fff; }
+.t3-and .grande { margin: 8px 16px 6px; background: #D3E3FD; border-radius: 30px; padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; font-size: 19px; cursor: pointer; }
+.t3-and .red { display: flex; gap: 18px; align-items: center; padding: 12px 24px; cursor: pointer; }
+.t3-and .red:hover { background: rgba(0,0,0,.04); }
+.t3-and .red svg { flex: none; }
+.t3-and .red .t { flex: 1; font-size: 16.5px; }
+.t3-and .red .t small { display: block; color: #49454F; font-size: 13px; }
+.t3-and .red.ok { background: #D3E3FD; margin: 0 12px; border-radius: 22px; padding: 12px 12px; }
+.t3-and .velo { position: absolute; inset: 0; background: rgba(0,0,0,.35); z-index: 2; }
+.t3-and-dlg { position: absolute; left: 20px; right: 20px; top: 190px; background: #F3EDF7; border-radius: 28px; padding: 24px 24px 18px; z-index: 3; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+.t3-and-dlg h5 { font-size: 22px; font-weight: 400; margin: 0 0 16px; }
+.t3-and-dlg label.cap2 { display: block; font-size: 13px; color: #0B57D0; margin-bottom: 4px; }
+.t3-and-dlg input.t3-clave { width: 100%; font: 17px Roboto, 'Segoe UI', sans-serif; padding: 12px 14px; border: 2px solid #0B57D0; border-radius: 6px; background: #fff; outline: none; color: #1B1B1F; }
+.t3-and-dlg .mostrar { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; font-size: 15px; cursor: pointer; }
+.t3-and-dlg .mostrar input { width: 20px; height: 20px; accent-color: #0B57D0; }
+.t3-and-dlg .bts { display: flex; justify-content: flex-end; gap: 26px; margin-top: 18px; font-size: 15px; font-weight: 600; color: #0B57D0; }
+.t3-and-dlg .bts span { padding: 8px 6px; cursor: pointer; }
+.t3-and-dlg .t3-conectar:not(.t3-activo) { color: rgba(29,27,32,.38); }
+
+/* Maquetas estáticas de ventanas */
+.maqueta-movil .ventana { pointer-events: none; }
+.t3-maqueta { justify-self: center; }
+
+/* Varios */
+/* Preguntas más compactas, para que la explicación quepa en la diapositiva después de corregir:
+   opciones de texto en dos columnas y simulaciones un poco más pequeñas */
+.preg .opciones:not(.rejilla):not(.numeros) { display: grid; grid-template-columns: 1fr 1fr; }
+.preg { gap: 16px; }
+.preg .opcion { padding: 12px 22px; }
+.preg.sim-dos .enun { font-size: 28px; }
+.preg.sim-dos .fb { font-size: 22px; }
+.preg.sim-dos .fb .fb-tit { font-size: 24px; }
+.sim-html .ventana { zoom: .88; }
+.t3-imgs-g .opcion img { max-height: 190px; }
+.repaso-test .preg.con-img > .img-enun { width: 460px; max-height: 470px; max-width: 520px; object-fit: contain; }
+.repaso-test .preg .img-enun { max-height: 220px; }
+.t3-imgs-g .opciones.rejilla { max-width: 1250px; }
+.t3-teclas { white-space: nowrap; }
+.t3-teclas kbd { font-size: .78em; }
+.t3-grande { font-size: 30px; }
+.t3-dir { font: 500 34px/1.5 'JetBrains Mono', monospace; display: flex; flex-direction: column; gap: 10px; }
+.t3-dir span { background: var(--blanco); border-radius: 16px; padding: 10px 26px; box-shadow: var(--sombra); align-self: flex-start; }
+.t3-recursos a { font-weight: 600; }
+.t3-recursos .lista > li { padding-left: 46px; }
+</style>
+</head>
+<body class="area-3">
+
+<!-- Plantilla: Word de Microsoft 365, guardar como PDF (simulación del Comprueba 3.2 y maqueta de la diapositiva «Convertir a PDF») -->
+<template id="t3-word-pdf">
+  <div class="ventana t3-of" style="--t3-app:#185ABD">
+    <!-- 1. Word con la carta -->
+    <div class="pantalla-html" data-id="inicio">
+      <div class="t3-tit"><span class="ap">W</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Carta - Word</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span data-ir="archivo">Archivo</span><span class="on">Inicio</span><span>Insertar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+      <div class="t3-cinta">
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>📋</i>Pegar</span><span class="t3-bp"><span>✂ Cortar</span><span>⧉ Copiar</span><span>🖌 Copiar formato</span></span></div><div class="l">Portapapeles</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bp"><span><span class="t3-caja" style="width:112px">Aptos</span> <span class="t3-caja">12</span></span><span><b>N</b> &nbsp;<i>K</i> &nbsp;<u>S</u> &nbsp;<s>ab</s> &nbsp;x₂ &nbsp;x² &nbsp;<span style="color:#C00000;font-weight:700">A</span></span></span></div><div class="l">Fuente</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bp"><span>☰ &nbsp;⁝ &nbsp;⇤ &nbsp;⇥</span><span>≡ &nbsp;≡ &nbsp;≡ &nbsp;¶</span></span></div><div class="l">Párrafo</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-est">Normal</span><span class="t3-est">Sin espaciado</span><span class="t3-est t1">Título 1</span><span class="t3-est t2">Título 2</span></div><div class="l">Estilos</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bp"><span>🔍 Buscar</span><span>⇄ Reemplazar</span><span>⬚ Seleccionar</span></span></div><div class="l">Edición</div></div>
+      </div>
+      <div class="t3-area"><div class="t3-hoja-w">
+        <p>Lucía Prueba<br>Calle Ejemplo, 1</p>
+        <p style="text-align:right">24 de octubre de 2026</p>
+        <p>Estimada directora:</p>
+        <p>Le escribo para pedir permiso para ir de excursión a Valladolid con los grupos de 1.º de SMR. La excursión sería el viernes 14 de mayo. Salimos a las 8:30 y llegamos a las 10:00. A las 10:30 visitamos el Museo de la Ciencia y a las 14:00 comemos en Campo Grande.</p>
+        <p>Adjunto la lista de alumnos y las autorizaciones firmadas.</p>
+        <p>Un saludo,<br>Lucía Prueba</p>
+      </div></div>
+      <div class="t3-estado"><span>Página 1 de 1</span><span>77 palabras</span><span>Español (España)</span><span class="d">100 %</span></div>
+    </div>
+    <!-- 2. Menú Archivo (Backstage) -->
+    <div class="pantalla-html" data-id="archivo">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs">
+        <div class="t3-bs-menu"><span class="atras">←</span><span class="on">Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span data-ir="guardarcomo">Guardar como</span><span>Imprimir</span><span>Compartir</span><span data-ir="exportar">Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div>
+        <div class="t3-bs-panel">
+          <h3>Buenas tardes</h3>
+          <h5>Nuevo</h5>
+          <div class="t3-nuevos"><div><b></b>Documento en blanco</div><div><b style="background:linear-gradient(#fff 70%,#DCE6F2 70%)"></b>Carta formal</div><div><b style="background:linear-gradient(#185ABD 18%,#fff 18%)"></b>Currículum</div></div>
+          <h5>Recientes</h5>
+          <div class="t3-recientes"><div><span>📄</span><span>Carta</span><span>Hace unos minutos</span></div><div><span>📄</span><span>Apuntes de Ofimática</span><span>Ayer</span></div><div><span>📄</span><span>Currículum</span><span>Lunes</span></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- 3A. Exportar -->
+    <div class="pantalla-html" data-id="exportar">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs">
+        <div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span>Guardar como</span><span>Imprimir</span><span>Compartir</span><span class="on">Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div>
+        <div class="t3-bs-panel">
+          <h3>Exportar</h3>
+          <div class="t3-exp">
+            <div><div class="op on"><i>📄</i>Crear documento PDF/XPS</div><div class="op"><i>🗎</i>Cambiar el tipo de archivo</div></div>
+            <div><h4>Crear un documento PDF/XPS</h4>
+              <ul><li>Conserva el diseño, el formato, las fuentes y las imágenes</li><li>El contenido no puede cambiarse fácilmente</li><li>Hay visores gratuitos disponibles en la web</li></ul>
+              <div class="t3-bgr" data-ir="publicar"><i>📄</i>Crear<br>PDF/XPS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 4A. Publicar como PDF o XPS -->
+    <div class="pantalla-html" data-id="publicar">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs">
+        <div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span>Guardar como</span><span>Imprimir</span><span>Compartir</span><span class="on">Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div>
+        <div class="t3-bs-panel"><h3>Exportar</h3></div>
+      </div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Publicar como PDF o XPS</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Documentos</span><span class="bus">Buscar en Documentos</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span class="on">📄 Documentos</span><span>🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-lista"><div class="fila enc"><span>Nombre</span><span>Fecha</span><span>Tipo</span></div><div class="fila"><span>📕 Horario 1.º SMR.pdf</span><span>15/10/2026</span><span>Documento PDF</span></div><div class="fila"><span>📕 Normas del aula.pdf</span><span>20/09/2026</span><span>Documento PDF</span></div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">Carta</span>
+          <label>Tipo:</label><span class="campo desp">PDF (*.pdf)</span>
+          <span class="opc"><span>☐ Abrir archivo tras publicación</span><span>Optimizar para: ◉ Estándar ○ Tamaño mínimo</span></span>
+          <div class="t3-dlg-bts"><span class="b izq">Opciones...</span><span class="b">Herramientas ⌄</span><span class="b p" data-ir="final">Publicar</span><span class="b">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 3B. Guardar como -->
+    <div class="pantalla-html" data-id="guardarcomo">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs">
+        <div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span class="on">Guardar como</span><span>Imprimir</span><span>Compartir</span><span>Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div>
+        <div class="t3-bs-panel">
+          <h3>Guardar como</h3>
+          <div class="t3-gc">
+            <div class="lug"><span><i>🕘</i>Recientes</span><span><i>☁️</i>OneDrive</span><span class="on"><i>💻</i>Este PC</span><span><i>➕</i>Agregar un sitio</span><span data-ir="dialogo"><i>📂</i>Examinar</span></div>
+            <div class="der"><p class="carp">📁 Documentos</p><div class="t3-recientes"><div><span>📁</span><span>Ofimática</span><span>12/10/2026</span></div><div><span>📁</span><span>Trabajos</span><span>05/10/2026</span></div><div><span>📄</span><span>Carta.docx</span><span>Hoy</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 4B. Diálogo Guardar como (tipo .docx) -->
+    <div class="pantalla-html" data-id="dialogo">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs"><div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span class="on">Guardar como</span><span>Imprimir</span><span>Compartir</span><span>Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div><div class="t3-bs-panel"><h3>Guardar como</h3></div></div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Guardar como</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Documentos</span><span class="bus">Buscar en Documentos</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span class="on">📄 Documentos</span><span>🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-lista"><div class="fila enc"><span>Nombre</span><span>Fecha</span><span>Tipo</span></div><div class="fila"><span>📁 Ofimática</span><span>12/10/2026</span><span>Carpeta de archivos</span></div><div class="fila"><span>📁 Trabajos</span><span>05/10/2026</span><span>Carpeta de archivos</span></div><div class="fila"><span>📘 Carta.docx</span><span>24/10/2026</span><span>Documento de Word</span></div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">Carta</span>
+          <label>Tipo:</label><span class="campo desp" data-ir="tipos">Documento de Word (*.docx)</span>
+          <label>Autores:</label><span style="color:#666">Lucía Prueba</span>
+          <div class="t3-dlg-bts"><span class="b izq">☐ Guardar miniatura</span><span class="b">Herramientas ⌄</span><span class="b p">Guardar</span><span class="b">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 5B. Lista de tipos -->
+    <div class="pantalla-html" data-id="tipos">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs"><div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span class="on">Guardar como</span><span>Imprimir</span><span>Compartir</span><span>Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div><div class="t3-bs-panel"><h3>Guardar como</h3></div></div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Guardar como</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Documentos</span><span class="bus">Buscar en Documentos</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span class="on">📄 Documentos</span><span>🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-lista"><div class="fila enc"><span>Nombre</span><span>Fecha</span><span>Tipo</span></div><div class="fila"><span>📁 Ofimática</span><span>12/10/2026</span><span>Carpeta de archivos</span></div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">Carta</span>
+          <label>Tipo:</label><span class="campo desp">Documento de Word (*.docx)</span>
+          <label>Autores:</label><span style="color:#666">Lucía Prueba</span>
+          <div class="t3-dlg-bts"><span class="b izq">☐ Guardar miniatura</span><span class="b">Herramientas ⌄</span><span class="b p">Guardar</span><span class="b">Cancelar</span></div>
+        </div>
+        <div class="t3-tipos">
+          <div class="on">Documento de Word (*.docx)</div><div>Documento habilitado con macros de Word (*.docm)</div><div>Documento de Word 97-2003 (*.doc)</div><div>Plantilla de Word (*.dotx)</div><div data-ir="dialogo-pdf">PDF (*.pdf)</div><div>Documento XPS (*.xps)</div><div>Página web (*.htm; *.html)</div><div>Texto con formato RTF (*.rtf)</div><div>Texto sin formato (*.txt)</div><div>Documento de texto de OpenDocument (*.odt)</div>
+        </div>
+      </div>
+    </div>
+    <!-- 6B. Diálogo Guardar como (tipo PDF) -->
+    <div class="pantalla-html" data-id="dialogo-pdf">
+      <div class="t3-tit"><span class="ap">W</span><span class="nom">Carta - Word</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-bs"><div class="t3-bs-menu"><span class="atras">←</span><span>Inicio</span><span>Nuevo</span><span>Abrir</span><hr><span>Información</span><span>Guardar</span><span class="on">Guardar como</span><span>Imprimir</span><span>Compartir</span><span>Exportar</span><span>Cerrar</span><span class="abajo">Cuenta</span><span>Opciones</span></div><div class="t3-bs-panel"><h3>Guardar como</h3></div></div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Guardar como</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Documentos</span><span class="bus">Buscar en Documentos</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span class="on">📄 Documentos</span><span>🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-lista"><div class="fila enc"><span>Nombre</span><span>Fecha</span><span>Tipo</span></div><div class="fila"><span>📕 Horario 1.º SMR.pdf</span><span>15/10/2026</span><span>Documento PDF</span></div><div class="fila"><span>📕 Normas del aula.pdf</span><span>20/09/2026</span><span>Documento PDF</span></div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">Carta</span>
+          <label>Tipo:</label><span class="campo desp">PDF (*.pdf)</span>
+          <span class="opc"><span>Optimizar para: ◉ Estándar ○ Tamaño mínimo</span><span>☐ Abrir archivo tras publicación</span></span>
+          <div class="t3-dlg-bts"><span class="b izq">Opciones...</span><span class="b">Herramientas ⌄</span><span class="b p" data-ir="final">Guardar</span><span class="b">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin -->
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="t3-tit"><span class="ap">W</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Carta - Word</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span class="on">Inicio</span><span>Insertar</span><span>Diseño</span><span>Disposición</span><span>Referencias</span><span>Correspondencia</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+      <div class="t3-cinta"></div>
+      <div class="t3-area"><div class="t3-hoja-w"><p>Lucía Prueba<br>Calle Ejemplo, 1</p><p style="text-align:right">24 de octubre de 2026</p><p>Estimada directora:</p></div></div>
+      <div class="t3-toast">✔ Se ha guardado <b>Carta.pdf</b> en Documentos.</div>
+      <div class="t3-estado"><span>Página 1 de 1</span><span>77 palabras</span><span>Español (España)</span><span class="d">100 %</span></div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: PowerPoint de Microsoft 365, insertar una imagen (simulación de práctica de la 3.1) -->
+<template id="t3-ppt-imagen">
+  <div class="ventana t3-of" style="--t3-app:#C43E1C">
+    <!-- 1. Pestaña Inicio -->
+    <div class="pantalla-html" data-id="inicio">
+      <div class="t3-tit"><span class="ap">P</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span class="on">Inicio</span><span data-ir="insertar">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span><span>Presentación con diapositivas</span><span>Grabar</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+      <div class="t3-cinta">
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>📋</i>Pegar</span><span class="t3-bp"><span>✂ Cortar</span><span>⧉ Copiar</span><span>🖌 Copiar formato</span></span></div><div class="l">Portapapeles</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🗔</i>Nueva<br>diapositiva</span><span class="t3-bp"><span>▦ Diseño</span><span>↺ Restablecer</span><span>§ Sección</span></span></div><div class="l">Diapositivas</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bp"><span><span class="t3-caja" style="width:100px">Aptos</span> <span class="t3-caja">18</span></span><span><b>N</b> &nbsp;<i>K</i> &nbsp;<u>S</u> &nbsp;<s>ab</s> &nbsp;<span style="color:#C00000;font-weight:700">A</span></span></span></div><div class="l">Fuente</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bp"><span>☰ &nbsp;⁝ &nbsp;⇤ &nbsp;⇥</span><span>≡ &nbsp;≡ &nbsp;≡</span></span></div><div class="l">Párrafo</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>⬠</i>Formas</span><span class="t3-bt"><i>▤</i>Organizar</span><span class="t3-bt"><i>◩</i>Estilos<br>rápidos</span></div><div class="l">Dibujo</div></div>
+      </div>
+      <div class="t3-ppt">
+        <div class="t3-mini"><div class="m"><span>1</span><b>Animales de Castilla y León</b></div><div class="m on"><span>2</span><b>El ciervo</b></div><div class="m"><span>3</span><b>El lobo</b></div></div>
+        <div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4><div class="ph">Haz clic para agregar texto</div></div></div>
+      </div>
+      <div class="t3-estado"><span>Diapositiva 2 de 3</span><span>Español (España)</span><span class="d">70 %</span></div>
+    </div>
+    <!-- 2. Pestaña Insertar -->
+    <div class="pantalla-html" data-id="insertar">
+      <div class="t3-tit"><span class="ap">P</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span><span>Presentación con diapositivas</span><span>Grabar</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+      <div class="t3-cinta">
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🗔</i>Nueva<br>diapositiva</span></div><div class="l">Diapositivas</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>▦</i>Tabla</span></div><div class="l">Tablas</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt" data-ir="menu"><i>🖼️</i>Imágenes ⌄</span><span class="t3-bt"><i>📷</i>Captura</span><span class="t3-bt"><i>🗂️</i>Álbum de<br>fotografías</span></div><div class="l">Imágenes</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>⬠</i>Formas</span><span class="t3-bt"><i>☺</i>Iconos</span><span class="t3-bt"><i>🧊</i>Modelos<br>3D</span><span class="t3-bt"><i>⧉</i>SmartArt</span><span class="t3-bt"><i>📊</i>Gráfico</span></div><div class="l">Ilustraciones</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🔗</i>Vínculo</span></div><div class="l">Vínculos</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🗨</i>Comentario</span></div><div class="l">Comentarios</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>A</i>Cuadro<br>de texto</span></div><div class="l">Texto</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🎬</i>Vídeo</span><span class="t3-bt"><i>🔊</i>Audio</span></div><div class="l">Multimedia</div></div>
+      </div>
+      <div class="t3-ppt">
+        <div class="t3-mini"><div class="m"><span>1</span><b>Animales de Castilla y León</b></div><div class="m on"><span>2</span><b>El ciervo</b></div><div class="m"><span>3</span><b>El lobo</b></div></div>
+        <div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4><div class="ph">Haz clic para agregar texto</div></div></div>
+      </div>
+      <div class="t3-estado"><span>Diapositiva 2 de 3</span><span>Español (España)</span><span class="d">70 %</span></div>
+    </div>
+    <!-- 3. Menú Imágenes -->
+    <div class="pantalla-html" data-id="menu">
+      <div class="t3-tit"><span class="ap">P</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span><span>Presentación con diapositivas</span><span>Grabar</span><span>Revisar</span><span>Vista</span><span>Ayuda</span></div>
+      <div class="t3-cinta">
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🗔</i>Nueva<br>diapositiva</span></div><div class="l">Diapositivas</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>▦</i>Tabla</span></div><div class="l">Tablas</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt" style="background:#E3E3E3"><i>🖼️</i>Imágenes ⌄</span><span class="t3-bt"><i>📷</i>Captura</span><span class="t3-bt"><i>🗂️</i>Álbum de<br>fotografías</span></div><div class="l">Imágenes</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>⬠</i>Formas</span><span class="t3-bt"><i>☺</i>Iconos</span><span class="t3-bt"><i>🧊</i>Modelos<br>3D</span><span class="t3-bt"><i>⧉</i>SmartArt</span><span class="t3-bt"><i>📊</i>Gráfico</span></div><div class="l">Ilustraciones</div></div>
+        <div class="t3-gr"><div class="c"><span class="t3-bt"><i>🔗</i>Vínculo</span></div><div class="l">Vínculos</div></div>
+      </div>
+      <div class="t3-ppt">
+        <div class="t3-mini"><div class="m"><span>1</span><b>Animales de Castilla y León</b></div><div class="m on"><span>2</span><b>El ciervo</b></div><div class="m"><span>3</span><b>El lobo</b></div></div>
+        <div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4><div class="ph">Haz clic para agregar texto</div></div></div>
+      </div>
+      <div class="t3-menu" style="left:168px;top:150px"><div class="h">Insertar imagen desde</div><div data-ir="dialogo">💻 Este dispositivo...</div><div>🗃️ Imágenes de archivo...</div><div>🌐 Imágenes en línea...</div></div>
+      <div class="t3-estado"><span>Diapositiva 2 de 3</span><span>Español (España)</span><span class="d">70 %</span></div>
+    </div>
+    <!-- 4. Diálogo Insertar imagen -->
+    <div class="pantalla-html" data-id="dialogo">
+      <div class="t3-tit"><span class="ap">P</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span></div>
+      <div class="t3-cinta"></div>
+      <div class="t3-ppt"><div class="t3-mini"></div><div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4></div></div></div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Insertar imagen</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Imágenes</span><span class="bus">Buscar en Imágenes</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span>📄 Documentos</span><span class="on">🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-mini"><div class="f"><img src="img/sim/aguila.webp" alt="">aguila.png</div><div class="f" data-ir="seleccion"><img src="img/sim/ciervo.webp" alt="">ciervo.jpg</div><div class="f"><img src="img/sim/lobo.webp" alt="">lobo.jpg</div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">&nbsp;</span>
+          <label></label><span class="campo desp" style="justify-self:end;width:220px">Todas las imágenes</span>
+          <div class="t3-dlg-bts"><span class="b">Herramientas ⌄</span><span class="b p" style="opacity:.55">Insertar ⌄</span><span class="b">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 5. ciervo.jpg seleccionado -->
+    <div class="pantalla-html" data-id="seleccion">
+      <div class="t3-tit"><span class="ap">P</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span>Inicio</span><span class="on">Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span></div>
+      <div class="t3-cinta"></div>
+      <div class="t3-ppt"><div class="t3-mini"></div><div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4></div></div></div>
+      <div class="t3-dlg">
+        <div class="t3-dlg-tit"><span>Insertar imagen</span><span>✕</span></div>
+        <div class="t3-dlg-dir"><span>←</span><span>→</span><span>↑</span><span class="camino">Este equipo › Imágenes</span><span class="bus">Buscar en Imágenes</span></div>
+        <div class="t3-dlg-cuerpo">
+          <div class="t3-dlg-nav"><span>🏠 Inicio</span><span>🖥️ Escritorio</span><span>⬇️ Descargas</span><span>📄 Documentos</span><span class="on">🖼️ Imágenes</span><span>🎵 Música</span><span>🎬 Vídeos</span><span>💻 Este equipo</span></div>
+          <div class="t3-dlg-mini"><div class="f"><img src="img/sim/aguila.webp" alt="">aguila.png</div><div class="f sel" data-ir="final"><img src="img/sim/ciervo.webp" alt="">ciervo.jpg</div><div class="f"><img src="img/sim/lobo.webp" alt="">lobo.jpg</div></div>
+        </div>
+        <div class="t3-dlg-pie">
+          <label>Nombre de archivo:</label><span class="campo">ciervo.jpg</span>
+          <label></label><span class="campo desp" style="justify-self:end;width:220px">Todas las imágenes</span>
+          <div class="t3-dlg-bts"><span class="b">Herramientas ⌄</span><span class="b p" data-ir="final">Insertar ⌄</span><span class="b">Cancelar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin: la foto en la diapositiva 2 -->
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="t3-tit"><span class="ap">P</span><span>Autoguardado<i class="t3-sw"></i></span><span>💾</span><span>↶ ↷</span><span class="nom">Animales de Castilla y León - PowerPoint</span><span class="bus">🔍 Buscar</span><span class="usu">LP</span><span class="ctl">—▢✕</span></div>
+      <div class="t3-tabs"><span>Archivo</span><span>Inicio</span><span>Insertar</span><span>Dibujar</span><span>Diseño</span><span>Transiciones</span><span>Animaciones</span><span>Presentación con diapositivas</span><span>Revisar</span><span>Vista</span><span class="ctx on">Formato de imagen</span></div>
+      <div class="t3-cinta"></div>
+      <div class="t3-ppt">
+        <div class="t3-mini"><div class="m"><span>1</span><b>Animales de Castilla y León</b></div><div class="m on"><span>2</span><b>El ciervo<img src="img/sim/ciervo.webp" alt=""></b></div><div class="m"><span>3</span><b>El lobo</b></div></div>
+        <div class="t3-diapo-zona"><div class="t3-diapo"><h4>El ciervo</h4><img class="t3-foto" src="img/sim/ciervo.webp" alt="Foto de un ciervo en la diapositiva"></div></div>
+      </div>
+      <div class="t3-estado"><span>Diapositiva 2 de 3</span><span>Español (España)</span><span class="d">70 %</span></div>
+    </div>
+  </div>
+</template>
+
+<!-- Plantilla: Android, conectar el móvil a una red wifi (simulación del Comprueba 3.4 y maqueta de Ajustes) -->
+<template id="t3-wifi">
+  <div class="movil">
+    <!-- 1. Pantalla de inicio -->
+    <div class="pantalla-html" data-id="inicio">
+      <div class="t3-and t3-and-fondo">
+        <div class="barra"><span>10:24</span><span>▾ ▴ ▮</span></div>
+        <div class="reloj">10:24</div>
+        <div class="fecha">sábado, 24 de octubre</div>
+        <div class="apps">
+          <span class="app"><i>📞</i>Teléfono</span><span class="app"><i>💬</i>Mensajes</span><span class="app"><i>🌐</i>Chrome</span><span class="app"><i>📷</i>Cámara</span>
+          <span class="app"><i>🖼️</i>Fotos</span><span class="app"><i>▶️</i>Play Store</span><span class="app"><i>✉️</i>Gmail</span><span class="app" data-ir="ajustes"><i>⚙️</i>Ajustes</span>
+        </div>
+        <div class="t3-and-busca"><b style="color:#4285F4">G</b><span>Buscar</span></div>
+      </div>
+    </div>
+    <!-- 2. Ajustes -->
+    <div class="pantalla-html" data-id="ajustes">
+      <div class="t3-and">
+        <div class="barra"><span>10:24</span><span>▾ ▴ ▮</span></div>
+        <div class="t3-and-tit"><h4>Ajustes</h4></div>
+        <div class="bus">🔍 Buscar en Ajustes</div>
+        <div class="it" data-ir="redes"><span class="ic" style="background:#0B57D0">📶</span><span class="t">Redes e Internet<small>Wi-Fi, datos móviles y punto de acceso</small></span></div>
+        <div class="it"><span class="ic" style="background:#146C2E">🔗</span><span class="t">Dispositivos conectados<small>Bluetooth, emparejamiento</small></span></div>
+        <div class="it"><span class="ic" style="background:#8E4585">▦</span><span class="t">Aplicaciones<small>Aplicaciones recientes y predeterminadas</small></span></div>
+        <div class="it"><span class="ic" style="background:#B3261E">🔔</span><span class="t">Notificaciones<small>Historial, conversaciones</small></span></div>
+        <div class="it"><span class="ic" style="background:#146C2E">🔋</span><span class="t">Batería<small>85 %</small></span></div>
+        <div class="it"><span class="ic" style="background:#5B5F97">💾</span><span class="t">Almacenamiento<small>34 % usado</small></span></div>
+        <div class="it"><span class="ic" style="background:#006A6A">🔊</span><span class="t">Sonido y vibración<small>Volumen, vibración, No molestar</small></span></div>
+        <div class="it"><span class="ic" style="background:#7D5260">☀️</span><span class="t">Pantalla<small>Brillo, tema oscuro, tamaño de letra</small></span></div>
+        <div class="it"><span class="ic" style="background:#8C4A00">🎨</span><span class="t">Fondo de pantalla y estilo</span></div>
+        <div class="it"><span class="ic" style="background:#3A5BA0">♿</span><span class="t">Accesibilidad</span></div>
+        <div class="it"><span class="ic" style="background:#146C2E">🔒</span><span class="t">Seguridad y privacidad</span></div>
+        <div class="it"><span class="ic" style="background:#0B57D0">📍</span><span class="t">Ubicación</span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">ⓘ</span><span class="t">Sistema<small>Idiomas, fecha y hora, copia de seguridad</small></span></div>
+      </div>
+    </div>
+    <!-- 3. Redes e Internet -->
+    <div class="pantalla-html" data-id="redes">
+      <div class="t3-and">
+        <div class="barra"><span>10:24</span><span>▾ ▴ ▮</span></div>
+        <div class="atras">←</div>
+        <div class="t3-and-tit"><h4>Redes e Internet</h4></div>
+        <div class="it" data-ir="internet"><span class="ic" style="background:#0B57D0">📶</span><span class="t">Internet<small>Desactivado</small></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">▣</span><span class="t">SIMs<small>Movistar</small></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">✈️</span><span class="t">Modo avión</span><span class="t3-and-sw"></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">📡</span><span class="t">Punto de acceso y compartir conexión<small>Desactivado</small></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">◔</span><span class="t">Ahorro de datos<small>Desactivado</small></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">🔑</span><span class="t">VPN<small>Ninguna</small></span></div>
+        <div class="it"><span class="ic" style="background:#5F6368">🌐</span><span class="t">DNS privado<small>Automático</small></span></div>
+      </div>
+    </div>
+    <!-- 4. Internet con el Wi-Fi desactivado -->
+    <div class="pantalla-html" data-id="internet">
+      <div class="t3-and">
+        <div class="barra"><span>10:24</span><span>▾ ▴ ▮</span></div>
+        <div class="atras">←</div>
+        <div class="t3-and-tit"><h4>Internet</h4></div>
+        <div class="grande" data-ir="redes-wifi"><span>Wi-Fi</span><span class="t3-and-sw"></span></div>
+        <p class="tx">Para ver las redes disponibles, activa el Wi-Fi.</p>
+        <div class="sec">Redes móviles</div>
+        <div class="red"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M2 22h20V2z" fill="#1B1B1F"/></svg><span class="t">Movistar<small>Datos móviles desactivados</small></span></div>
+      </div>
+    </div>
+    <!-- 5. Lista de redes -->
+    <div class="pantalla-html" data-id="redes-wifi">
+      <div class="t3-and">
+        <div class="barra"><span>10:25</span><span>▾ ▴ ▮</span></div>
+        <div class="atras">←</div>
+        <div class="t3-and-tit"><h4>Internet</h4></div>
+        <div class="grande"><span>Wi-Fi</span><span class="t3-and-sw on"></span></div>
+        <div class="red" data-ir="clave"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#1B1B1F"/></svg><span class="t">IES-Alumnos<small>Protegida</small></span><span>🔒</span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#1B1B1F"/></svg><span class="t">IES-Profesores<small>Protegida</small></span><span>🔒</span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#79747E"/></svg><span class="t">MOVISTAR_4F2A<small>Protegida</small></span><span>🔒</span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#79747E"/></svg><span class="t">Biblioteca-Libre<small>Abierta</small></span></div>
+        <div class="red"><span style="width:26px;text-align:center;font-size:22px">＋</span><span class="t">Añadir red</span></div>
+      </div>
+    </div>
+    <!-- 6. Contraseña -->
+    <div class="pantalla-html" data-id="clave">
+      <div class="t3-and">
+        <div class="barra"><span>10:25</span><span>▾ ▴ ▮</span></div>
+        <div class="atras">←</div>
+        <div class="t3-and-tit"><h4>Internet</h4></div>
+        <div class="grande"><span>Wi-Fi</span><span class="t3-and-sw on"></span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#1B1B1F"/></svg><span class="t">IES-Alumnos</span><span>🔒</span></div>
+        <div class="velo"></div>
+        <div class="t3-and-dlg">
+          <h5>IES-Alumnos</h5>
+          <label class="cap2 t3-libre">Contraseña</label>
+          <input class="t3-clave t3-libre" type="password" autocomplete="off" spellcheck="false" aria-label="Contraseña de la red wifi" data-valor="Castilla2027">
+          <label class="mostrar t3-libre"><input type="checkbox" class="t3-mostrar"> Mostrar contraseña</label>
+          <div class="bts"><span>Cancelar</span><span class="t3-conectar" data-destino="final">Conectar</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin: conectado -->
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="t3-and">
+        <div class="barra"><span>10:26</span><span>📶 ▾ ▴ ▮</span></div>
+        <div class="atras">←</div>
+        <div class="t3-and-tit"><h4>Internet</h4></div>
+        <div class="grande"><span>Wi-Fi</span><span class="t3-and-sw on"></span></div>
+        <div class="red ok"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#0B57D0"/></svg><span class="t">IES-Alumnos<small>Conectado</small></span><span>⚙️</span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#1B1B1F"/></svg><span class="t">IES-Profesores<small>Protegida</small></span><span>🔒</span></div>
+        <div class="red"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 21 1 8.5C4 5.9 7.8 4.5 12 4.5s8 1.4 11 4z" fill="#79747E"/></svg><span class="t">MOVISTAR_4F2A<small>Protegida</small></span><span>🔒</span></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada e índice ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 3</p>
+  <h1>Creación de contenidos</h1>
+  <p class="sub">Documentos, PDF, licencias y cómo funciona tu equipo.</p>
+  <div class="datos"><span class="pill">Área 3</span><span class="pill clara">4 competencias</span><span class="pill clara">2,5 horas</span><span class="pill clara">12 preguntas en el examen</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 3</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp">
+      <a href="#c31"><img class="ico" src="../assets/img/area-creacion.webp" alt=""><div><span class="n">3.1</span><h3>Desarrollo de contenidos digitales</h3><span class="estado-comp" data-comp="3.1"></span></div></a>
+      <a href="#c32"><img class="ico" src="img/ia/integracion.webp" alt=""><div><span class="n">3.2</span><h3>Integración y reelaboración de contenidos digitales</h3><span class="estado-comp" data-comp="3.2"></span></div></a>
+      <a href="#c33"><img class="ico" src="img/ia/derechos.webp" alt=""><div><span class="n">3.3</span><h3>Derechos de autor y licencias</h3><span class="estado-comp" data-comp="3.3"></span></div></a>
+      <a href="#c34"><img class="ico" src="img/ia/programacion.webp" alt=""><div><span class="n">3.4</span><h3>Pensamiento computacional y programación</h3><span class="estado-comp" data-comp="3.4"></span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Esta área tiene 12 preguntas: 3 por cada competencia. Cada competencia termina con un <b>Comprueba</b> de 3 preguntas como las del examen. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué vas a saber hacer">
+  <div class="cab"><p class="etq">Tema 3</p><h2>Qué vas a saber hacer</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ul class="lista">
+        <li>Crear y cambiar documentos, hojas de cálculo y presentaciones con Microsoft 365 o LibreOffice.</li>
+        <li>Hacer capturas de pantalla en el ordenador y en el móvil.</li>
+        <li>Convertir un archivo a PDF.</li>
+        <li>Saber qué contenidos de Internet puedes reutilizar y con qué licencia.</li>
+        <li>Explicar qué es un dominio y cómo funciona Internet.</li>
+        <li>Configurar el wifi y otros ajustes del móvil y del ordenador.</li>
+      </ul>
+      <div class="tarjeta" style="align-items:center;text-align:center"><p class="cifra">2,5 h</p><p>Tiempo para estudiar el tema y hacer todos los ejercicios.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 3.1 Desarrollo de contenidos digitales ======================= -->
+
+<section class="competencia" data-label="3.1 Desarrollo de contenidos digitales" data-seccion="3.1" data-deck-id="c31" data-deck-section="3.1">
+  <div class="izq">
+    <p class="n">3.1</p>
+    <h2>Desarrollo de contenidos digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo sale un reto: sumar una columna de una hoja de cálculo.</p>
+    <img class="ico" src="../assets/img/area-creacion.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Reconocer los formatos de archivo más usados: .docx, .xlsx, .pptx, .pdf, .jpg y .mp4.</li>
+      <li>Elegir un programa de escritorio o en la nube.</li>
+      <li>Crear documentos, hojas de cálculo y presentaciones.</li>
+      <li>Usar formatos, tablas, hipervínculos, fórmulas, gráficos e imágenes.</li>
+      <li>Hacer fotos y vídeos con el móvil.</li>
+      <li>Hacer capturas de pantalla en el ordenador y en el móvil.</li>
+    </ol>
+    <span class="estado-comp" data-comp="3.1"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Formatos de archivo: documentos" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Formatos de archivo: documentos</h2><p class="entrada">El <b>formato</b> de un archivo es la forma en que guarda los datos. Lo indica la <b>extensión</b>: las letras que van después del punto. Por ejemplo, en carta.docx la extensión es .docx.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Texto</h3><ul class="t3-exts"><li><span class="t3-ext e-w">.docx</span>Word. Antes, .doc.</li><li><span class="t3-ext e-lo">.odt</span>Writer de LibreOffice.</li><li><span class="t3-ext e-pdf">.pdf</span>Para leer e imprimir.</li><li><span class="t3-ext e-txt">.txt</span>Texto sin formato.</li></ul></div>
+      <div class="tarjeta"><h3>Hoja de cálculo</h3><ul class="t3-exts"><li><span class="t3-ext e-x">.xlsx</span>Excel. Antes, .xls.</li><li><span class="t3-ext e-lo">.ods</span>Calc de LibreOffice.</li><li><span class="t3-ext e-txt">.csv</span>Datos separados por comas o por punto y coma.</li></ul></div>
+      <div class="tarjeta"><h3>Presentación</h3><ul class="t3-exts"><li><span class="t3-ext e-p">.pptx</span>PowerPoint. Antes, .ppt.</li><li><span class="t3-ext e-lo">.odp</span>Impress de LibreOffice.</li></ul></div>
+    </div>
+    <div class="caja"><span class="tt">OpenDocument</span>.odt, .ods y .odp son el formato <b>OpenDocument</b>. Es un estándar abierto: cualquier programa puede usarlo. Word, Excel y PowerPoint también abren estos archivos.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Formatos de archivo: imagen, sonido y vídeo" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Formatos de archivo: imagen, sonido y vídeo</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Imagen</h3><ul class="t3-exts"><li><span class="t3-ext e-img">.jpg</span>Fotos. También se escribe .jpeg.</li><li><span class="t3-ext e-img">.png</span>Capturas de pantalla. Admite fondo transparente.</li><li><span class="t3-ext e-img">.gif</span>Animaciones cortas.</li><li><span class="t3-ext e-img">.svg</span>Imagen vectorial: se amplía sin perder calidad.</li><li><span class="t3-ext e-img">.webp</span>Imágenes para la web.</li></ul></div>
+      <div class="tarjetas" style="--n:1;gap:22px">
+        <div class="tarjeta"><h3>Audio</h3><ul class="t3-exts fila"><li><span class="t3-ext e-aud">.mp3</span></li><li><span class="t3-ext e-aud">.wav</span></li><li><span class="t3-ext e-aud">.ogg</span></li><li><span class="t3-ext e-aud">.m4a</span></li></ul></div>
+        <div class="tarjeta"><h3>Vídeo</h3><ul class="t3-exts fila"><li><span class="t3-ext e-vid">.mp4</span></li><li><span class="t3-ext e-vid">.mov</span></li><li><span class="t3-ext e-vid">.avi</span></li><li><span class="t3-ext e-vid">.mkv</span></li></ul></div>
+        <div class="tarjeta"><h3>Comprimido</h3><ul class="t3-exts fila"><li><span class="t3-ext e-zip">.zip</span></li><li><span class="t3-ext e-zip">.rar</span></li><li><span class="t3-ext e-zip">.7z</span></li></ul></div>
+      </div>
+    </div>
+    <div class="ruta-bloque"><span class="donde">Para ver las extensiones en Windows 11</span><div class="ruta"><span>Explorador de archivos</span><i>›</i><span>Ver</span><i>›</i><span>Mostrar</span><i>›</i><span class="disp">Extensiones de nombre de archivo</span></div></div>
+  </div>
+</section>
+
+<section class="s" data-label="Programas de escritorio y en la nube" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Programas de escritorio y en la nube</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta con-ico"><img src="img/ia/escritorio.webp" alt=""><h3>De escritorio</h3><ul class="lista peq"><li>Se instala en el ordenador.</li><li>Funciona sin Internet.</li><li>Los archivos se guardan en el disco.</li></ul><p><b>Ejemplos:</b> Microsoft 365 u Office 2024, de pago (Word, Excel y PowerPoint). LibreOffice, libre y gratuito (Writer, Calc e Impress).</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/nube.webp" alt=""><h3>En la nube</h3><ul class="lista peq"><li>Se usa desde el navegador, con una cuenta. No se instala.</li><li>Necesita Internet. Se actualiza solo.</li><li>Los archivos se guardan en la nube.</li><li>Varias personas pueden editar a la vez.</li></ul><p><b>Ejemplos:</b> Documentos, Hojas de cálculo y Presentaciones de Google. Word, Excel y PowerPoint para la web.</p></div>
+    </div>
+    <div class="caja"><span class="tt">En el aula</span>Tienes Microsoft 365 de escritorio. También tiene versión para la web y app para el móvil.</div>
+  </div>
+</section>
+
+<section class="s" data-label="El mismo trabajo con tres programas" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>El mismo trabajo con tres programas</h2></div>
+  <div class="cuerpo">
+    <table class="tabla">
+      <tr><th>Tipo</th><th>Microsoft 365</th><th>LibreOffice</th><th>Google (en la nube)</th></tr>
+      <tr><td>Texto</td><td>Word (.docx)</td><td>Writer (.odt)</td><td>Documentos de Google</td></tr>
+      <tr><td>Hoja de cálculo</td><td>Excel (.xlsx)</td><td>Calc (.ods)</td><td>Hojas de cálculo de Google</td></tr>
+      <tr><td>Presentación</td><td>PowerPoint (.pptx)</td><td>Impress (.odp)</td><td>Presentaciones de Google</td></tr>
+    </table>
+    <ul class="lista peq">
+      <li>Todos abren y guardan los formatos de los otros.</li>
+      <li>LibreOffice es libre y gratuito. Se descarga en es.libreoffice.org.</li>
+      <li>Office Online hoy se llama <b>Word, Excel y PowerPoint para la web</b>. Es gratis con una cuenta Microsoft.</li>
+    </ul>
+    <div class="caja examen"><span class="tt">En la demo</span>Hay una pregunta para emparejar cada programa de pago con su alternativa libre. Por ejemplo: Word con Writer, Excel con Calc y PowerPoint con Impress.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde está cada cosa (1)" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos · repaso</p><h2>Dónde está cada cosa (1)</h2><p class="entrada">Consulta esta tabla cuando hagas los retos.</p></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tarea</th><th>Microsoft 365</th><th>LibreOffice</th><th>Google</th></tr>
+      <tr><td>Documento nuevo</td><td>Archivo › Nuevo › Documento en blanco</td><td>Archivo › Nuevo › Documento de texto</td><td>Drive › Nuevo › Documentos de Google</td></tr>
+      <tr><td>Formato de letra: negrita, cursiva, tamaño, color</td><td>Inicio › grupo Fuente</td><td>Barra de formato o Formato › Carácter</td><td>Barra de herramientas</td></tr>
+      <tr><td>Tabla</td><td>Insertar › Tabla</td><td>Tabla › Insertar tabla (Ctrl+F12)</td><td>Insertar › Tabla</td></tr>
+      <tr><td>Hipervínculo</td><td>Insertar › Vínculo (Ctrl+Alt+K), o clic derecho › Vínculo</td><td>Insertar › Hiperenlace (Ctrl+K)</td><td>Insertar › Enlace (Ctrl+K)</td></tr>
+    </table>
+    <div class="caja"><span class="tt">Hipervínculo</span>Un <b>hipervínculo</b> (o vínculo) es un texto o una imagen que lleva a una web o a otro archivo al pulsarlo. LibreOffice lo llama <b>hiperenlace</b>.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde está cada cosa (2)" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos · repaso</p><h2>Dónde está cada cosa (2)</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tarea</th><th>Microsoft 365</th><th>LibreOffice</th><th>Google</th></tr>
+      <tr><td>Imagen</td><td>Insertar › Imágenes › Este dispositivo</td><td>Insertar › Imagen</td><td>Insertar › Imagen › Subir desde el ordenador</td></tr>
+      <tr><td>Gráfico</td><td>Insertar › Gráficos recomendados</td><td>Insertar › Gráfico</td><td>Insertar › Gráfico</td></tr>
+      <tr><td>Nueva diapositiva</td><td>Inicio › Nueva diapositiva</td><td>Diapositiva › Nueva diapositiva</td><td>Diapositiva › Nueva diapositiva</td></tr>
+    </table>
+    <div class="cols c-2-1 centro">
+      <div class="caja"><span class="tt">Libro en blanco</span>En Excel, un archivo se llama <b>libro</b>. Un <b>libro en blanco</b> es una hoja de cálculo nueva y vacía, sin datos ni formato.</div>
+      <figure class="foto" style="height:250px"><img src="img/cyl/libro-en-blanco.png" alt="Miniatura de Libro en blanco en Excel"><figcaption class="credito">Opción «Libro en blanco» de Excel. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Hoja de cálculo: fórmulas y funciones" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos · repaso</p><h2>Hoja de cálculo: fórmulas y funciones</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Fórmula</span><p>Una fórmula es una operación que calcula un resultado. Siempre empieza por el signo <b>=</b>.</p><p class="peq">Operadores: <code>+</code> suma, <code>-</code> resta, <code>*</code> multiplica, <code>/</code> divide. Ejemplo: <code>=B2*C2</code></p></div>
+        <table class="tabla peq">
+          <tr><th>Función</th><th>Qué calcula</th></tr>
+          <tr><td><code>=SUMA(B2:B19)</code></td><td>La suma de las celdas de B2 a B19.</td></tr>
+          <tr><td><code>=PROMEDIO(B2:B13)</code></td><td>La media.</td></tr>
+          <tr><td><code>=CONTAR(B2:B13)</code></td><td>Cuántos números hay.</td></tr>
+          <tr><td><code>=MAX(B2:B13)</code> <code>=MIN(B2:B13)</code></td><td>El número mayor y el menor. En Calc: MÁX y MÍN.</td></tr>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="t3-autosuma"><div class="bt"><b>Σ</b>Autosuma ⌄</div><ul><li class="on">Suma</li><li>Promedio</li><li>Contar números</li><li>Máx.</li><li>Mín.</li></ul></div>
+        <p class="peq">En Excel: <b>Inicio › Autosuma</b>. La flecha da las otras funciones. En Calc, el botón <b>Σ</b> está junto a la barra de fórmulas.</p>
+        <p class="peq"><b>B2:B19</b> es un <b>rango</b>: las celdas de B2 a B19. Para separar datos se usa punto y coma: <code>=SUMA(B2;D2)</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Errores típicos y gráficos" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos · repaso</p><h2>Errores típicos y gráficos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Errores típicos</h3>
+        <table class="tabla peq" style="box-shadow:none">
+          <tr><th>Ves…</th><th>Significa…</th></tr>
+          <tr><td><code>#####</code> o <code>9,17E+09</code></td><td>La columna es estrecha. Haz doble clic en el borde derecho de la letra de la columna.</td></tr>
+          <tr><td><code>#¡DIV/0!</code></td><td>Divides entre cero.</td></tr>
+          <tr><td><code>#¡REF!</code></td><td>La fórmula usa una celda que no es válida o se ha borrado.</td></tr>
+        </table>
+      </div>
+      <div class="tarjeta"><h3>Gráficos</h3>
+        <ol class="pasos peq"><li>Selecciona los datos con sus títulos.</li><li>Pulsa <b>Insertar › Gráficos recomendados</b>, o elige un tipo en el grupo <b>Gráficos</b>.</li><li>Elige el gráfico y pulsa <b>Aceptar</b>.</li></ol>
+        <ul class="lista peq"><li><b>Circular:</b> las partes de un total.</li><li><b>Columnas:</b> comparar cantidades.</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Reto: un gráfico circular" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Práctica (no cuenta para el Comprueba)</p><h2>Reto: un gráfico circular</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/t3-reto-31-grafico.xlsx",
+       "enunciado": "Descarga la hoja de cálculo. Haz un gráfico circular con A3:B7 y ponle el título «Transporte al instituto». Añade etiquetas con el porcentaje. ¿Qué porcentaje tiene Autobús?",
+       "instrucciones": "Resuélvelo con Excel. Escribe solo el número. En la diapositiva siguiente puedes ver cómo queda el gráfico.",
+       "pista": ["Selecciona **A3:B7** y pulsa **Insertar** › **Gráfico circular** › **Circular**.", "Pulsa en el título del gráfico y escribe «Transporte al instituto».", "Pulsa **+** (Elementos de gráfico) › **Etiquetas de datos** › **Más opciones** y marca **Porcentaje**."],
+       "respuesta": ["30", "30%", "30 %", "30,0%", "30,0 %"],
+       "explicacion": "Autobús tiene 9 de 30 alumnos: 9 / 30 = 0,3, es decir, el **30 %**. Andando es el 40 %, Coche el 20 % y Bicicleta el 10 %."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Solución: así queda el gráfico circular" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Práctica (no cuenta para el Comprueba)</p><h2>Solución: así queda el gráfico</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro">
+      <div class="piensa">
+        <p class="t3-grande">Compara tu gráfico con la solución.</p>
+        <button class="btn revela-btn" type="button">Ver cómo queda</button>
+        <div class="resp" style="padding:16px">
+          <div class="t3-tarta"><svg viewBox="0 0 560 360" role="img" aria-label="Gráfico circular: Andando 40 %, Autobús 30 %, Coche 20 %, Bicicleta 10 %">
+            <text x="280" y="30" text-anchor="middle" font-family="Calibri, Segoe UI, sans-serif" font-size="24" fill="#404040">Transporte al instituto</text>
+            <path d="M170 195 L170 55 A140 140 0 0 1 252.3 308.3 Z" fill="#156082" stroke="#fff" stroke-width="2"/>
+            <path d="M170 195 L252.3 308.3 A140 140 0 0 1 36.8 238.3 Z" fill="#E97132" stroke="#fff" stroke-width="2"/>
+            <path d="M170 195 L36.8 238.3 A140 140 0 0 1 87.7 81.7 Z" fill="#196B24" stroke="#fff" stroke-width="2"/>
+            <path d="M170 195 L87.7 81.7 A140 140 0 0 1 170 55 Z" fill="#0F9ED5" stroke="#fff" stroke-width="2"/>
+            <g font-family="Calibri, Segoe UI, sans-serif" font-size="22" font-weight="700" fill="#fff" text-anchor="middle">
+              <text x="254" y="176">40 %</text><text x="143" y="287">30 %</text><text x="86" y="176">20 %</text><text x="139" y="108">10 %</text>
+            </g>
+            <g font-family="Calibri, Segoe UI, sans-serif" font-size="22" fill="#404040">
+              <rect x="360" y="118" width="18" height="18" fill="#156082"/><text x="388" y="134">Andando</text>
+              <rect x="360" y="158" width="18" height="18" fill="#E97132"/><text x="388" y="174">Autobús</text>
+              <rect x="360" y="198" width="18" height="18" fill="#196B24"/><text x="388" y="214">Coche</text>
+              <rect x="360" y="238" width="18" height="18" fill="#0F9ED5"/><text x="388" y="254">Bicicleta</text>
+            </g>
+          </svg></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <ul class="lista peq">
+          <li>El gráfico tiene el título <b>Transporte al instituto</b>.</li>
+          <li>Cada parte lleva su porcentaje: Andando 40 %, Autobús 30 %, Coche 20 % y Bicicleta 10 %.</li>
+          <li>La leyenda dice qué color es cada medio.</li>
+        </ul>
+        <div class="ruta-bloque"><span class="donde">Lo mismo en LibreOffice Calc</span><div class="ruta" style="font-size:22px"><span>Insertar</span><i>›</i><span>Gráfico</span><i>›</i><span>Circular</span><i>›</i><span class="disp">Finalizar</span></div><p class="peq">Después, con el gráfico en edición: <b>Insertar › Etiquetas de datos › Mostrar valor como porcentaje</b>.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Simulación: una imagen en una presentación" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Práctica (no cuenta para el Comprueba)</p><h2>Simulación: una imagen en una presentación</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "simulacion", "html": "#t3-ppt-imagen",
+       "enunciado": "Inserta la imagen ciervo.jpg en la diapositiva 2. La imagen está en la carpeta Imágenes.",
+       "instrucciones": "Haz clic en la ventana de PowerPoint. No uses atajos de teclado. Solo puedes equivocarte una vez.",
+       "explicacion": "En PowerPoint: **Insertar** › **Imágenes** › **Este dispositivo...** Eliges el archivo y pulsas **Insertar**. En LibreOffice Impress: **Insertar** › **Imagen**, eliges el archivo y pulsas **Abrir**."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Capturas de pantalla en el ordenador" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Capturas de pantalla en el ordenador</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Captura de pantalla</span><p>Una captura de pantalla es una imagen de lo que se ve en la pantalla en ese momento.</p></div>
+    <table class="tabla peq">
+      <tr><th>Teclas en Windows</th><th>Qué captura</th><th>Dónde va</th></tr>
+      <tr><td class="t3-teclas"><kbd>Windows</kbd> + <kbd>Mayús</kbd> + <kbd>S</kbd></td><td>La parte que eliges con la <b>Herramienta Recortes</b>: rectángulo, ventana, pantalla completa o forma libre.</td><td>Al portapapeles. En Windows 11 también se guarda en <b>Imágenes › Capturas de pantalla</b>.</td></tr>
+      <tr><td class="t3-teclas"><kbd>Windows</kbd> + <kbd>Impr Pant</kbd></td><td>Toda la pantalla.</td><td>Se guarda como archivo PNG en <b>Imágenes › Capturas de pantalla</b>.</td></tr>
+      <tr><td class="t3-teclas"><kbd>Impr Pant</kbd></td><td>Toda la pantalla. En Windows 11 actualizado, abre Recortes, igual que Windows + Mayús + S.</td><td>Al portapapeles. Pégala con <b>Ctrl+V</b> en Word o en Paint.</td></tr>
+      <tr><td class="t3-teclas"><kbd>Alt</kbd> + <kbd>Impr Pant</kbd></td><td>Solo la ventana activa.</td><td>Al portapapeles.</td></tr>
+    </table>
+    <p class="peq">La tecla <b>Impr Pant</b> puede llamarse <b>ImpPnt</b> o <b>PrtSc</b>. También puedes abrir la app: <b>Inicio › Recortes › Nuevo</b>.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Fotos, vídeos y capturas en el móvil" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Fotos, vídeos y capturas en el móvil</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta con-ico"><img src="img/ia/movil-foto.webp" alt=""><h3>Fotos y vídeos</h3><p>Usa la app <b>Cámara</b>.</p><p>Se guardan en la <b>Galería</b> o en <b>Google Fotos</b>. La carpeta se llama DCIM/Camera.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/movil-captura.webp" alt=""><h3>Captura en Android</h3><p>Pulsa a la vez el botón de <b>encendido</b> y el de <b>bajar volumen</b>.</p><p>Se guarda en la Galería o en Google Fotos, en el álbum <b>Capturas de pantalla</b>.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/movil-captura.webp" alt=""><h3>Captura en iPhone</h3><p>Sin botón de inicio: <b>botón lateral + subir volumen</b>.</p><p>Con botón de inicio: <b>botón lateral + botón de inicio</b>.</p><p>Se guarda en la app Fotos.</p></div>
+    </div>
+    <div class="caja aviso"><span class="tt">Cuidado</span>Si mantienes pulsado el botón de encendido, el móvil muestra el menú para apagarlo. Para la captura, pulsa los dos botones a la vez y suéltalos.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Empareja cada atajo con lo que hace" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Práctica (no cuenta para el Comprueba)</p><h2>Empareja cada atajo con lo que hace</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "emparejar", "enunciado": "Une cada atajo con lo que hace.",
+       "pares": [["Windows + Mayús + S", "Captura una parte de la pantalla con Recortes"],
+                 ["Windows + Impr Pant", "Guarda toda la pantalla en Imágenes › Capturas de pantalla"],
+                 ["Alt + Impr Pant", "Copia solo la ventana activa"],
+                 ["Encendido + bajar volumen", "Captura la pantalla de un móvil Android"]],
+       "explicacion": "Windows + Mayús + S abre Recortes para elegir una parte. Windows + Impr Pant guarda un archivo PNG. Alt + Impr Pant copia la ventana activa al portapapeles. En Android, encendido y bajar volumen a la vez."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: sumar una columna" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Así lo pregunta el examen · pregunta 10 de la demo</p><h2>Reto: sumar una columna</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/Cuentas.xlsx", "barajar": false,
+       "enunciado": "Descárgate la siguiente hoja de cálculo, ábrela y suma la columna B en el lugar indicado. A continuación marca cuál es la cantidad resultante.",
+       "instrucciones": "Resuelve el reto con Excel sin cerrar el navegador. Después marca la respuesta. El archivo es el de la demo oficial.",
+       "opciones": ["9169024545229 €", "9169025229", "19.710.717.050,00 €", "16.654.036.564,00"], "correcta": 1,
+       "explicacion": "La suma de B2 a B19 es **9169025229**. Las otras opciones son números distintos, con puntos o con el símbolo €. Están para confundirte: compara el resultado cifra a cifra. En la diapositiva siguiente tienes los pasos."}
+    </script></div>
+    <p class="fuente">Pregunta y archivo de la pregunta 10 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo se resuelve el reto de sumar una columna" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Así lo pregunta el examen · pregunta 10 de la demo</p><h2>Cómo se resuelve el reto</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro">
+      <ol class="pasos peq">
+        <li>Descarga <b>Cuentas.xlsx</b> y ábrelo con Excel.</li>
+        <li>Haz clic en <b>B20</b>, la celda verde junto a TOTAL.</li>
+        <li>Escribe <code>=SUMA(B2:B19)</code> y pulsa <b>Intro</b>. También vale el botón <b>Autosuma</b> (Σ).</li>
+        <li>Si ves <code>#####</code> o <code>9,17E+09</code>, ensancha la columna B: doble clic en el borde derecho de la letra B.</li>
+        <li>Sale <b>9169025229</b>. Compáralo cifra a cifra con las opciones.</li>
+      </ol>
+      <div class="t3-xl">
+        <div class="t3-xl-barra"><span class="cel">B20</span><span class="fx">fx</span><span class="form">=SUMA(B2:B19)</span></div>
+        <table>
+          <tr><th style="width:52px"></th><th>A</th><th class="on">B</th></tr>
+          <tr><th>1</th><td class="az">Empleado</td><td class="az">ventas</td></tr>
+          <tr><th>2</th><td>Juan</td><td class="n">5284</td></tr>
+          <tr><th>3</th><td>Pedro</td><td class="n">369841558</td></tr>
+          <tr><th>4</th><td>Sara</td><td class="n">36941850</td></tr>
+          <tr class="salto"><th>…</th><td>…</td><td>…</td></tr>
+          <tr><th>18</th><td>Miguel</td><td class="n">10023</td></tr>
+          <tr><th>19</th><td>Marisa</td><td class="n">20123</td></tr>
+          <tr><th class="on">20</th><td class="ve"><b>TOTAL</b></td><td class="ve n sel">9169025229</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 3.1" data-seccion="3.1">
+  <div class="cab"><p class="etq">3.1 · Desarrollo de contenidos</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="3.1"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Estás en el ordenador de una biblioteca. No puedes instalar programas. Necesitas hacer una hoja de cálculo. ¿Qué usas?",
+       "opciones": ["Hojas de cálculo de Google, desde el navegador", "Microsoft Excel de escritorio", "LibreOffice Calc", "Microsoft Word"], "correcta": 0,
+       "explicacion": "Las aplicaciones en la nube funcionan en el navegador. No hay que instalar nada. Excel y Calc son programas de escritorio: hay que instalarlos. Word no es una hoja de cálculo."},
+      {"tipo": "test", "enunciado": "Quieres hacer una captura de pantalla en un móvil Android. ¿Qué haces?",
+       "opciones": ["Pulsas a la vez el botón de encendido y el de bajar volumen", "Pulsas a la vez los dos botones de volumen", "Mantienes pulsado el botón de encendido durante 10 segundos", "Pulsas dos veces el botón de subir volumen"], "correcta": 0,
+       "explicacion": "En la mayoría de los móviles Android, la captura se hace con encendido y bajar volumen a la vez. La imagen se guarda en la Galería. Si mantienes pulsado el encendido, el móvil se apaga o se reinicia."},
+      {"tipo": "reto", "archivo": "retos/t3-reto-31-notas.xlsx",
+       "enunciado": "Descarga la hoja de cálculo y ábrela. Calcula la media de la columna B en la celda verde. ¿Qué resultado sale?",
+       "opciones": ["6,25", "75", "7", "6,5"], "correcta": 0,
+       "explicacion": "La media se calcula con =PROMEDIO(B2:B13). Suma las 12 notas y divide entre 12: 75 / 12 = 6,25. 75 es la suma. 7 es la nota que más se repite. 6,5 sale de ordenar las notas y hacer la media de las dos del centro, 6 y 7."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 3.2 Integración y reelaboración ======================= -->
+
+<section class="competencia" data-label="3.2 Integración y reelaboración de contenidos digitales" data-seccion="3.2" data-deck-id="c32" data-deck-section="3.2">
+  <div class="izq">
+    <p class="n">3.2</p>
+    <h2>Integración y reelaboración de contenidos digitales</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: el atajo de teclado para copiar un archivo.</p>
+    <img class="ico" src="img/ia/integracion.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar la diferencia entre un documento editable y un PDF.</li>
+      <li>Convertir un archivo a PDF.</li>
+      <li>Abrir, rellenar y convertir un PDF.</li>
+      <li>Corregir la ortografía del documento de otra persona.</li>
+      <li>Cambiar textos, tablas e imágenes de un documento.</li>
+      <li>Copiar, cortar y pegar contenido entre documentos.</li>
+    </ol>
+    <span class="estado-comp" data-comp="3.2"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Documento editable y PDF" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Documento editable y PDF</h2><p class="entrada">El <b>PDF</b> (Portable Document Format, formato de documento portátil) es un formato que se ve igual en cualquier dispositivo.</p></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta con-ico"><img src="img/ia/editable.webp" alt=""><h3>Documento editable</h3><ul class="lista peq"><li>.docx, .odt, .xlsx, .ods, .pptx, .odp</li><li>Se cambia con su programa.</li><li>En otro ordenador puede verse distinto si falta una fuente o cambia la versión del programa.</li></ul></div>
+      <div class="tarjeta con-ico"><img src="img/ia/pdf.webp" alt=""><h3>PDF</h3><ul class="lista peq"><li>Conserva el diseño, las fuentes y las imágenes.</li><li>No está pensado para editarse.</li><li>Se abre con el navegador, con Adobe Acrobat Reader (gratis) o con el visor del móvil.</li></ul></div>
+    </div>
+    <div class="caja ok"><span class="tt">Regla práctica</span>El editable sirve para trabajar y colaborar: guárdalo siempre para poder cambiarlo. El PDF sirve para enviar e imprimir: currículum, facturas, formularios y apuntes.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Convertir un archivo a PDF con Word" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Convertir un archivo a PDF con Word</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 790px;gap:48px">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <ol class="pasos peq">
+          <li>Pulsa <b>Archivo</b>.</li>
+          <li>Pulsa <b>Exportar</b>.</li>
+          <li>Elige <b>Crear documento PDF/XPS</b> y pulsa el botón <b>Crear PDF/XPS</b>.</li>
+          <li>Elige la carpeta y el nombre.</li>
+          <li>Pulsa <b>Publicar</b>.</li>
+        </ol>
+        <p class="peq">Es igual en Excel y en PowerPoint. Otra forma: <b>Archivo › Guardar como › Examinar</b>, y en <b>Tipo</b> eliges <b>PDF (*.pdf)</b>. Si el archivo está en OneDrive, sale «Guardar una copia».</p>
+        <div class="caja aviso"><span class="tt">Error típico</span>Cambiar el nombre de carta.docx a carta.pdf no lo convierte. El archivo deja de abrirse.</div>
+      </div>
+      <div class="maqueta-movil t3-maqueta" data-plantilla="#t3-word-pdf" data-pantalla="exportar" style="zoom:.8"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Otras formas de crear un PDF" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Otras formas de crear un PDF</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>LibreOffice</h3><div class="ruta" style="font-size:22px"><span>Archivo</span><i>›</i><span>Exportar a</span><i>›</i><span>Exportar a PDF</span><i>›</i><span class="disp">Exportar</span></div><p>También puedes usar el botón <b>Exportar a PDF</b> de la barra de herramientas.</p></div>
+      <div class="tarjeta"><h3>Documentos de Google</h3><div class="ruta" style="font-size:22px"><span>Archivo</span><i>›</i><span>Descargar</span><i>›</i><span class="disp">Documento PDF (.pdf)</span></div><p>El PDF se guarda en la carpeta <b>Descargas</b>.</p></div>
+      <div class="tarjeta"><img class="ico xp" style="margin:0" src="img/ia/impresora.webp" alt=""><h3>Desde cualquier programa</h3><ol class="pasos peq"><li>Pulsa <b>Imprimir</b> (Ctrl+P).</li><li>Elige la impresora <b>Microsoft Print to PDF</b>.</li><li>Pulsa <b>Imprimir</b> y elige el nombre y la carpeta.</li></ol></div>
+    </div>
+    <div class="cols centro">
+      <div class="caja"><span class="tt">En los navegadores</span>En Edge y en Chrome, al imprimir, el destino se llama <b>Guardar como PDF</b>. Así guardas una página web como PDF.</div>
+      <figure class="foto cred-arriba" style="height:230px;width:438px;justify-self:center"><img src="img/capturas/word-imprimir-pdf.webp" alt="Word en Archivo › Imprimir. En Impresora está elegida Microsoft Print to PDF, marcada con un recuadro"><figcaption class="credito">Word: Archivo › Imprimir con la impresora «Microsoft Print to PDF». Captura propia (24-10-2026).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Trabajar con un PDF" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Trabajar con un PDF</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Qué quieres hacer</th><th>Cómo</th></tr>
+      <tr><td>Abrir y leer</td><td>Con el navegador (Edge, Chrome, Firefox), con Adobe Acrobat Reader o con el visor del móvil.</td></tr>
+      <tr><td>Rellenar un formulario</td><td>Escribe en los campos con el navegador o con Acrobat Reader. Después guárdalo.</td></tr>
+      <tr><td>Editar el texto</td><td>Word abre el PDF y lo convierte en un documento editable (<b>Archivo › Abrir</b>). El diseño puede cambiar. LibreOffice Draw también lo abre. Adobe Acrobat, de pago, lo edita directamente.</td></tr>
+      <tr><td>Unir, dividir, comprimir o convertir</td><td>Webs gratuitas, con límites de uso: <b>iLovePDF</b> (ilovepdf.com) y <b>Smallpdf</b> (smallpdf.com). Convierten un PDF a Word o a JPG, y al revés.</td></tr>
+    </table>
+    <div class="caja aviso"><span class="tt">Seguridad</span>No subas a estas webs documentos con datos personales: el DNI, las notas o una nómina.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Corrige la ortografía y cambia palabras" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración · repaso</p><h2>Corrige la ortografía y cambia palabras</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Ortografía</h3>
+        <ul class="lista peq">
+          <li><b>Subrayado rojo:</b> palabra mal escrita.</li>
+          <li><b>Subrayado azul o doble:</b> posible error de gramática.</li>
+          <li>Haz clic derecho en la palabra y elige la sugerencia.</li>
+          <li>Revisión completa: <b>F7</b>. En Word, <b>Revisar › Ortografía y gramática</b>. En Writer, <b>Herramientas › Ortografía</b>.</li>
+          <li>Idioma del corrector: <b>Revisar › Idioma › Establecer idioma de corrección</b>. En Writer, <b>Herramientas › Idioma</b>.</li>
+        </ul>
+      </div>
+      <div class="tarjeta"><h3>Cambiar una palabra en todo el texto</h3>
+        <ol class="pasos peq">
+          <li>Pulsa <b>Inicio › Reemplazar</b> (Ctrl+L en Word en español). En Writer: <b>Editar › Buscar y reemplazar</b> (Ctrl+H).</li>
+          <li>Escribe la palabra que buscas y la palabra nueva.</li>
+          <li>Pulsa <b>Reemplazar todo</b>. El programa te dice cuántos cambios ha hecho.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cambia tablas e imágenes" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración · repaso</p><h2>Cambia tablas e imágenes</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tarea</th><th>Word</th><th>Writer</th></tr>
+      <tr><td>Añadir una fila a una tabla</td><td>Clic derecho en una celda › Insertar › Insertar filas debajo</td><td>Tabla › Insertar › Filas debajo</td></tr>
+      <tr><td>Cambiar una imagen por otra</td><td>Clic derecho › Cambiar imagen</td><td>Clic derecho › Reemplazar</td></tr>
+      <tr><td>Colocar la imagen respecto al texto</td><td>Formato de imagen › Ajustar texto</td><td>Clic derecho › Ajuste</td></tr>
+    </table>
+    <div class="ruta-bloque"><span class="donde">Opciones de Ajustar texto en Word</span><div class="ruta"><span>En línea con el texto</span><span>Cuadrado</span><span>Estrecho</span><span>Detrás del texto</span><span>Delante del texto</span></div></div>
+    <div class="caja"><span class="tt">Varias personas en el mismo documento</span>Usa el <b>Control de cambios</b>: así se ve qué ha cambiado cada persona. Lo viste en el Tema 2 (2.4).</div>
+  </div>
+</section>
+
+<section class="s" data-label="Copiar, cortar, pegar y deshacer" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Copiar, cortar, pegar y deshacer</h2><p class="entrada">Funcionan igual con archivos (en el Explorador) y con textos, celdas o imágenes (en cualquier programa).</p></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <table class="tabla peq">
+          <tr><th>Atajo</th><th>Qué hace</th></tr>
+          <tr><td class="t3-teclas"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td><b>Copiar.</b> El original se queda donde estaba.</td></tr>
+          <tr><td class="t3-teclas"><kbd>Ctrl</kbd> + <kbd>X</kbd></td><td><b>Cortar.</b> El original se quita al pegar. Sirve para mover.</td></tr>
+          <tr><td class="t3-teclas"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td><b>Pegar</b> lo que has copiado o cortado.</td></tr>
+          <tr><td class="t3-teclas"><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td><b>Deshacer</b> el último cambio.</td></tr>
+          <tr><td class="t3-teclas"><kbd>Ctrl</kbd> + <kbd>Y</kbd></td><td><b>Rehacer</b> lo que has deshecho.</td></tr>
+        </table>
+        <p class="peq">Con el ratón: clic derecho › <b>Copiar</b>, <b>Cortar</b> o <b>Pegar</b>.</p>
+      </div>
+      <div class="tarjeta"><h3>Pegado especial</h3>
+        <ul class="lista peq">
+          <li><b>Sin el formato de origen</b>. Word: Inicio › Pegar (flecha) › <b>Mantener solo texto</b>. Writer: Editar › Pegado especial › <b>Pegar texto sin formato</b>.</li>
+          <li><b>Solo los resultados, sin fórmulas</b>. Excel: Inicio › Pegar (flecha) › <b>Pegar valores</b>.</li>
+          <li><b>Integrar contenidos</b>: copia un gráfico de Excel y pégalo en Word o en PowerPoint.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Reto: corrige el documento de otra persona" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Práctica (no cuenta para el Comprueba)</p><h2>Reto: corrige el documento de otra persona</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/t3-reto-32-excursion.docx",
+       "enunciado": "Descarga el aviso de la excursión. Con Buscar y reemplazar, cambia «Valladolit» por «Valladolid» en todo el documento. ¿Cuántos reemplazos hace el programa?",
+       "instrucciones": "Ábrelo con Word. Escribe solo el número. Después, termina de corregir el documento: tienes las tareas en la diapositiva siguiente.",
+       "pista": ["Pulsa **Inicio** › **Reemplazar** (Ctrl+L).", "Buscar: Valladolit. Reemplazar con: Valladolid.", "Pulsa **Reemplazar todo** y lee el aviso."],
+       "respuesta": ["6", "seis"],
+       "explicacion": "El programa hace **6** reemplazos: 1 en el título, 4 en los párrafos y 1 en la tabla. Reemplazar todo cambia la palabra todas las veces que aparece, también dentro de las tablas."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Termina el documento y compara" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Práctica (no cuenta para el Comprueba)</p><h2>Termina el documento y compara</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 1.1fr">
+      <div class="tarjeta"><h3>Sigue con el mismo documento</h3>
+        <ol class="pasos peq">
+          <li>Corrige las otras 3 faltas con el corrector: clic derecho en la palabra subrayada.</li>
+          <li>Añade al final de la tabla la fila «18:00 · Vuelta al instituto».</li>
+          <li>Pon un hipervínculo en la palabra «autorización» del último párrafo. Que lleve a https://www.educa.jcyl.es.</li>
+          <li>Guárdalo como PDF: <b>Archivo › Exportar › Crear PDF/XPS › Publicar</b>.</li>
+        </ol>
+      </div>
+      <div class="piensa">
+        <button class="btn revela-btn" type="button">Ver cómo queda</button>
+        <div class="resp" style="padding:0;border:0;background:none;box-shadow:none">
+          <div class="t3-pagina">
+            <h4>Excursión a <mark>Valladolid</mark></h4>
+            <p>El viernes 14 de mayo de 2027 vamos de <mark>excursión</mark> a <mark>Valladolid</mark> con los grupos de 1.º de SMR.</p>
+            <p>Salimos a las 8:30 desde la puerta del instituto. El <mark>autobús</mark> llega a <mark>Valladolid</mark> a las 10:00.</p>
+            <p>En <mark>Valladolid</mark> visitamos el Museo de la Ciencia y comemos en el parque Campo Grande.</p>
+            <p>Trae en la <mark>mochila</mark> comida, agua, gorra y la <a>autorización</a> firmada. Sin autorización no puedes ir a <mark>Valladolid</mark>.</p>
+            <table><tr><td><b>Hora</b></td><td><b>Actividad</b></td></tr><tr><td>8:30</td><td>Salida del instituto</td></tr><tr><td>10:00</td><td>Llegada a <mark>Valladolid</mark></td></tr><tr><td>10:30</td><td>Museo de la Ciencia</td></tr><tr><td>14:00</td><td>Comida en Campo Grande</td></tr><tr class="nueva"><td>18:00</td><td>Vuelta al instituto</td></tr></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: copiar un archivo" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Así lo pregunta el examen · pregunta 12 de la demo</p><h2>Copiar un archivo</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Qué atajo de teclado usarás para copiar un archivo del ordenador.",
+       "opciones": ["Ctrl+X", "Ctrl+C", "Crtl+Z", "Ctrl+V"], "correcta": 1,
+       "explicacion": "Ctrl+C copia. Ctrl+X corta, para mover. Ctrl+V pega lo copiado o cortado. Ctrl+Z deshace. El examen puede tener erratas, como «Crtl» en lugar de «Ctrl». No te distraigas con ellas."}
+    </script></div>
+    <p class="fuente">Pregunta 12 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 3.2" data-seccion="3.2">
+  <div class="cab"><p class="etq">3.2 · Integración y reelaboración</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="3.2"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Vas a enviar tu currículum a una empresa. ¿Por qué es mejor enviarlo en PDF y no en .docx?",
+       "opciones": ["Porque se ve igual en cualquier ordenador o móvil", "Porque la empresa puede cambiarlo más fácilmente", "Porque solo se puede abrir con Microsoft Word", "Porque un PDF no se puede imprimir"], "correcta": 0,
+       "explicacion": "Un PDF conserva el diseño, las fuentes y las imágenes en cualquier dispositivo. Está pensado para leer e imprimir, no para editar. Se abre con cualquier navegador."},
+      {"tipo": "test", "enunciado": "Quieres mover un párrafo de una página a otra del mismo documento. ¿Qué atajos usas?",
+       "opciones": ["Ctrl+X y después Ctrl+V", "Ctrl+C y después Ctrl+Z", "Ctrl+V y después Ctrl+X", "Ctrl+Z y después Ctrl+C"], "correcta": 0,
+       "explicacion": "Ctrl+X corta el párrafo. Ctrl+V lo pega en el sitio nuevo. Así el párrafo desaparece del sitio de antes. Ctrl+Z deshace el último cambio."},
+      {"tipo": "simulacion", "html": "#t3-word-pdf",
+       "enunciado": "Guarda el documento Carta como PDF en la carpeta Documentos. Usa el menú Archivo.",
+       "instrucciones": "Haz clic en la ventana de Word. No uses atajos de teclado. Solo puedes equivocarte una vez.",
+       "explicacion": "En Word: **Archivo** › **Exportar** › **Crear PDF/XPS** › **Publicar**. También vale **Archivo** › **Guardar como** › **Examinar** › Tipo: PDF (*.pdf) › **Guardar**. Cambiar la extensión del nombre no convierte el archivo."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 3.3 Derechos de autor y licencias ======================= -->
+
+<section class="competencia" data-label="3.3 Derechos de autor y licencias" data-seccion="3.3" data-deck-id="c33" data-deck-section="3.3">
+  <div class="izq">
+    <p class="n">3.3</p>
+    <h2>Derechos de autor y licencias</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: qué imágenes no puedes reutilizar.</p>
+    <img class="ico" src="img/ia/derechos.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Saber que muchos contenidos de Internet tienen derechos de autor.</li>
+      <li>Diferenciar el uso comercial del no comercial.</li>
+      <li>Reconocer las licencias copyright, Creative Commons, CC0, dominio público y copyleft, y sus iconos.</li>
+      <li>Buscar contenidos que puedes reutilizar y citarlos.</li>
+      <li>Explicar las consecuencias de descargar contenidos de forma ilegal.</li>
+    </ol>
+    <span class="estado-comp" data-comp="3.3"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Derechos de autor" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Derechos de autor</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">Propiedad intelectual</span><p>La propiedad intelectual es el conjunto de derechos que tiene el autor sobre su obra.</p></div>
+        <ul class="lista">
+          <li>Nace al crear la obra. No hace falta registrarla.</li>
+          <li>Protege textos, fotos, música, vídeos, dibujos y programas.</li>
+          <li>En España la regula la <b>Ley de Propiedad Intelectual</b>.</li>
+        </ul>
+        <div class="caja"><span class="tt">Idea clave</span>Que algo esté publicado en Internet no significa que puedas usarlo.</div>
+      </div>
+      <div class="t3-obras"><div><img src="img/ia/libro.webp" alt="Libro"></div><div><img src="img/ia/foto.webp" alt="Foto"></div><div><img src="img/ia/musica.webp" alt="Música"></div><div><img src="img/ia/claqueta.webp" alt="Película"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Dos tipos de derechos de autor" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Dos tipos de derechos</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>Derechos morales</h3><p>Que se reconozca quién es el autor de la obra.</p><p>No se venden ni se pierden.</p></div>
+      <div class="tarjeta"><h3>Derechos de explotación</h3><p>Copiar, distribuir, mostrar en público y transformar la obra.</p><p>El autor decide quién lo hace y puede cobrar por ello.</p></div>
+    </div>
+    <div class="cols c-1-2 centro">
+      <p class="cifra" style="text-align:center">+70</p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <p>Los derechos de explotación duran toda la vida del autor y <b>70 años más</b>.</p>
+        <p>Después, la obra pasa a <b>dominio público</b>: todo el mundo puede usarla. Por ejemplo, El Quijote o Las Meninas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Uso comercial y uso no comercial" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Uso comercial y uso no comercial</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta con-ico"><img src="img/ia/tienda.webp" alt=""><h3>Uso comercial</h3><p>Uso comercial es usar una obra para ganar dinero o para anunciar un negocio.</p><ul class="lista peq"><li>El anuncio de una tienda en Instagram.</li><li>Camisetas o tazas con una foto, para venderlas.</li><li>La portada de un libro que se vende.</li><li>La web de una empresa.</li><li>El cartel de un concierto con entrada de pago.</li></ul></div>
+      <div class="tarjeta con-ico"><img src="img/ia/clase.webp" alt=""><h3>Uso no comercial</h3><p>Uso no comercial es usar la obra sin ganar dinero con ella.</p><ul class="lista peq"><li>Un trabajo de clase.</li><li>Una presentación en el instituto.</li><li>Un blog personal sin publicidad.</li><li>Una felicitación de cumpleaños.</li><li>El cartel de una charla gratuita.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: ¿es uso comercial?" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Piensa: ¿es uso comercial?</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:24px">
+        <img class="ico m" src="img/ia/tienda.webp" alt="">
+        <span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nc.svg" alt=""><b>BY-NC</b></span>
+      </div>
+      <div class="piensa">
+        <p class="enun" style="font-size:38px;font-weight:600;line-height:1.3">Vendes camisetas con una foto que tiene la licencia CC BY-NC. El dinero es para pagar el viaje de fin de curso. ¿Es uso comercial?</p>
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p><b>Sí, es uso comercial.</b> Ganas dinero con las camisetas, aunque sea para el viaje.</p>
+          <p style="margin-top:14px">La licencia NC no lo permite.</p>
+          <p style="margin-top:14px">Necesitas el permiso del autor o una foto con licencia CC BY, CC BY-SA o CC0.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Formas de licenciar una obra" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Formas de licenciar una obra</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Licencia</th><th>Símbolo</th><th>Qué significa</th><th>Ejemplo</th></tr>
+      <tr><td>Copyright</td><td><img class="t3-cc" src="img/cc/copyright.svg" alt="©"></td><td>Todos los derechos reservados. Necesitas permiso del autor para copiar, compartir o modificar. Es lo que tiene cualquier obra que no indica licencia.</td><td>Una canción de un artista. Una foto de un periódico.</td></tr>
+      <tr><td>Creative Commons</td><td><img class="t3-cc" src="img/cc/cc.svg" alt="CC"></td><td>Algunos derechos reservados. El autor permite algunos usos, con condiciones.</td><td>Muchas fotos de Wikimedia Commons.</td></tr>
+      <tr><td>CC0</td><td><img class="t3-cc" src="img/cc/cc0.svg" alt="CC0"></td><td>Sin derechos reservados. El autor renuncia a ellos. Puedes usar la obra para lo que quieras, sin citar.</td><td>Fotos de algunos bancos de imágenes.</td></tr>
+      <tr><td>Dominio público</td><td><img class="t3-cc" src="img/cc/dominio-publico.svg" alt="C tachada"></td><td>Obras cuyos derechos han caducado.</td><td>El Quijote. Las Meninas.</td></tr>
+      <tr><td>Copyleft</td><td><img class="t3-cc" src="img/cc/copyleft.svg" alt="C al revés"></td><td>Puedes usar, copiar, modificar y compartir. Lo que hagas con la obra debe llevar la misma licencia libre.</td><td>Wikipedia (CC BY-SA). Programas con licencia GNU GPL, como GIMP.</td></tr>
+    </table>
+    <p class="peq">Estas son licencias de contenidos: textos, fotos, música y vídeos. Las licencias de los programas están en la diapositiva «Licencias de software».</p>
+  </div>
+</section>
+
+<section class="s" data-label="Las 4 condiciones de Creative Commons" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Las 4 condiciones de Creative Commons</h2><p class="entrada">Cada licencia Creative Commons junta varias condiciones. Cada condición tiene un icono.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta t3-cond"><img src="img/cc/by.svg" alt="Icono de una persona"><h3>BY · Atribución</h3><p>También se llama Reconocimiento.</p><p><b>Tienes que citar al autor.</b></p></div>
+      <div class="tarjeta t3-cond"><img src="img/cc/nc.svg" alt="Icono del dólar tachado"><h3>NC · No comercial</h3><p><b>No puedes ganar dinero con la obra.</b></p></div>
+      <div class="tarjeta t3-cond"><img src="img/cc/nd.svg" alt="Icono del signo igual"><h3>ND · Sin obra derivada</h3><p><b>Puedes compartirla, pero sin cambiarla:</b> no recortar, no poner filtros, no traducir.</p></div>
+      <div class="tarjeta t3-cond"><img src="img/cc/sa.svg" alt="Icono de una flecha en círculo"><h3>SA · Compartir igual</h3><p><b>Puedes cambiarla, pero lo nuevo debe llevar la misma licencia.</b></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Las 6 licencias Creative Commons" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Las 6 licencias Creative Commons</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Licencia, de más abierta a más cerrada</th><th>¿Citar al autor?</th><th>¿Uso comercial?</th><th>¿Modificar?</th><th>Además</th></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><b>BY</b></span></td><td>Sí</td><td>Sí</td><td>Sí</td><td>—</td></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/sa.svg" alt=""><b>BY-SA</b></span></td><td>Sí</td><td>Sí</td><td>Sí</td><td>Lo nuevo, con la misma licencia</td></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nc.svg" alt=""><b>BY-NC</b></span></td><td>Sí</td><td>No</td><td>Sí</td><td>—</td></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nc.svg" alt=""><img src="img/cc/sa.svg" alt=""><b>BY-NC-SA</b></span></td><td>Sí</td><td>No</td><td>Sí</td><td>Lo nuevo, con la misma licencia</td></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nd.svg" alt=""><b>BY-ND</b></span></td><td>Sí</td><td>Sí</td><td>No</td><td>—</td></tr>
+      <tr><td><span class="t3-sello"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nc.svg" alt=""><img src="img/cc/nd.svg" alt=""><b>BY-NC-ND</b></span></td><td>Sí</td><td>No</td><td>No</td><td>—</td></tr>
+    </table>
+    <ul class="lista peq">
+      <li>Todas llevan BY. ND y SA no van juntas: si no puedes modificar la obra, no hay obra nueva que compartir.</li>
+      <li>La versión actual es la 4.0. Este curso tiene la licencia <b>CC BY-NC-SA 4.0</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: lee la licencia" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Piensa: lee la licencia</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+        <span class="t3-sello g"><img src="img/cc/cc.svg" alt=""><img src="img/cc/by.svg" alt=""><img src="img/cc/nc.svg" alt=""><b>BY-NC</b></span>
+        <p class="peq gris">Licencia de una foto</p>
+      </div>
+      <div class="piensa">
+        <p class="enun" style="font-size:40px;font-weight:600">Una foto tiene esta licencia. ¿Qué puedes hacer con ella?</p>
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p>Puedes usarla, compartirla y modificarla.</p>
+          <p style="margin-top:14px"><b>Tienes que citar al autor</b> (BY).</p>
+          <p style="margin-top:14px"><b>No puedes ganar dinero con ella</b> (NC).</p>
+          <p style="margin-top:14px">Sí puedes usarla en un trabajo de clase. No puedes usarla en el cartel de una tienda.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Busca contenido que puedes reutilizar" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Busca contenido que puedes reutilizar</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro" style="grid-template-columns:1fr 820px;gap:48px">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <ol class="pasos peq">
+          <li>En <b>Google Imágenes</b>, busca lo que necesitas.</li>
+          <li>Pulsa <b>Herramientas › Derechos de uso › Licencias Creative Commons</b>. En la captura está elegida la otra opción: «Licencias comerciales y otras licencias».</li>
+          <li>Abre la imagen en su web de origen y lee la licencia exacta.</li>
+          <li>Cítala: título, autor, fuente y licencia.</li>
+        </ol>
+        <div class="caja"><span class="tt">Ejemplo de cita</span>«Cigüeña en la catedral», de Ana Gómez, Wikimedia Commons, CC BY-SA 4.0. (Es un ejemplo inventado.)</div>
+      </div>
+      <figure class="foto" style="height:400px"><img src="img/cyl/google-imagenes.png" alt="Búsqueda en Google Imágenes. En Herramientas está elegido el filtro Licencias comerciales y otras licencias"><figcaption class="credito">Google Imágenes con el filtro Derechos de uso. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde buscar contenidos con licencia" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Dónde buscar contenidos con licencia</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Wikimedia Commons</h3><p>commons.wikimedia.org</p><p>Fotos, dibujos, sonidos y vídeos. Cada archivo indica su licencia.</p></div>
+      <div class="tarjeta"><h3>Openverse</h3><p>openverse.org</p><p>Un buscador de obras con licencias abiertas.</p></div>
+      <div class="tarjeta"><h3>Pixabay y Pexels</h3><p>Fotos y vídeos con licencia propia: uso gratuito, también comercial, sin obligación de citar. No permite vender la foto sin cambios, por ejemplo en una camiseta.</p></div>
+      <div class="tarjeta"><h3>Biblioteca de audio de YouTube</h3><p>Música y efectos de sonido para tus vídeos.</p></div>
+      <div class="tarjeta"><h3>Jamendo</h3><p>Música con licencias Creative Commons.</p></div>
+      <div class="tarjeta c-ok"><h3>Si no ves la licencia</h3><p>Busca el <b>Aviso legal</b> en el pie de la web. Si no hay licencia, la obra tiene todos los derechos reservados.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Descargar contenidos de forma ilegal" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Descargar contenidos de forma ilegal</h2><p class="entrada">Descargar de forma ilegal es bajar música, películas, libros, juegos o programas sin permiso de sus autores.</p></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1fr 300px;gap:32px;align-items:start">
+      <div class="tarjetas" style="display:contents">
+        <div class="tarjeta c-ko"><h3>Consecuencias éticas</h3><ul class="lista peq"><li>Los autores no cobran por su trabajo: músicos, actores, escritores, programadores.</li><li>Se pierden empleos.</li><li>Es injusto con quien paga.</li></ul></div>
+        <div class="tarjeta c-ko"><h3>Consecuencias legales</h3><ul class="lista peq"><li>Va contra la Ley de Propiedad Intelectual. El autor puede reclamar una indemnización.</li><li>Las webs piratas se cierran o se bloquean.</li><li>Compartir o vender copias piratas para ganar dinero es delito. Se castiga con cárcel de 6 meses a 4 años y multa (Código Penal, artículo 270).</li></ul></div>
+      </div>
+      <img class="ico g" src="img/ia/pirata.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Riesgos de las descargas ilegales y alternativas legales" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Riesgos para tu equipo y alternativas legales</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta c-ko"><h3>Riesgos para tu equipo</h3><ul class="lista peq"><li>Los programas pirata y los «cracks» suelen llevar malware.</li><li>Las webs piratas tienen anuncios engañosos.</li><li>El software pirata no recibe actualizaciones de seguridad (lo verás en el Tema 4).</li></ul></div>
+      <div class="tarjeta c-ok"><h3>Alternativas legales</h3><ul class="lista peq"><li>Plataformas de música y vídeo: Spotify, YouTube y RTVE Play, gratis.</li><li><b>eBiblio Castilla y León</b>: libros electrónicos gratis con el carné de biblioteca.</li><li>Software libre: LibreOffice, GIMP.</li></ul></div>
+    </div>
+    <div class="caja"><span class="tt">Recuerda</span>Que algo sea gratis en una web no significa que sea legal. Usa las webs oficiales de cada servicio.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Licencias de software" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias · repaso</p><h2>Licencias de software</h2><p class="entrada">Un repaso rápido de las licencias de los programas:</p></div>
+  <div class="cuerpo">
+    <div class="t3-matriz" role="img" aria-label="Cuadro de dos por dos: si el programa es gratis o de pago, y si puedes ver y cambiar su código.">
+      <span></span>
+      <p class="eje">Código cerrado<small>No puedes ver ni cambiar el código.</small></p>
+      <p class="eje">Código abierto<small>Puedes ver y cambiar el código.</small></p>
+      <p class="eje fila">Gratis</p>
+      <div class="celda"><h3>Freeware</h3><p>Es gratis, pero es propietario.</p><p class="ej">WhatsApp, Adobe Acrobat Reader</p><h3>Freemium</h3><p>Es gratis, con funciones de pago.</p><p class="ej">Canva, Spotify</p></div>
+      <div class="celda abierto"><h3>Libre y código abierto</h3><p><b>Libre</b>: puedes usarlo, estudiarlo, compartirlo y mejorarlo. <b>Código abierto</b>: puedes ver el código. Para el usuario es casi lo mismo. Los programas libres también son de código abierto.</p><p class="ej">LibreOffice, GIMP, Firefox, VLC</p></div>
+      <p class="eje fila">De pago</p>
+      <div class="celda"><h3>Propietario de pago</h3><p>No puedes ver ni cambiar el código. Pagas por usarlo.</p><p class="ej">Windows, Microsoft Office</p></div>
+      <div class="celda recuerda"><h3>Libre y de pago</h3><p>Existe, pero es poco habitual. <b>Libre no significa gratis.</b> Significa libertad para usar, estudiar, compartir y mejorar el programa.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: imágenes que no puedes reutilizar" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Así lo pregunta el examen · pregunta 11 de la demo</p><h2>Imágenes que no puedes reutilizar</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t3-imgs-g"><script type="application/json">
+      {"tipo": "test",
+       "enunciado": "Selecciona qué imagen seguro no podrías reutilizar. (Selecciona todas las respuestas correctas, puede haber más de una)",
+       "opciones": ["Imagen 1", "Imagen 2", "Imagen 3"],
+       "imagenes": ["img/cyl/q11-ciervo-1.png", "img/cyl/q11-ciervo-2.png", "img/cyl/q11-ciervo-3.png"], "correcta": [0, 1],
+       "explicacion": "La imagen 1 no indica licencia: tiene todos los derechos reservados, igual que la imagen 2, que lleva ©. La imagen 3 es CC0: sí se puede reutilizar. En estas preguntas puede haber más de una respuesta. Marca todas las correctas."}
+    </script></div>
+    <p class="fuente">Imágenes de la pregunta 11 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 3.3" data-seccion="3.3">
+  <div class="cab"><p class="etq">3.3 · Derechos de autor y licencias</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="3.3"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Una tienda de ropa quiere poner en su cartel de rebajas una foto con la licencia CC BY-NC. ¿Puede?",
+       "opciones": ["No, porque NC no permite el uso comercial", "Sí, si pone el nombre del autor", "Sí, porque la foto es gratis", "Sí, si no cambia la foto"], "correcta": 0,
+       "explicacion": "NC significa «no comercial». Un cartel de rebajas sirve para vender, así que es uso comercial. La tienda necesita el permiso del autor."},
+      {"tipo": "test", "enunciado": "Descargas una película de estreno de una web pirata. ¿Qué afirmación es correcta?",
+       "opciones": ["Va contra la ley, perjudica a quienes hicieron la película y puedes meter malware en tu ordenador", "Es legal si la película es solo para verla en casa", "Es legal si la web no te cobra nada", "Solo es ilegal si después vendes la película"], "correcta": 0,
+       "explicacion": "Descargar contenido sin permiso de los autores va contra la Ley de Propiedad Intelectual. Los autores no cobran por su trabajo. Además, estas webs suelen tener virus y anuncios engañosos."},
+      {"tipo": "emparejar", "enunciado": "Relaciona cada icono de Creative Commons con lo que significa.",
+       "pares": [["Icono de una persona (BY)", "Tienes que citar al autor"],
+                 ["Icono del dólar tachado (NC)", "No puedes ganar dinero con la obra"],
+                 ["Icono del signo igual (ND)", "No puedes modificar la obra"],
+                 ["Icono de la flecha en círculo (SA)", "Si la modificas, compártela con la misma licencia"]],
+       "explicacion": "BY es atribución. NC es no comercial. ND es sin obra derivada. SA es compartir igual."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 3.4 Pensamiento computacional y programación ======================= -->
+
+<section class="competencia" data-label="3.4 Pensamiento computacional y programación" data-seccion="3.4" data-deck-id="c34" data-deck-section="3.4">
+  <div class="izq">
+    <p class="n">3.4</p>
+    <h2>Pensamiento computacional y programación</h2>
+    <p class="examen">En el examen: 3 preguntas. La demo no tiene pregunta de esta competencia.</p>
+    <img class="ico" src="img/ia/programacion.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Distinguir el hardware y el software de un ordenador o un móvil.</li>
+      <li>Explicar cómo llega una página web a tu pantalla.</li>
+      <li>Explicar qué es un dominio y reconocerlo en una dirección.</li>
+      <li>Configurar el wifi, el Bluetooth, el brillo, el sonido y el idioma del móvil y del ordenador.</li>
+    </ol>
+    <p class="peq gris" style="margin-top:26px">El nombre de la competencia es el oficial. En el nivel básico no se programa.</p>
+    <span class="estado-comp" data-comp="3.4"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Hardware: las partes físicas" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional · repaso</p><h2>Hardware: las partes físicas</h2><p class="entrada">El <b>hardware</b> son las partes físicas del equipo: las que puedes tocar.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/procesador.webp" alt=""><h3>Procesador o CPU</h3><p>Ejecuta las instrucciones de los programas.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/ram.webp" alt=""><h3>Memoria RAM</h3><p>Guarda lo que estás usando. Se borra al apagar.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/ssd.webp" alt=""><h3>Almacenamiento</h3><p>Disco duro, SSD o memoria del móvil. Guarda los archivos aunque apagues.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/placa.webp" alt=""><h3>Placa base</h3><p>Une todas las piezas del equipo.</p></div>
+    </div>
+    <p class="peq gris" style="font-weight:700">PERIFÉRICOS: LOS APARATOS QUE SE CONECTAN AL EQUIPO</p>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta con-ico"><img src="img/ia/raton.webp" alt=""><h3>De entrada</h3><p>Teclado, ratón, micrófono, cámara web y escáner.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/monitor.webp" alt=""><h3>De salida</h3><p>Monitor, impresora y altavoces.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/impresora.webp" alt=""><h3>De entrada y salida</h3><p>Pantalla táctil e impresora multifunción (imprime y escanea).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Software: los programas" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional · repaso</p><h2>Software: los programas</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Software</span><p>El software son los programas: las instrucciones que dicen al hardware qué hacer.</p></div>
+        <table class="tabla peq">
+          <tr><th>Tipo</th><th>Ejemplos</th></tr>
+          <tr><td>De sistema: el sistema operativo y los controladores</td><td>Windows, macOS, Linux, Android, iOS</td></tr>
+          <tr><td>De aplicación: programas para hacer tareas</td><td>Word, Chrome, WhatsApp</td></tr>
+          <tr><td>Firmware: programa grabado en el propio aparato</td><td>La BIOS o UEFI del ordenador</td></tr>
+        </table>
+      </div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/movil-foto.webp" alt=""><h3>En el móvil</h3><p><b>Hardware:</b> procesador, RAM, almacenamiento, pantalla táctil, cámaras, batería y tarjeta SIM.</p><p><b>Software:</b> el sistema operativo (Android o iOS) y las apps.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo llega una web a tu pantalla" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional · repaso</p><h2>Cómo llega una web a tu pantalla</h2></div>
+  <div class="cuerpo" style="gap:40px">
+    <div class="t3-flujo" role="img" aria-label="Esquema: tu ordenador o móvil, por wifi o cable, llega al router; el router al proveedor de Internet; el proveedor a Internet, la red de redes; y por Internet llega al servidor web.">
+      <div class="n"><img src="img/ia/portatil.webp" alt="">Tu ordenador o móvil<small>el cliente</small></div>
+      <div class="f">wifi o cable</div>
+      <div class="n"><img src="img/ia/router.webp" alt="">Router<small>en casa o en el instituto</small></div>
+      <div class="f"></div>
+      <div class="n"><img src="img/ia/proveedor.webp" alt="">Proveedor de Internet<small>tu compañía</small></div>
+      <div class="f"></div>
+      <div class="n"><img src="img/ia/globo.webp" alt="">Internet<small>cables terrestres y submarinos</small></div>
+      <div class="f"></div>
+      <div class="n"><img src="img/ia/servidor.webp" alt="">Servidor web<small>guarda la página</small></div>
+    </div>
+    <div class="cols">
+      <div class="def"><span class="t">Internet</span><p>Internet es la red de redes: une millones de redes y dispositivos de todo el mundo.</p></div>
+      <div class="tarjeta"><h3>Cliente y servidor</h3><p>Tu navegador es el <b>cliente</b>: pide la página.</p><p>El <b>servidor web</b> es el ordenador que guarda la página y la envía.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Dirección IP, DNS y HTTPS" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional · repaso</p><h2>Dirección IP, DNS y HTTPS</h2></div>
+  <div class="cuerpo">
+    <div class="t3-dns" role="img" aria-label="Esquema: escribes jcyl.es en el navegador. 1: el navegador pregunta al servidor DNS qué IP tiene jcyl.es. 2: el DNS responde con la IP. 3: el navegador pide la web a esa IP con HTTPS, con la conexión cifrada.">
+      <div class="n pc"><img src="img/ia/portatil.webp" alt=""><span class="t3-barra-url">🔒 https://jcyl.es</span>Escribes jcyl.es<small>en el navegador</small></div>
+      <div class="flechas">
+        <div class="f"><b>1</b> ¿Qué IP tiene jcyl.es?</div>
+        <div class="f vuelta"><b>2</b> Es la 203.0.113.25</div>
+      </div>
+      <div class="n"><img src="img/ia/dns.webp" alt="">Servidor DNS<small>traduce el nombre a la IP</small></div>
+      <div class="flechas">
+        <div class="f segura"><b>3</b> Dame la web <img src="img/ia/candado.webp" alt=""> HTTPS: va cifrado</div>
+      </div>
+      <div class="n"><img src="img/ia/servidor.webp" alt="">Servidor web de la Junta<small>IP 203.0.113.25 (ejemplo)</small></div>
+    </div>
+    <div class="t3-defs">
+      <p><b>Dirección IP</b>: es el número que identifica a cada dispositivo conectado. En una red de casa, por ejemplo, <code>192.168.1.10</code>.</p>
+      <p><b>DNS</b> (Sistema de Nombres de Dominio): traduce el nombre de dominio a la dirección IP del servidor.</p>
+      <p><b>HTTPS</b>: un <b>protocolo</b> es un conjunto de reglas para comunicarse. HTTP es el protocolo de las webs. La <b>S</b> indica que la conexión va cifrada: el navegador muestra un candado.</p>
+    </div>
+    <div class="cols centro">
+      <div class="caja"><span class="tt">Internet no es lo mismo que la web</span>La web es un servicio de Internet. El correo electrónico y la mensajería son otros servicios.</div>
+      <p class="cap">Internet empezó en 1983, cuando la red ARPANET adoptó el protocolo TCP/IP.</p>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué es un dominio" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Qué es un dominio</h2></div>
+  <div class="cuerpo" style="gap:44px">
+    <div class="def"><span class="t">Dominio</span><p>Un dominio es el nombre fácil de recordar que identifica un sitio en Internet, como <b>jcyl.es</b>. Así no tienes que escribir la dirección IP del servidor.</p></div>
+    <div class="t3-url" role="img" aria-label="Partes de https://www.tucerticyl.es/demo">
+      <div class="p" style="--c:#E6DEE8"><b>https://</b><span>protocolo</span></div>
+      <div class="p" style="--c:#E0F2F4"><b>www.</b><span>subdominio (a veces no aparece)</span></div>
+      <div class="dom">
+        <div><div class="p" style="--c:#FCE7A5"><b>tucerticyl</b><span>nombre</span></div><div class="p" style="--c:#F3C51A"><b>.es</b><span>extensión</span></div></div>
+        <div class="llave"></div>
+        <p class="t">dominio: tucerticyl.es</p>
+      </div>
+      <div class="p" style="--c:#F1EFF3"><b>/demo</b><span>ruta: no es parte del dominio</span></div>
+    </div>
+    <p>En una dirección web, el subdominio (www, es…) no forma parte del dominio. En un correo electrónico, el dominio es todo lo que va detrás de la @, también el subdominio: nombre@<b>educa.jcyl.es</b></p>
+  </div>
+</section>
+
+<section class="s" data-label="Extensiones de dominio" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Extensiones de dominio</h2><p class="entrada">La <b>extensión</b> (o dominio de primer nivel) es la parte final del dominio, después del último punto.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>De un territorio</h3><ul class="lista peq"><li><code>.es</code> España</li><li><code>.fr</code> Francia</li><li><code>.pt</code> Portugal</li><li><code>.eu</code> Unión Europea</li></ul></div>
+      <div class="tarjeta"><h3>Genéricas</h3><ul class="lista peq"><li><code>.com</code> empresas</li><li><code>.org</code> organizaciones</li><li><code>.net</code> redes</li><li><code>.info</code> información</li></ul></div>
+      <div class="tarjeta"><h3>Administración</h3><p>En España, la Administración del Estado usa dominios que terminan en <code>.gob.es</code>. Su extensión es .es.</p><p>Ejemplo: lamoncloa.gob.es</p></div>
+    </div>
+    <ul class="lista peq">
+      <li>Cada dominio es único: no puede haber dos iguales.</li>
+      <li>Se alquila por años a una empresa llamada registrador.</li>
+      <li>Los dominios .es los gestiona <b>Red.es</b> (dominios.es).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: ¿cuál es el dominio?" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Piensa: ¿cuál es el dominio?</h2></div>
+  <div class="cuerpo">
+    <div class="cols centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <p class="t3-grande">Señala el dominio en estas tres direcciones:</p>
+        <div class="t3-dir"><span>https://www.rae.es/diccionario</span><span>alumno.prueba@educa.jcyl.es</span><span>https://es.wikipedia.org/wiki/Burgos</span></div>
+      </div>
+      <div class="piensa">
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p><b>rae.es</b>. «www» es un subdominio: no forma parte del dominio.</p>
+          <p style="margin-top:14px"><b>educa.jcyl.es</b>. Es un correo: el dominio es todo lo que va detrás de la @. Incluye el subdominio «educa».</p>
+          <p style="margin-top:14px"><b>wikipedia.org</b>. «es» es un subdominio: indica la versión en español.</p>
+          <p style="margin-top:14px">La ruta (/diccionario, /wiki/Burgos) no es parte del dominio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Configura el móvil Android" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Configura el móvil Android</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <p class="peq">Abre la app <b>Ajustes</b> (el engranaje) o los <b>ajustes rápidos</b>: desliza el dedo desde arriba.</p>
+        <table class="tabla peq">
+          <tr><th>Qué</th><th>Dónde, en Ajustes</th></tr>
+          <tr><td>Wifi</td><td>Redes e Internet › Internet</td></tr>
+          <tr><td>Datos móviles y Modo avión</td><td>Redes e Internet</td></tr>
+          <tr><td>Bluetooth</td><td>Dispositivos conectados</td></tr>
+          <tr><td>Brillo, tema oscuro y tamaño de letra</td><td>Pantalla</td></tr>
+          <tr><td>Volumen, tono y No molestar</td><td>Sonido y vibración</td></tr>
+          <tr><td>Idioma</td><td>Sistema › Idiomas</td></tr>
+          <tr><td>Fondo de pantalla</td><td>Fondo de pantalla y estilo</td></tr>
+        </table>
+        <p class="peq">Los nombres cambian según la marca. En Samsung, el wifi está en <b>Conexiones</b>.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t3-wifi" data-pantalla="ajustes" style="zoom:.92;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Configura el ordenador con Windows 11" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Configura el ordenador con Windows 11</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <p class="peq">Abre <b>Configuración</b>: <kbd>Windows</kbd> + <kbd>I</kbd>.</p>
+        <table class="tabla peq">
+          <tr><th>Qué</th><th>Dónde, en Configuración</th></tr>
+          <tr><td>Wifi</td><td>Red e Internet › Wi-Fi</td></tr>
+          <tr><td>Bluetooth</td><td>Bluetooth y dispositivos</td></tr>
+          <tr><td>Brillo y tamaño del texto</td><td>Sistema › Pantalla</td></tr>
+          <tr><td>Volumen</td><td>Sistema › Sonido</td></tr>
+          <tr><td>Fondo y modo oscuro</td><td>Personalización</td></tr>
+          <tr><td>Idioma</td><td>Hora e idioma › Idioma y región</td></tr>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="tarjeta con-ico"><img src="img/ia/ajustes.webp" alt=""><h3>Configuración rápida</h3><p>Pulsa <kbd>Windows</kbd> + <kbd>A</kbd>, o haz clic en los iconos de red y volumen de la barra de tareas.</p><p>Tienes wifi, Bluetooth, modo avión, brillo y volumen.</p></div>
+        <figure class="foto" style="height:252px"><img src="img/capturas/win11-red-internet.webp" alt="Configuración de Windows 11 en el apartado Red e Internet, con la wifi conectada y las opciones Wi-Fi, Ethernet, VPN y Zona con cobertura inalámbrica móvil"><figcaption class="credito">Windows 11: Configuración › Red e Internet. Captura propia (24-10-2026); la cuenta y el nombre de la red están difuminados.</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: qué es un dominio" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Así lo pregunta el examen · pregunta propia (la demo no tiene pregunta de la 3.4)</p><h2>Qué es un dominio</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "¿Qué es un dominio en Internet?",
+       "opciones": ["El nombre fácil de recordar que identifica una web, como jcyl.es", "El número que identifica a cada dispositivo conectado a Internet", "El programa que usas para ver las páginas web", "El cable que une el router con la central"], "correcta": 0,
+       "explicacion": "El dominio es el nombre de la web. El número que identifica a cada dispositivo es la dirección IP. El programa para ver páginas web es el navegador. El cable que une el router con la central es la conexión de fibra o ADSL. El DNS traduce el dominio a la dirección IP."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 3.4" data-seccion="3.4">
+  <div class="cab"><p class="etq">3.4 · Pensamiento computacional</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="3.4"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Cuál de estos elementos de un móvil es software?",
+       "opciones": ["El sistema operativo Android", "La memoria RAM", "La pantalla táctil", "La batería"], "correcta": 0,
+       "explicacion": "El software son los programas. Android es el sistema operativo: un programa. La RAM, la pantalla y la batería son hardware: partes físicas que puedes tocar."},
+      {"tipo": "test", "enunciado": "¿Qué extensión de dominio corresponde a España?",
+       "opciones": [".es", ".sp", ".esp", ".com"], "correcta": 0,
+       "explicacion": ".es es la extensión de España. La gestiona Red.es. .com es una extensión genérica, pensada para empresas de cualquier país."},
+      {"tipo": "simulacion", "html": "#t3-wifi",
+       "enunciado": "Conecta el móvil a la red wifi IES-Alumnos. La contraseña es Castilla2027.",
+       "instrucciones": "Toca la pantalla del móvil. Escribe la contraseña con el teclado del ordenador. Solo puedes equivocarte una vez.",
+       "explicacion": "El wifi se configura en **Ajustes** › **Redes e Internet** › **Internet**. Activa el Wi-Fi y elige la red. Elige bien la red: IES-Profesores es otra red. La contraseña distingue mayúsculas y minúsculas."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= Repaso del área y cierre ======================= -->
+
+<section class="s" data-label="Resumen del tema" data-seccion="R" data-deck-section="R">
+  <div class="cab"><p class="etq">Repaso del área 3</p><h2>Resumen del tema</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas peq" style="--n:4">
+      <div class="tarjeta"><h3>3.1 Desarrollo</h3><ul class="lista peq"><li>Formatos: .docx y .odt, .xlsx y .ods, .pptx y .odp, .pdf, .jpg, .png, .mp4.</li><li>Escritorio (Microsoft 365, LibreOffice) y nube (Google, Office para la web).</li><li>=SUMA y =PROMEDIO.</li><li>Capturas: Windows + Mayús + S; encendido + bajar volumen.</li></ul></div>
+      <div class="tarjeta"><h3>3.2 Integración</h3><ul class="lista peq"><li>El PDF se ve igual en todas partes y no se edita.</li><li>Archivo › Exportar (Office). Exportar a PDF (LibreOffice).</li><li>Ctrl+C copia, Ctrl+X corta, Ctrl+V pega, Ctrl+Z deshace.</li></ul></div>
+      <div class="tarjeta"><h3>3.3 Licencias</h3><ul class="lista peq"><li>Sin licencia = todos los derechos reservados.</li><li>Comercial = ganar dinero.</li><li>©, CC (BY, NC, ND, SA), CC0, dominio público, copyleft.</li><li>Descargar pirata es ilegal y peligroso.</li></ul></div>
+      <div class="tarjeta"><h3>3.4 Tu equipo</h3><ul class="lista peq"><li>Hardware y software.</li><li>Red de redes, IP y DNS.</li><li>Dominio de una web = nombre + extensión (.es). En un correo: lo que va detrás de la @.</li><li>Ajustes del móvil y Configuración de Windows.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Test de repaso del área" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 3 · preguntas del curso «Soy competente digital», CyL Digital</p><h2>Test de repaso</h2></div>
+  <div class="cuerpo">
+    <div class="repaso-test"><script type="application/json">[
+      {"comp": "3.1", "tipo": "test", "enunciado": "¿Cuál es el formato de archivo de PowerPoint?",
+       "opciones": ["PPTS", "PPTD", "PPTX", "PDF"], "correcta": 2,
+       "explicacion": "Las presentaciones de PowerPoint se guardan en .pptx. El formato antiguo era .ppt. PDF es otro formato, para leer e imprimir."},
+      {"comp": "3.3", "tipo": "test", "enunciado": "¿Qué icono indica que puedes reutilizar la obra si citas al autor?",
+       "opciones": ["Icono A", "Icono B", "Icono C", "Icono D"],
+       "imagenes": ["img/cc/by.svg", "img/cc/nc.svg", "img/cc/sa.svg", "img/cc/nd.svg"], "correcta": 0,
+       "explicacion": "La persona es BY (atribución): tienes que citar al autor. El dólar tachado es NC, la flecha en círculo es SA y el signo igual es ND."},
+      {"comp": "3.3", "tipo": "test", "barajar": false, "imagen": "img/cc/copyleft.svg", "enunciado": "¿Qué significa este icono?",
+       "opciones": ["Creative Commons", "Copyright", "Copyleft", "Ninguna es correcta"], "correcta": 2,
+       "explicacion": "La C al revés es el símbolo del copyleft. Puedes usar, copiar y modificar la obra. Lo nuevo debe llevar la misma licencia libre."},
+      {"comp": "3.1", "tipo": "test", "barajar": false, "enunciado": "PowerPoint sirve para…",
+       "opciones": ["Crear vídeos con imágenes, texto y gráficos", "Crear presentaciones con imágenes, texto y gráficos", "Crear páginas web con imágenes, texto y gráficos", "Ninguna es correcta"], "correcta": 1,
+       "explicacion": "PowerPoint es el programa de presentaciones de Microsoft. En LibreOffice se llama Impress."},
+      {"comp": "3.1", "tipo": "test", "imagen": "img/cyl/libro-en-blanco.png", "enunciado": "En Excel, ¿qué es «Libro en blanco»?",
+       "opciones": ["Un formato prediseñado para organizar datos", "Una hoja de cálculo nueva y vacía, sin datos ni formato", "Una opción para borrar todo el contenido", "Una extensión de pago para Excel"], "correcta": 1,
+       "explicacion": "En Excel, un archivo se llama libro. Un libro en blanco es una hoja de cálculo nueva y vacía."},
+      {"comp": "3.2", "tipo": "test", "imagen": "img/cyl/control-cambios.png", "enunciado": "En este documento de Word, las palabras WORD (tachada) y POWERPOINT (subrayada) salen en color. ¿Por qué?",
+       "opciones": ["Porque están escritas en inglés", "Porque alguien les ha puesto ese color desde Inicio › Fuente", "Porque está activado el Control de cambios y se ha hecho un cambio", "Porque tienen el estilo Título 1"], "correcta": 2,
+       "explicacion": "Con el Control de cambios, lo borrado sale tachado y lo añadido sale subrayado, en color. Así se ve qué ha cambiado cada persona."},
+      {"comp": "3.3", "tipo": "test", "imagen": "img/cyl/google-imagenes.png", "enunciado": "Buscas imágenes en Google. ¿Puedes publicar cualquiera en tu blog?",
+       "opciones": ["Sí, porque son públicas en Google", "No sin comprobar antes la licencia en la web de origen", "No, ninguna imagen de Internet se puede usar nunca", "Sí, si citas al autor"], "correcta": 1,
+       "explicacion": "Que una imagen salga en Google no significa que puedas usarla. Abre la web de origen y comprueba su licencia."},
+      {"comp": "3.2", "tipo": "test", "imagen": "img/cyl/pegar-valores.png", "enunciado": "Has copiado celdas con fórmulas. Quieres pegar solo los resultados, sin las fórmulas. ¿Qué opción eliges?",
+       "opciones": ["Pegar", "Pegar fórmulas", "Pegar valores", "Pegar formato"], "correcta": 2,
+       "explicacion": "Pegar valores pega los resultados que ves, sin las fórmulas. Está en Inicio › Pegar (flecha)."},
+      {"comp": "3.1", "tipo": "test", "enunciado": "¿Cuál es el formato de un archivo de Excel?",
+       "opciones": [".xls", ".doc", ".ptx", ".xlsx"], "correcta": 3,
+       "explicacion": "Excel guarda en .xlsx. El formato .xls es el antiguo, de Excel 2003 y anteriores. .doc es de Word."},
+      {"comp": "3.4", "tipo": "test", "barajar": false, "imagen": "img/cyl/impresora.png", "enunciado": "¿Qué es una impresora?",
+       "opciones": ["Hardware", "Software", "Un servicio en la nube", "Software de sistema"], "correcta": 0,
+       "explicacion": "Una impresora es una parte física que puedes tocar: es hardware. En concreto, un periférico de salida."},
+      {"comp": "3.2", "tipo": "test", "enunciado": "Tu trabajo de clase en PDF pesa demasiado para subirlo al aula virtual. No tiene datos personales. ¿Qué herramienta usas para comprimirlo?",
+       "opciones": ["iLovePDF", "GIMP", "MindMeister", "Google Sites"],
+       "imagenes": ["img/cyl/logo-ilovepdf.png", "img/cyl/logo-gimp.png", "img/cyl/logo-mindmeister.png", "img/cyl/logo-google-sites.jpg"], "correcta": 0,
+       "explicacion": "iLovePDF une, divide, comprime y convierte PDF. GIMP edita imágenes, MindMeister hace mapas mentales y Google Sites crea webs."},
+      {"comp": "3.4", "tipo": "test", "barajar": false, "enunciado": "¿Qué puedes configurar en el router de tu casa?",
+       "opciones": ["Ocultar o mostrar la red wifi", "La contraseña del wifi", "El nombre del wifi", "Todas son correctas"], "correcta": 3,
+       "explicacion": "En el router puedes cambiar el nombre de la red wifi y su contraseña. También puedes ocultar la red."},
+      {"comp": "3.1", "tipo": "test", "enunciado": "Quieres quitar el formato de unas celdas de Excel. ¿Qué botón usas?",
+       "opciones": ["Botón A", "Botón B", "Botón C", "Botón D"],
+       "imagenes": ["img/cyl/excel-boton-1.png", "img/cyl/excel-boton-2.png", "img/cyl/excel-boton-3.png", "img/cyl/excel-boton-4.png"], "correcta": 1,
+       "explicacion": "La goma es el botón Borrar: Inicio › Borrar › Borrar formatos. Los botones A y D eliminan celdas o filas. El C es Formato."},
+      {"comp": "3.1", "tipo": "test", "enunciado": "En Excel aparece el error #¡REF!. ¿Qué significa?",
+       "opciones": ["Que divides entre cero", "Que hay valores numéricos no válidos", "Que la fórmula usa una celda que no es válida o se ha borrado", "Que la columna es demasiado estrecha"], "correcta": 2,
+       "explicacion": "#¡REF! es un error de referencia: la fórmula usa una celda borrada. #¡DIV/0! es dividir entre cero. ##### indica que la columna es estrecha."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s t3-recursos" data-label="Recursos" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 3</p><h2>Recursos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <ul class="lista">
+        <li>Vídeo de presentación del módulo 3 de CyL Digital: <a href="https://www.youtube.com/watch?v=fX9ysbjXvko" target="_blank" rel="noopener">youtube.com/watch?v=fX9ysbjXvko</a></li>
+        <li>Licencias Creative Commons en español: <a href="https://creativecommons.org/licenses/?lang=es" target="_blank" rel="noopener">creativecommons.org/licenses</a></li>
+        <li>Openverse: <a href="https://openverse.org" target="_blank" rel="noopener">openverse.org</a></li>
+        <li>Wikimedia Commons: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">commons.wikimedia.org</a></li>
+      </ul>
+      <ul class="lista">
+        <li>LibreOffice: <a href="https://es.libreoffice.org" target="_blank" rel="noopener">es.libreoffice.org</a></li>
+        <li>Dominios .es: <a href="https://www.dominios.es" target="_blank" rel="noopener">dominios.es</a></li>
+        <li>Demo del examen: <a href="https://www.tucerticyl.es/demo" target="_blank" rel="noopener">tucerticyl.es/demo</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 3" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 3</p><h2>Creación de contenidos</h2></div>
+  <div class="cuerpo" style="gap:36px">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta" style="color:var(--texto)"><h3>3.1</h3><p>Desarrollo de contenidos digitales</p><span class="estado-comp" data-comp="3.1"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>3.2</h3><p>Integración y reelaboración</p><span class="estado-comp" data-comp="3.2"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>3.3</h3><p>Derechos de autor y licencias</p><span class="estado-comp" data-comp="3.3"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>3.4</h3><p>Pensamiento computacional y programación</p><span class="estado-comp" data-comp="3.4"></span></div>
+    </div>
+    <p>Si te falta alguna competencia, vuelve a su Comprueba y repítelo hasta acertar las 3 preguntas.</p>
+    <div class="botones"><a class="btn sec" href="../">Portada del curso</a><a class="btn ciruela" href="#c31">Volver al principio del tema</a><a class="btn sec" href="../tema4/">Tema 4 · Seguridad, bienestar y uso responsable</a></div>
+    <p class="peq" style="opacity:.9;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), CC BY-NC. Preguntas 10 a 12 de la demo de tuCertiCyL. Ilustraciones y fotos de las simulaciones: generadas para este curso. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+<script>
+/* Tema 3: ayudas para las simulaciones HTML y el emparejar con iconos */
+(function () {
+  'use strict';
+  // En las simulaciones, los campos para escribir (contraseña, «Mostrar contraseña») no cuentan como clic fallado
+  document.addEventListener('click', function (e) {
+    const t = e.target.closest && e.target.closest('.t3-libre');
+    if (t && t.closest('.sim-marco')) e.stopPropagation();
+  }, true);
+  // El botón Conectar se activa con 8 caracteres y solo lleva a la pantalla final si la contraseña es la del enunciado
+  document.addEventListener('input', function (e) {
+    const inp = e.target.closest && e.target.closest('.t3-clave');
+    if (!inp) return;
+    const b = inp.closest('.pantalla-html').querySelector('.t3-conectar');
+    b.classList.toggle('t3-activo', inp.value.length >= 8);
+    if (inp.value === inp.dataset.valor) b.setAttribute('data-ir', b.dataset.destino);
+    else b.removeAttribute('data-ir');
+  });
+  document.addEventListener('change', function (e) {
+    if (!e.target.matches || !e.target.matches('.t3-mostrar')) return;
+    const inp = e.target.closest('.pantalla-html').querySelector('.t3-clave');
+    inp.type = e.target.checked ? 'text' : 'password';
+  });
+  // Emparejar de la 3.3: pone el icono dibujado delante de «… (BY)», «… (NC)», etc.
+  const ponIconos = function (raiz) {
+    raiz.querySelectorAll('.parejas .fija:not([data-t3])').forEach(function (f) {
+      f.setAttribute('data-t3', '');
+      const m = f.textContent.match(/\((BY|NC|ND|SA)\)/);
+      if (!m) return;
+      const i = document.createElement('img');
+      i.src = 'img/cc/' + m[1].toLowerCase() + '.svg';
+      i.alt = '';
+      i.className = 't3-fija-ico';
+      f.prepend(i);
+    });
+  };
+  document.querySelectorAll('.comprueba[data-comp="3.3"]').forEach(function (c) {
+    ponIconos(c);
+    new MutationObserver(function () { ponIconos(c); }).observe(c, { childList: true, subtree: true });
+  });
+})();
+</script>
+</body>
+</html>

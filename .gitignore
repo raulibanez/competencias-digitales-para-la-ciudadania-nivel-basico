@@ -1,0 +1,8 @@
+*.tmp
+.DS_Store
+Thumbs.db
+
+guiones/*
+
+# Credenciales locales (por si acaso)
+.env

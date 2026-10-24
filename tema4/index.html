@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 4 · Seguridad, bienestar y uso responsable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+/* Estilos propios del tema 4 (prefijo t4-) */
+/* PIN, PUK e IMEI: la SIM a la izquierda (con el paso de un código al siguiente), el móvil a la derecha */
+.t4-sim-movil { display: grid; grid-template-columns: 1.85fr 1fr; gap: 32px; align-items: stretch; }
+.t4-panel { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); border-top: 10px solid var(--area); padding: 26px 32px; display: flex; flex-direction: column; gap: 22px; font-size: var(--type-caption); }
+.t4-panel-cab { display: flex; align-items: center; gap: 24px; }
+.t4-panel-cab img { height: 150px; width: auto; flex: none; }
+.t4-panel-cab h3 { font-size: 34px; margin-bottom: 4px; }
+.t4-panel-cab p { font-size: var(--type-small); }
+.t4-flujo { display: grid; grid-template-columns: 1fr 150px 1fr 150px 1fr; align-items: stretch; }
+.t4-paso { border: 4px solid var(--area); border-radius: 22px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; background: var(--area-claro); }
+.t4-paso > b { font-size: 28px; }
+.t4-paso.puk { border-color: var(--azul); background: var(--a1-claro); }
+.t4-paso.puk .t4-cod { background: var(--azul); }
+.t4-paso.fin { border-color: var(--ko); background: var(--ko-claro); }
+.t4-paso.fin .t4-cod { background: var(--ko); }
+.t4-paso.imei { flex: 1; }
+.t4-cod { align-self: flex-start; background: var(--area); color: var(--blanco); font-weight: 800; font-size: 28px; border-radius: 999px; padding: 2px 20px; }
+.t4-flecha { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--ko); position: relative; padding: 0 10px; }
+.t4-flecha b { font-size: 26px; }
+.t4-flecha span { font-size: 19px; font-weight: 600; line-height: 1.2; margin-top: 44px; }
+.t4-flecha::before { content: ''; position: absolute; left: 12px; right: 26px; top: 50%; border-top: 5px solid var(--ko); }
+.t4-flecha::after { content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: 13px solid transparent; border-left: 18px solid var(--ko); border-right: 0; }
+.t4-flecha b, .t4-flecha span { position: relative; }
+/* Tablas con un icono delante del texto de la celda */
+.t4-ico-fila { float: left; height: 54px; width: 54px; object-fit: contain; margin: -12px 16px -12px 0; }
+/* Pasos con icono y flecha: cómo funciona algo, de izquierda a derecha */
+.t4-pasos-tit { font-size: var(--type-caption); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--area); margin-bottom: -12px; }
+.t4-pasos { display: flex; align-items: stretch; }
+.t4-pasos .p { flex: 1; display: grid; grid-template-columns: 92px 1fr; gap: 16px; align-items: center; background: var(--blanco); border-radius: 22px; box-shadow: var(--sombra); padding: 14px 22px 14px 16px; font-size: var(--type-caption); line-height: 1.3; }
+.t4-pasos .p img { width: 92px; height: 92px; object-fit: contain; }
+.t4-pasos .fl { flex: none; width: 54px; position: relative; }
+.t4-pasos .fl::before { content: ''; position: absolute; left: 8px; right: 20px; top: 50%; border-top: 5px solid var(--area); transform: translateY(-50%); }
+.t4-pasos .fl::after { content: ''; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 11px solid transparent; border-left: 16px solid var(--area); border-right: 0; }
+.t4-pasos.vert .p { grid-template-columns: 1fr; justify-items: center; text-align: center; align-content: start; padding: 22px 22px; gap: 14px; font-size: var(--type-small); }
+.t4-pasos.vert .p img { width: 140px; height: 140px; }
+/* Cookies: aviso más compacto, con los tres botones en una fila */
+.t4-cookies .cookies-maqueta { padding: 22px 26px; }
+.t4-cookies .cookies-maqueta .bts { margin-top: 14px; gap: 10px; }
+.t4-cookies .cookies-maqueta .bts span { padding: 8px 14px; font-size: 19px; }
+/* Tarjetas en cadena (con flecha entre una y otra) */
+.t4-cadena .tarjeta { position: relative; }
+.t4-cadena .tarjeta > .ico { height: 100px; width: auto; max-width: 100%; align-self: flex-start; object-fit: contain; }
+.t4-cadena .tarjeta:not(:last-child)::after { content: ''; position: absolute; right: -24px; top: 76px; border: 11px solid transparent; border-left: 16px solid var(--area); border-right: 0; z-index: 1; }
+</style>
+</head>
+<body class="area-4">
+
+<!-- Plantilla: WhatsApp en Android (simulación de la 4.2 y maqueta de la diapositiva de privacidad) -->
+<template id="t4-wa-privacidad">
+  <div class="movil">
+    <div class="pantalla-html" data-id="chats">
+      <div class="wa-barra-estado"><span>10:24</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="tit">WhatsApp</span><span class="bt">◎</span><span class="bt" data-ir="menu" title="Más opciones">⋮</span></div>
+      <div class="wa-buscar">🔍 Buscar</div>
+      <div class="wa-chips"><span class="on">Todos</span><span>No leídos</span><span>Favoritos</span><span>Grupos</span></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#E861A7">CL</span><div class="txt"><div class="n">Clase 1.º SMR <small>10:12</small></div><div class="m">Marta: ¿Alguien tiene el horario?</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#007CC2">MA</span><div class="txt"><div class="n">Mamá <small>9:47</small></div><div class="m">Llámame cuando salgas</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#8FA72F">DA</span><div class="txt"><div class="n">Dani <small>ayer</small></div><div class="m">Vale, nos vemos a las 6</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#F3C51A">FU</span><div class="txt"><div class="n">Fútbol sala <small>ayer</small></div><div class="m">Pablo: Entreno el jueves</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#0090A8">AB</span><div class="txt"><div class="n">Abuela <small>lunes</small></div><div class="m">📷 Foto</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#830065">IR</span><div class="txt"><div class="n">Irene <small>domingo</small></div><div class="m">Jajaja 😂</div></div></div>
+      <span class="wa-fab">+</span>
+      <div class="wa-nav"><span class="on"><b>💬</b>Chats</span><span><b>◌</b>Novedades</span><span><b>👥</b>Comunidades</span><span><b>📞</b>Llamadas</span></div>
+    </div>
+    <div class="pantalla-html" data-id="menu">
+      <div class="wa-barra-estado"><span>10:24</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="tit">WhatsApp</span><span class="bt">◎</span><span class="bt">⋮</span></div>
+      <div class="wa-buscar">🔍 Buscar</div>
+      <div class="wa-chips"><span class="on">Todos</span><span>No leídos</span><span>Favoritos</span><span>Grupos</span></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#E861A7">CL</span><div class="txt"><div class="n">Clase 1.º SMR <small>10:12</small></div><div class="m">Marta: ¿Alguien tiene el horario?</div></div></div>
+      <div class="wa-chat-fila"><span class="wa-av" style="background:#007CC2">MA</span><div class="txt"><div class="n">Mamá <small>9:47</small></div><div class="m">Llámame cuando salgas</div></div></div>
+      <div class="wa-velo"></div>
+      <div class="wa-menu"><div>Nuevo grupo</div><div>Nueva comunidad</div><div>Nueva difusión</div><div>Dispositivos vinculados</div><div>Mensajes destacados</div><div>Leer todo</div><div data-ir="ajustes">Ajustes</div></div>
+    </div>
+    <div class="pantalla-html" data-id="ajustes">
+      <div class="wa-barra-estado"><span>10:24</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Ajustes</span><span class="bt">🔍</span></div>
+      <div class="wa-perfil"><span class="wa-av" style="background:#0090A8">LU</span><div>Lucía<small>Disponible</small></div></div>
+      <div class="wa-item"><span class="i">🔑</span><span class="t">Cuenta<small>Notificaciones de seguridad, cambiar número</small></span></div>
+      <div class="wa-item" data-ir="privacidad"><span class="i">🔒</span><span class="t">Privacidad<small>Bloquear contactos, mensajes temporales</small></span></div>
+      <div class="wa-item"><span class="i">☺</span><span class="t">Avatar<small>Crear, editar, foto del perfil</small></span></div>
+      <div class="wa-item"><span class="i">☰</span><span class="t">Listas<small>Gestionar personas y grupos</small></span></div>
+      <div class="wa-item"><span class="i">💬</span><span class="t">Chats<small>Tema, fondos de pantalla, historial</small></span></div>
+      <div class="wa-item"><span class="i">🔔</span><span class="t">Notificaciones<small>Tonos de mensajes, grupos y llamadas</small></span></div>
+      <div class="wa-item"><span class="i">◔</span><span class="t">Almacenamiento y datos<small>Uso de red, descarga automática</small></span></div>
+      <div class="wa-item"><span class="i">♿</span><span class="t">Accesibilidad</span></div>
+      <div class="wa-item"><span class="i">🌐</span><span class="t">Idioma de la aplicación<small>Español</small></span></div>
+    </div>
+    <div class="pantalla-html" data-id="privacidad">
+      <div class="wa-barra-estado"><span>10:25</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Privacidad</span></div>
+      <div class="wa-sec">Quién puede ver mi información personal</div>
+      <div class="wa-item"><span class="t">Hora de últ. vez y en línea<small>Nadie</small></span></div>
+      <div class="wa-item" data-ir="dialogo"><span class="t">Foto del perfil<small>Todos</small></span></div>
+      <div class="wa-item"><span class="t">Info.<small>Todos</small></span></div>
+      <div class="wa-item"><span class="t">Estados<small>Mis contactos</small></span></div>
+      <div class="wa-item"><span class="t">Confirmaciones de lectura<small>Si las desactivas, tampoco verás las de los demás</small></span><span class="wa-interr"></span></div>
+      <div class="wa-sec">Mensajes temporales</div>
+      <div class="wa-item"><span class="t">Duración predeterminada<small>Desactivada</small></span></div>
+      <div class="wa-item"><span class="t">Grupos<small>Todos</small></span></div>
+      <div class="wa-item"><span class="t">Ubicación en tiempo real<small>Ninguna</small></span></div>
+      <div class="wa-item"><span class="t">Llamadas<small>Silenciar llamadas de desconocidos</small></span></div>
+      <div class="wa-item"><span class="t">Contactos bloqueados<small>2</small></span></div>
+    </div>
+    <div class="pantalla-html" data-id="dialogo">
+      <div class="wa-barra-estado"><span>10:25</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Privacidad</span></div>
+      <div class="wa-sec">Quién puede ver mi información personal</div>
+      <div class="wa-item"><span class="t">Hora de últ. vez y en línea<small>Nadie</small></span></div>
+      <div class="wa-item"><span class="t">Foto del perfil<small>Todos</small></span></div>
+      <div class="wa-item"><span class="t">Info.<small>Todos</small></span></div>
+      <div class="wa-velo" style="background:rgba(0,0,0,.35)"></div>
+      <div class="wa-dialogo">
+        <h4>Foto del perfil</h4>
+        <div class="op on"><i></i>Todos</div>
+        <div class="op" data-ir="final"><i></i>Mis contactos</div>
+        <div class="op"><i></i>Mis contactos, excepto...</div>
+        <div class="op"><i></i>Nadie</div>
+        <div class="pie"><span>CANCELAR</span></div>
+      </div>
+    </div>
+    <div class="pantalla-html" data-id="final" data-final>
+      <div class="wa-barra-estado"><span>10:25</span><span class="ic">▾ ▴ ▮</span></div>
+      <div class="wa-top"><span class="bt atras">←</span><span class="tit negro">Privacidad</span></div>
+      <div class="wa-sec">Quién puede ver mi información personal</div>
+      <div class="wa-item"><span class="t">Hora de últ. vez y en línea<small>Nadie</small></span></div>
+      <div class="wa-item" style="background:#D8FDD2"><span class="t">Foto del perfil<small>Mis contactos</small></span></div>
+      <div class="wa-item"><span class="t">Info.<small>Todos</small></span></div>
+      <div class="wa-item"><span class="t">Estados<small>Mis contactos</small></span></div>
+    </div>
+  </div>
+</template>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada e índice ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 4</p>
+  <h1>Seguridad, bienestar y uso responsable</h1>
+  <p class="sub">Protege tus dispositivos, tus datos, tu salud y el planeta.</p>
+  <div class="datos"><span class="pill">Área 4</span><span class="pill clara">4 competencias</span><span class="pill clara">2,5 horas</span><span class="pill clara">12 preguntas en el examen</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 4</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp">
+      <a href="#c41"><img class="ico" src="../assets/img/area-seguridad.webp" alt=""><div><span class="n">4.1</span><h3>Protección de dispositivos</h3><span class="estado-comp" data-comp="4.1"></span></div></a>
+      <a href="#c42"><img class="ico" src="img/ia/datos.webp" alt=""><div><span class="n">4.2</span><h3>Protección de los datos personales y la privacidad</h3><span class="estado-comp" data-comp="4.2"></span></div></a>
+      <a href="#c43"><img class="ico" src="img/ia/bienestar.webp" alt=""><div><span class="n">4.3</span><h3>Apoyo al bienestar</h3><span class="estado-comp" data-comp="4.3"></span></div></a>
+      <a href="#c44"><img class="ico" src="img/ia/medioambiente.webp" alt=""><div><span class="n">4.4</span><h3>Impacto medioambiental</h3><span class="estado-comp" data-comp="4.4"></span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Esta área tiene 12 preguntas: 3 por cada competencia. Cada competencia termina con un <b>Comprueba</b> de 3 preguntas como las del examen. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<!-- ======================= 4.1 Protección de dispositivos ======================= -->
+
+<section class="competencia" data-label="4.1 Protección de dispositivos" data-seccion="4.1" data-deck-id="c41" data-deck-section="4.1">
+  <div class="izq">
+    <p class="n">4.1</p>
+    <h2>Protección de dispositivos</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo sale una simulación: expulsar un USB.</p>
+    <img class="ico" src="../assets/img/area-seguridad.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Reconocer los virus y otros programas maliciosos.</li>
+      <li>Saber por dónde entran en el ordenador y en el móvil.</li>
+      <li>Mantener el sistema y las aplicaciones actualizados.</li>
+      <li>Analizar un USB o un disco con el antivirus.</li>
+      <li>Crear contraseñas seguras.</li>
+      <li>Saber qué son el PIN, el PUK y el IMEI del móvil.</li>
+      <li>Explicar qué es la ciberseguridad y quién te ayuda.</li>
+      <li>Proteger el desbloqueo de la pantalla del móvil.</li>
+      <li>Expulsar un USB con seguridad.</li>
+    </ol>
+    <span class="estado-comp" data-comp="4.1"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Ciberseguridad" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>La ciberseguridad</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">Ciberseguridad</span><p>La ciberseguridad es el conjunto de medidas que protegen tus dispositivos, tus cuentas y tus datos de ataques y de accesos sin permiso.</p></div>
+        <p>Ejemplos de medidas:</p>
+        <ul class="lista"><li>Usar un antivirus.</li><li>Instalar las actualizaciones.</li><li>Usar contraseñas seguras.</li><li>Hacer copias de seguridad.</li></ul>
+        <p class="peq">Un <b>ciberdelincuente</b> es una persona que comete delitos por Internet.</p>
+      </div>
+      <div class="tarjeta">
+        <img class="ico p" src="img/ia/ayuda-telefono.webp" alt="">
+        <h3>INCIBE y el 017</h3>
+        <p>El <b>INCIBE</b> es el Instituto Nacional de Ciberseguridad. Es un organismo público. Está en León.</p>
+        <p>Su línea <b>017</b> te ayuda con problemas de seguridad en Internet. Es gratuita y confidencial.</p>
+        <p>Atiende todos los días, de 8:00 a 23:00. También por WhatsApp (900 116 117) y Telegram (@INCIBE017).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Malware: los programas maliciosos" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Malware: los programas maliciosos</h2><p class="entrada"><b>Malware</b> es cualquier programa hecho para dañar un dispositivo o robar sus datos. Un virus es un tipo de malware.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/virus.webp" alt=""><h3>Virus</h3><p>Se pega a un archivo. Se activa cuando abres ese archivo.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/gusano.webp" alt=""><h3>Gusano</h3><p>Se copia solo de un equipo a otro por la red. Nadie tiene que abrir nada.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/troyano.webp" alt=""><h3>Troyano</h3><p>Se disfraza de programa útil: un juego gratis, un «activador» de Windows o una app falsa.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/ransomware.webp" alt=""><h3>Ransomware</h3><p>Cifra tus archivos y pide dinero (un rescate) para devolverlos.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/spyware.webp" alt=""><h3>Spyware</h3><p>Espía lo que haces. Un <b>keylogger</b> guarda las teclas que pulsas para robar contraseñas.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/adware.webp" alt=""><h3>Adware</h3><p>Llena el equipo de anuncios.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Pistas para reconocer el malware" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Pistas para reconocer cada tipo</h2></div>
+  <div class="cuerpo">
+    <table class="tabla t4-tabla-ico">
+      <tr><th>Si el enunciado dice…</th><th>Es un…</th></tr>
+      <tr><td>«Se propaga solo por la red, sin que nadie abra nada»</td><td><img class="t4-ico-fila" src="img/ia/gusano.webp" alt="">Gusano</td></tr>
+      <tr><td>«Se hace pasar por un programa legítimo»</td><td><img class="t4-ico-fila" src="img/ia/troyano.webp" alt="">Troyano</td></tr>
+      <tr><td>«Secuestra los archivos y pide un pago»</td><td><img class="t4-ico-fila" src="img/ia/ransomware.webp" alt="">Ransomware</td></tr>
+      <tr><td>«Guarda lo que escribes con el teclado»</td><td><img class="t4-ico-fila" src="img/ia/spyware.webp" alt="">Keylogger (un tipo de spyware)</td></tr>
+      <tr><td>«Se activa al abrir un archivo infectado»</td><td><img class="t4-ico-fila" src="img/ia/virus.webp" alt="">Virus</td></tr>
+    </table>
+    <div class="caja aviso"><span class="tt">Descargas ilegales</span>Las películas, los juegos y los programas pirata son una vía muy habitual de troyanos y ransomware. Además, descargarlos es ilegal.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Por dónde entra el malware (1)" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Por dónde entra el malware</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-correo.webp" alt=""><h3>Adjuntos de correo</h3><p>Ejemplo: «factura.zip» o «multa.pdf.exe».</p><p><b>Qué haces:</b> no abras adjuntos que no esperas.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-mensaje.webp" alt=""><h3>Enlaces en mensajes</h3><p>Ejemplo: «Mira esta foto tuya» por SMS, WhatsApp o redes.</p><p><b>Qué haces:</b> no pulses. Entra tú en la web o en la app oficial.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-descarga.webp" alt=""><h3>Descargas no oficiales</h3><p>Ejemplo: programas pirata o apps de fuera de Google Play y App Store.</p><p><b>Qué haces:</b> descarga solo de la web del fabricante o de la tienda oficial.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-usb.webp" alt=""><h3>Memorias USB</h3><p>Ejemplo: un USB que te deja otra persona.</p><p><b>Qué haces:</b> analízalo con el antivirus antes de abrir nada.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Por dónde entra el malware (2)" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Por dónde entra el malware</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-web.webp" alt=""><h3>Webs falsas o infectadas</h3><p>Si el navegador no está actualizado, basta con entrar en una web maliciosa.</p><p><b>Qué haces:</b> actualiza el navegador. Si sale «La conexión no es privada», sal de la web.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-wifi.webp" alt=""><h3>Wifi pública abierta</h3><p>En una cafetería, un hotel o una estación.</p><p><b>Qué haces:</b> no entres en el banco ni compres. Usa los datos móviles o una VPN. Una <b>VPN</b> (red privada virtual) cifra tu conexión.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/via-ventana.webp" alt=""><h3>Ventanas emergentes</h3><p>Ejemplo: «Has ganado un iPhone» o «Tu equipo tiene un virus».</p><p><b>Qué haces:</b> cierra la pestaña.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Idea clave</span>Casi todas las infecciones necesitan que tú hagas algo: abrir, pulsar o instalar.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Piensa: un WhatsApp sospechoso" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Piensa: te llega este WhatsApp</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro">
+      <div class="movil" style="height:520px;zoom:1.45">
+        <div class="pantalla-html activa">
+          <div class="wa-barra-estado"><span>18:02</span><span class="ic">▾ ▴ ▮</span></div>
+          <div class="wa-top"><span class="bt atras">←</span><span class="tit negro" style="font-size:17px">+34 6•• ••• •••</span><span class="bt">⋮</span></div>
+          <div class="wa-conv">
+            <div class="wa-aviso-desc">Este número no está en tus contactos. Bloquear · Añadir</div>
+            <div class="wa-burbuja">¿Eres tú el del vídeo? 😱 Míralo aquí: <a>bit.ly/3xV1d3o</a><small>18:01</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="piensa">
+        <p class="enun" style="font-size:40px;font-weight:600">¿Qué haces?</p>
+        <button class="btn revela-btn" type="button">Ver la respuesta</button>
+        <div class="resp">
+          <p><b>No pulses el enlace.</b> Es un gancho para que instales malware o escribas tu contraseña en una web falsa.</p>
+          <p style="margin-top:14px">Bloquea el número y repórtalo: en el chat, toca <b>⋮</b> › <b>Más</b> › <b>Bloquear</b> o <b>Reportar</b>.</p>
+          <p style="margin-top:14px">Si ya lo has pulsado, no instales nada ni escribas datos. Pasa el antivirus y cambia la contraseña de la cuenta que te pidió.</p>
+          <p style="margin-top:14px">Si te lo envía un amigo, quizá le han robado la cuenta. Avísale por otra vía.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Actualiza el sistema y las aplicaciones" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Actualiza el sistema y las aplicaciones</h2><p class="entrada">Una <b>actualización de seguridad</b> cierra un fallo del programa (un agujero de seguridad) antes de que lo use un atacante. Cuanto antes la instalas, menos riesgo.</p></div>
+  <div class="cuerpo" style="gap:30px">
+    <div class="ruta-bloque"><span class="donde">Windows 11</span><div class="ruta"><span>Inicio</span><i>›</i><span>Configuración</span><i>›</i><span>Windows Update</span><i>›</i><span class="disp">Buscar actualizaciones</span></div></div>
+    <div class="ruta-bloque"><span class="donde">Android (el nombre cambia según la marca)</span><div class="ruta"><span>Ajustes</span><i>›</i><span>Sistema</span><i>›</i><span class="disp">Actualización de software</span></div></div>
+    <div class="ruta-bloque"><span class="donde">iPhone</span><div class="ruta"><span>Ajustes</span><i>›</i><span>General</span><i>›</i><span class="disp">Actualización de software</span></div></div>
+    <div class="ruta-bloque"><span class="donde">Aplicaciones del móvil Android</span><div class="ruta"><span>Google Play</span><i>›</i><span>tu foto de perfil</span><i>›</i><span>Gestionar apps y dispositivo</span><i>›</i><span class="disp">Actualizar todo</span></div></div>
+    <div class="caja"><span class="tt">Consejo</span>Activa las actualizaciones automáticas. Un sistema sin soporte ya no recibe arreglos de seguridad: Windows 10 dejó de recibirlos el 14 de octubre de 2025.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Analiza un USB con el antivirus" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Analiza un USB con el antivirus</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="def"><span class="t">Antivirus</span><p>Un antivirus es un programa que busca malware y lo elimina o lo aísla.</p><p class="peq">Windows trae gratis <b>Microsoft Defender</b> (antes se llamaba Windows Defender), dentro de la aplicación <b>Seguridad de Windows</b>. Android trae <b>Google Play Protect</b>.</p></div>
+        <div class="caja examen"><span class="tt">En el examen</span>En la demo (Windows 10) salen dos opciones y las dos valen: «<b>Digitalizar con Windows Defender...</b>» y «<b>Analizar F:\</b>». La segunda es de otro antivirus (Avast) y lleva su icono naranja.</div>
+      </div>
+      <div>
+        <p class="peq gris" style="font-weight:700;margin-bottom:18px">PASOS EN WINDOWS 11</p>
+        <ol class="pasos">
+          <li>Abre el <b>Explorador de archivos</b>.</li>
+          <li>Haz clic derecho en la unidad USB. Por ejemplo, PEN_DRIVE (E:).</li>
+          <li>Pulsa <b>Mostrar más opciones</b>.</li>
+          <li>Pulsa <b>Examinar con Microsoft Defender</b>.</li>
+          <li>Espera el resultado: «No hay amenazas actuales» o la lista de amenazas, con el botón para quitarlas.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Tipos de examen del antivirus" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Tipos de examen y normas del antivirus</h2></div>
+  <div class="cuerpo">
+    <div class="ruta-bloque"><span class="donde">Dónde están en Windows 11</span><div class="ruta"><span>Seguridad de Windows</span><i>›</i><span>Protección contra virus y amenazas</span><i>›</i><span class="disp">Opciones de examen</span></div></div>
+    <table class="tabla">
+      <tr><th>Examen</th><th>Qué revisa</th></tr>
+      <tr><td>Examen rápido</td><td>Las carpetas donde suele esconderse el malware. Tarda unos minutos.</td></tr>
+      <tr><td>Examen completo</td><td>Todo el disco. Puede tardar más de una hora.</td></tr>
+      <tr><td>Examen personalizado</td><td>La carpeta o la unidad que eliges. Por ejemplo, un USB.</td></tr>
+      <tr><td>Examen sin conexión</td><td>Reinicia el equipo para quitar malware difícil.</td></tr>
+    </table>
+    <ul class="lista peq"><li>Usa <b>un solo antivirus</b> en cada equipo. Dos a la vez se estorban.</li><li>Mantenlo siempre actualizado y con la protección en tiempo real activada.</li></ul>
+  </div>
+</section>
+
+<section class="s" data-label="Contraseñas seguras" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Contraseñas seguras</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <ul class="lista">
+        <li>Al menos 8 caracteres. Mejor, 12 o más.</li>
+        <li>Mezcla mayúsculas, minúsculas, números y símbolos ($, #, !).</li>
+        <li>Sin datos tuyos: nombre, fecha de nacimiento o mascota.</li>
+        <li>Sin palabras del diccionario ni series (1234, qwerty).</li>
+        <li>Una distinta para cada servicio.</li>
+        <li>No la compartas. Cámbiala si alguien la conoce.</li>
+      </ul>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="tarjeta c-ok"><h3>Truco: una frase</h3><p>«Mi perro come 3 veces al día y duerme 12 horas»</p><p>→ <code>Mpc3v@d&amp;d12h</code></p></div>
+        <div class="tarjeta c-ko"><h3>Malas contraseñas</h3><p><code>123456</code> · <code>maria2009</code></p><p><code>qwertyuiop1234567890</code>: es larga, pero es una serie del teclado.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Gestor de contraseñas y verificación en dos pasos" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Gestor de contraseñas y verificación en dos pasos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="def"><span class="t">Gestor de contraseñas</span><p>Un gestor de contraseñas es un programa que guarda todas tus contraseñas cifradas. Tú solo recuerdas una.</p><p class="peq">Ejemplos: el gestor de Google en Chrome y Bitwarden.</p></div>
+      <div class="def"><span class="t">Verificación en dos pasos</span><p>La verificación en dos pasos (también <b>doble factor</b> o <b>2FA</b>) pide una segunda prueba además de la contraseña.</p><p class="peq">Por ejemplo, un código por SMS o en una app del móvil, o tu huella. Si alguien roba la contraseña, le cuesta mucho más entrar. No des el código a nadie.</p></div>
+    </div>
+    <div class="ruta-bloque"><span class="donde">Actívala en tu cuenta de Google</span><div class="ruta"><span>Gestionar tu cuenta de Google</span><i>›</i><span>Seguridad</span><i>›</i><span class="disp">Verificación en dos pasos</span></div></div>
+    <div class="caja"><span class="tt">Consejo</span>Actívala también en el correo, en las redes sociales y en WhatsApp.</div>
+  </div>
+</section>
+
+<section class="s" data-label="PIN, PUK e IMEI" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>PIN, PUK e IMEI</h2><p class="entrada">El PIN y el PUK protegen la tarjeta SIM. El IMEI identifica el móvil.</p></div>
+  <div class="cuerpo">
+    <div class="t4-sim-movil">
+      <div class="t4-panel">
+        <div class="t4-panel-cab"><img src="img/ia/sim-tarjeta.webp" alt="Tarjeta de plástico con la SIM"><div><h3>La tarjeta SIM</h3><p>El PIN y el PUK vienen en la tarjeta de plástico de la SIM.</p></div></div>
+        <div class="t4-flujo">
+          <div class="t4-paso"><span class="t4-cod">PIN</span><b>4 números</b><p>El móvil lo pide al encenderse. Puede tener de 4 a 8 números. Puedes cambiarlo en Ajustes.</p></div>
+          <div class="t4-flecha"><b>3 fallos</b><span>la SIM se bloquea</span></div>
+          <div class="t4-paso puk"><span class="t4-cod">PUK</span><b>8 números</b><p>Desbloquea la SIM. También te lo da tu compañía de teléfono.</p></div>
+          <div class="t4-flecha"><b>10 fallos</b><span>la SIM ya no sirve</span></div>
+          <div class="t4-paso fin"><span class="t4-cod">✕</span><b>Duplicado</b><p>Pide a tu compañía un duplicado de la SIM.</p></div>
+        </div>
+      </div>
+      <div class="t4-panel">
+        <div class="t4-panel-cab"><img src="img/ia/movil.webp" alt="Móvil"><div><h3>El móvil</h3><p>El IMEI es el número que identifica el móvil.</p></div></div>
+        <div class="t4-paso imei"><span class="t4-cod">IMEI</span><b>15 cifras</b><p>Lo ves si marcas <code>*#06#</code> en el teclado del teléfono.</p><p>Si te roban el móvil, das el IMEI en la denuncia. La compañía puede bloquear el teléfono.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="No confundas el PIN de la SIM" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Dónde ves el IMEI y qué no debes confundir</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p>El IMEI está en tres sitios:</p>
+        <ol class="pasos peq"><li>Marca <code>*#06#</code> en el teclado del teléfono.</li><li>En la caja del móvil, en una pegatina.</li><li>En <b>Ajustes › Información del teléfono</b> y en Find Hub de Google (antes se llamaba Encontrar mi dispositivo).</li></ol>
+        <p class="peq">Un móvil con dos tarjetas SIM tiene dos IMEI.</p>
+        <div class="caja aviso"><span class="tt">No te confundas</span>El PIN de la SIM no es el PIN de la pantalla. El de la SIM protege la tarjeta. El de la pantalla lo eliges tú y protege el móvil.</div>
+      </div>
+      <figure class="foto" style="height:640px"><img src="img/cyl/imei.png" alt="Ventana con el IMEI del móvil después de marcar *#06#"><figcaption class="credito">Ventana del IMEI tras marcar *#06#. Imagen: curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Protege el desbloqueo del móvil" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Protege el desbloqueo del móvil</h2><p class="entrada">Si pierdes el móvil o te lo roban, nadie puede ver tus fotos ni tus chats, ni entrar en tus cuentas.</p></div>
+  <div class="cuerpo">
+    <div class="escala">
+      <div class="paso" style="--n-color:#C0392B"><h3>Deslizar</h3><p>No protege nada.</p></div>
+      <div class="paso" style="--n-color:#E07A1F"><h3>Patrón</h3><p>Se ve por encima del hombro. Se adivina por las marcas de los dedos.</p></div>
+      <div class="paso" style="--n-color:#C99A00"><h3>PIN</h3><p>4 cifras o más. Mejor, 6.</p></div>
+      <div class="paso" style="--n-color:#8FA72F"><h3>Contraseña</h3><p>Letras, números y símbolos. La más segura de las que se escriben.</p></div>
+      <div class="paso" style="--n-color:#1E8E5A"><h3>Huella o cara</h3><p>Rápidas y cómodas. Siempre llevan un PIN o una contraseña de respaldo.</p></div>
+    </div>
+    <div class="flecha-escala"><span>← menos seguro</span><span>más seguro →</span></div>
+    <div class="cols" style="align-items:center">
+      <div class="ruta-bloque"><span class="donde">Dónde se configura en Android (el nombre cambia según la marca)</span><div class="ruta"><span>Ajustes</span><i>›</i><span>Seguridad</span><i>›</i><span class="disp">Bloqueo de pantalla</span></div></div>
+      <div class="caja ok"><span class="tt">Recomendado</span>PIN de 6 cifras o contraseña, más la huella. Bloqueo automático a los 30 segundos o al minuto.</div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Expulsa el USB con seguridad" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Expulsa el USB con seguridad</h2><p class="entrada">Si quitas el USB mientras Windows escribe en él, puedes perder o estropear archivos. Al expulsarlo, Windows termina y lo deja listo.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Camino A</h3><p>Haz clic derecho en la unidad USB, en el escritorio o en el Explorador.</p><div class="ruta" style="font-size:22px"><span>clic derecho</span><i>›</i><span class="disp">Expulsar</span></div></div>
+      <div class="tarjeta"><h3>Camino B</h3><p>Abre el Explorador de archivos y busca la unidad en Este equipo.</p><div class="ruta" style="font-size:22px"><span>Este equipo</span><i>›</i><span>clic derecho</span><i>›</i><span class="disp">Expulsar</span></div></div>
+      <div class="tarjeta"><h3>Camino C</h3><p>En la barra de tareas, pulsa la flecha ^ (Mostrar iconos ocultos) y el icono del USB.</p><div class="ruta" style="font-size:22px"><span>^</span><i>›</i><span>icono USB</span><i>›</i><span class="disp">Expulsar</span></div></div>
+    </div>
+    <div class="caja ok"><span class="tt">Ya puedes sacarlo</span>Cuando sale el aviso «<b>Es seguro quitar el hardware</b>». Si dice que la unidad está en uso, cierra los archivos del USB y repite.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: expulsar el USB" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Así lo pregunta el examen · pregunta 13 de la demo</p><h2>Simulación: expulsar el USB</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "simulacion", "sim": "q13-usb", "ancho": 960,
+       "enunciado": "Desconecta con seguridad el pendrive usb que tienes conectado en tu ordenador.",
+       "instrucciones": "Haz la tarea en la pantalla. No uses atajos de teclado. Estas pantallas son las de la demo oficial del examen (Windows 10).",
+       "explicacion": "Para quitar un USB sin perder datos, primero lo expulsas. Haz clic derecho en la unidad y elige **Expulsar**. También vale la flecha ^ de la barra de tareas o el Explorador de archivos. Cuando sale el aviso «Es seguro quitar el hardware», ya puedes sacarlo."}
+    </script></div>
+    <p class="fuente">Pantallas de la pregunta 13 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 4.1" data-seccion="4.1">
+  <div class="cab"><p class="etq">4.1 · Protección de dispositivos</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="4.1"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Has escrito mal el PIN de la tarjeta SIM 3 veces. Ahora el móvil te pide otro código para desbloquear la SIM. ¿Qué código es?",
+       "opciones": ["El IMEI", "El PUK", "El patrón de desbloqueo", "La contraseña del wifi"], "correcta": 1,
+       "explicacion": "El PUK desbloquea la tarjeta SIM después de 3 fallos del PIN. Está en la tarjeta de plástico de la SIM o te lo da tu compañía de teléfono."},
+      {"tipo": "test", "enunciado": "¿Cuál de estas contraseñas es más segura?",
+       "opciones": ["maria2009", "12345678", "Tq7#mLp2!vRx", "qwertyuiop"], "correcta": 2,
+       "explicacion": "Es larga y mezcla mayúsculas, minúsculas, números y símbolos. Las otras usan un nombre, una fecha o teclas seguidas. Son fáciles de adivinar."},
+      {"tipo": "simulacion", "sim": "antivirus", "ancho": 900,
+       "enunciado": "Analiza con el antivirus el pendrive USB que tienes conectado en tu ordenador.",
+       "explicacion": "Haz clic derecho en la unidad USB y elige la opción del antivirus: «Digitalizar con Windows Defender...» o el antivirus que tengas. En Windows 11 se llama «Examinar con Microsoft Defender» y está en «Mostrar más opciones»."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 4.2 Datos personales y privacidad ======================= -->
+
+<section class="competencia" data-label="4.2 Protección de los datos personales y la privacidad" data-seccion="4.2" data-deck-id="c42" data-deck-section="4.2">
+  <div class="izq">
+    <p class="n">4.2</p>
+    <h2>Protección de los datos personales y la privacidad</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: quién ve lo que publicas en Facebook.</p>
+    <img class="ico" src="img/ia/datos.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Entender qué permites cuando aceptas las condiciones de uso y las cookies.</li>
+      <li>Saber quién puede ver y seguir tu huella digital.</li>
+      <li>Recordar que lo que publicas dura y se reenvía.</li>
+      <li>Conocer tus derechos a la privacidad, la intimidad y el olvido, y dónde reclamar.</li>
+      <li>Reconocer las suplantaciones de identidad y los robos de contraseñas.</li>
+      <li>Conocer los peligros de la cámara web.</li>
+      <li>Dar en cada sitio solo los datos necesarios.</li>
+      <li>Configurar la privacidad de WhatsApp.</li>
+    </ol>
+    <span class="estado-comp" data-comp="4.2"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Tus datos tienen valor" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Tus datos tienen valor</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>Datos personales</h3><p>Los datos personales son los datos que te identifican: nombre, DNI, teléfono, dirección, foto, voz, ubicación y correo.</p></div>
+      <div class="tarjeta"><h3>Condiciones de uso</h3><p>Las condiciones de uso son el contrato que aceptas al registrarte en un servicio. Al aceptarlas, das permiso.</p></div>
+      <div class="tarjeta"><h3>Política de privacidad</h3><p>La política de privacidad explica qué datos recoge el servicio, para qué los usa y con quién los comparte.</p></div>
+    </div>
+    <p class="t4-pasos-tit">Uso comercial de tus datos: así gana dinero una app gratuita</p>
+    <div class="t4-pasos vert">
+      <div class="p"><img src="img/ia/movil.webp" alt=""><p>Usas una red social o una app gratis.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/datos.webp" alt=""><p>La app analiza lo que publicas, lo que te gusta, lo que buscas y dónde estás.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/anuncio-movil.webp" alt=""><p>Te muestra publicidad personalizada: anuncios elegidos para ti.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/monedas.webp" alt=""><p>Las empresas pagan a la app por esos anuncios. Así gana dinero.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Ejemplos de uso comercial de tus datos" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Ejemplos y consejos</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div>
+        <p class="peq gris" style="font-weight:700;margin-bottom:18px">EJEMPLOS DEL EXAMEN</p>
+        <ul class="lista">
+          <li>Al subir una foto a Facebook, das a la red permiso para usarla según sus condiciones.</li>
+          <li>Los concursos y promociones online piden tus datos para enviarte publicidad o dárselos a otras empresas.</li>
+          <li>Los anuncios que te persiguen: miras algo una vez y te sale en todas partes.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="peq gris" style="font-weight:700;margin-bottom:18px">CONSEJOS</p>
+        <ul class="lista">
+          <li>Antes de aceptar, mira qué datos te piden y para qué.</li>
+          <li>Usa un correo secundario para registros y promociones.</li>
+          <li>Si no conoces la marca, no participes en el concurso.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cookies y anuncios que te persiguen" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Cookies y anuncios que te persiguen</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 t4-cookies">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="def"><span class="t">Cookie</span><p>Una cookie es un pequeño archivo que una web guarda en tu navegador para recordar datos de tu visita: el idioma, el carrito de la compra o que tienes la sesión iniciada.</p></div>
+        <ul class="lista peq"><li><b>Cookies propias</b>: son de la web que visitas.</li><li><b>Cookies de terceros</b>: son de empresas de publicidad. Te siguen de una web a otra.</li></ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="cookies-maqueta"><p class="web">tiendadeportes.example</p><p>Usamos cookies propias y de terceros para analizar el uso de la web y mostrarte publicidad.</p><div class="bts"><span class="p">Aceptar todas</span><span>Rechazar todas</span><span>Configurar</span></div></div>
+        <p class="peq">Rechazar las cookies de publicidad no te impide usar la web.</p>
+        <div class="ruta-bloque"><span class="donde">Borrar las cookies en Chrome</span><div class="ruta" style="font-size:22px"><span>⋮</span><i>›</i><span>Eliminar datos de navegación</span><i>›</i><span class="disp">Cookies y otros datos de sitios</span></div></div>
+      </div>
+    </div>
+    <p class="t4-pasos-tit">Ejemplo: así te sigue una cookie de terceros</p>
+    <div class="t4-pasos">
+      <div class="p"><img src="img/ia/tienda-zapatilla.webp" alt=""><p>Miras unas zapatillas en una tienda online.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/cookies.webp" alt=""><p>La tienda guarda en tu navegador una cookie de una empresa de publicidad.</p></div><span class="fl"></span>
+      <div class="p"><img src="img/ia/anuncio-movil.webp" alt=""><p>Después ves anuncios de esas zapatillas en YouTube y en Instagram.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Tu huella digital" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Tu huella digital</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Huella digital</span><p>La huella digital es el rastro que dejas al usar Internet: lo que buscas, las webs que visitas, lo que publicas, tus «me gusta» y los sitios donde estás.</p></div>
+        <p class="peq">Una parte la dejas tú (publicaciones, comentarios). Otra se recoge sin que lo notes (cookies, historial, ubicación).</p>
+        <p class="peq"><b>Quién la ve:</b> los buscadores, las redes sociales, las empresas de publicidad, cualquier persona que mire tu perfil público… y también los ladrones. «Una semana de vacaciones en Cádiz» dice que tu casa está vacía.</p>
+        <div class="caja"><span class="tt">Qué hacer</span>Búscate en Google de vez en cuando. Pon tu perfil en privado. Quita la ubicación de la cámara del móvil. No compartas dónde estás en directo.</div>
+      </div>
+      <img class="ico g" src="img/ia/huella.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Reto: ¿cuándo se hizo esta foto?" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Práctica (no cuenta para el Comprueba)</p><h2>Reto: ¿cuándo se hizo esta foto?</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/foto-excursion.jpg",
+       "enunciado": "Esta foto la ha publicado una compañera. Descárgala y mira sus propiedades. ¿En qué fecha se hizo?",
+       "pista": ["Haz clic derecho en el archivo descargado y elige **Propiedades**.", "Abre la pestaña **Detalles**.", "Busca el apartado **Origen** y mira la **Fecha de captura**. Más abajo, en **GPS**, verás también el lugar."],
+       "opciones": ["12/05/2026", "El día de hoy", "01/01/2026", "No se puede saber"], "correcta": 0, "barajar": false,
+       "explicacion": "Las fotos del móvil guardan datos ocultos llamados **metadatos**: la fecha, el modelo del móvil y, a veces, el lugar exacto. La fecha de hoy es la de la descarga (Fecha de modificación). Antes de enviar una foto, puedes borrar sus metadatos: Propiedades › Detalles › Quitar propiedades e información personal."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Lo que publicas se queda" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Lo que publicas se queda</h2><p class="entrada">Esto pasa con lo que publicas en una red o envías por WhatsApp:</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas t4-cadena" style="--n:4">
+      <div class="tarjeta"><img class="ico" src="img/ia/captura-movil.webp" alt=""><h3>1. Se copia</h3><p>Cualquiera puede hacer una captura de pantalla o grabarlo.</p></div>
+      <div class="tarjeta"><img class="ico" src="img/ia/reenvio.webp" alt=""><h3>2. Se reenvía</h3><p>En pocos minutos llega a personas que no conoces.</p></div>
+      <div class="tarjeta"><img class="ico" src="img/ia/papelera-copias.webp" alt=""><h3>3. No desaparece</h3><p>Aunque lo borres, puede quedar en capturas, en copias y en los buscadores.</p></div>
+      <div class="tarjeta"><img class="ico" src="img/ia/reloj-arena.webp" alt=""><h3>4. Dura años</h3><p>Lo puede ver dentro de 10 años tu familia, un centro de estudios o una empresa.</p></div>
+    </div>
+    <p class="peq">Las fotos de «ver una vez» y los estados de 24 horas también se pueden fotografiar con otro móvil.</p>
+    <div class="caja"><span class="tt">Regla</span>Antes de publicar, piensa si te importaría que lo viera todo el mundo dentro de 10 años. Si te arrepientes, bórralo cuanto antes y pide a quien lo tenga que lo borre.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Tus derechos: privacidad e intimidad" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Tus derechos: privacidad, intimidad y olvido</h2></div>
+  <div class="cuerpo">
+    <div class="def"><span class="t">Privacidad</span><p>La privacidad es tu derecho a decidir quién conoce tus datos y tu vida personal.</p></div>
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>RGPD</h3><p>Reglamento General de Protección de Datos de la Unión Europea. Se aplica desde 2018.</p></div>
+      <div class="tarjeta"><h3>LOPDGDD</h3><p>Ley española de protección de datos personales y derechos digitales (2018).</p></div>
+      <div class="tarjeta"><h3>Constitución</h3><p>El artículo 18 protege la intimidad y la propia imagen.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Edad</span>En España, desde los 14 años das tú el permiso para usar tus datos. Antes de los 14, lo dan tus padres o tutores.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué puedes pedir y dónde reclamar" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Qué puedes pedir y dónde reclamar</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Derecho</th><th>Qué puedes pedir</th></tr>
+      <tr><td>Acceso</td><td>Saber qué datos tuyos tiene una empresa.</td></tr>
+      <tr><td>Rectificación</td><td>Que corrijan tus datos.</td></tr>
+      <tr><td>Supresión o derecho al olvido</td><td>Que borren tus datos si ya no hacen falta o se usan sin permiso. También puedes pedir a Google que quite enlaces con tu nombre. (El manual usa el nombre antiguo: «cancelación».)</td></tr>
+      <tr><td>Oposición</td><td>Que dejen de usar tus datos, por ejemplo para publicidad.</td></tr>
+      <tr><td>Retirar el permiso</td><td>Puedes retirar tu permiso cuando quieras.</td></tr>
+    </table>
+    <ol class="pasos peq">
+      <li>Primero lo pides a la empresa o a la red social.</li>
+      <li>Si no responde, reclamas a la <b>AEPD</b> (Agencia Española de Protección de Datos, aepd.es).</li>
+      <li>Urgente: si alguien difunde fotos o vídeos sexuales o violentos de una persona sin su permiso, el <b>Canal prioritario</b> de la AEPD pide que se retiren de inmediato.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="s" data-label="Suplantación de identidad" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Suplantación de identidad</h2><p class="entrada"><b>Suplantar la identidad</b> es hacerse pasar por otra persona o por una empresa. Pueden hacerse pasar por tu banco, Correos o la DGT para robarte las <b>credenciales</b> (usuario y contraseña). O pueden hacerse pasar por ti, con un perfil falso o entrando en tu cuenta.</p></div>
+  <div class="cuerpo">
+    <table class="tabla">
+      <tr><th>Técnica</th><th>Por dónde llega</th><th>Ejemplo</th></tr>
+      <tr><td>Phishing</td><td>Correo electrónico</td><td>«Su cuenta será bloqueada. Verifique sus datos aquí.»</td></tr>
+      <tr><td>Smishing</td><td>SMS</td><td>«Correos: su paquete está retenido. Pague 1,99 €.»</td></tr>
+      <tr><td>Vishing</td><td>Llamada de teléfono</td><td>Un falso técnico de Microsoft o del banco. Con IA pueden imitar la voz de un familiar.</td></tr>
+      <tr><td>Por WhatsApp</td><td>Mensaje</td><td>«Hola, mamá. Se me ha roto el móvil y este es mi número nuevo. ¿Me haces un bizum?»</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Detecta el engaño: el correo falso de la DGT" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Detecta el engaño</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-1-2 centro" style="grid-template-columns:1.05fr 1fr">
+      <figure class="foto" style="height:720px"><img src="img/cyl/dgt-2.png" alt="Correo falso que se hace pasar por la DGT y avisa de una multa"><figcaption class="credito">Correo falso de la DGT. Imagen: tarea práctica 4.1 del curso «Soy competente digital», CyL Digital (Junta de Castilla y León), CC BY-NC.</figcaption></figure>
+      <ol class="pasos peq">
+        <li><b>Remitente raro:</b> «notificaciones@dgt.ggobs.es». La web de la DGT es dgt.es. «ggobs» imita a «gob».</li>
+        <li><b>Asunto que asusta:</b> «Multa no pagada - bloqueo de vehículos».</li>
+        <li><b>Un botón</b> («Acceso a mi DGT») que descarga un archivo .zip con malware.</li>
+        <li><b>Te pide</b> abrirlo «en un sistema (Windows)».</li>
+        <li><b>Faltas:</b> «notificacion», «trafico».</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué hacer ante un engaño" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Señales y qué hacer</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Señales de engaño</h3><ul class="lista peq"><li>Prisa y amenazas.</li><li>Premios que no esperas.</li><li>Te piden contraseñas o el código que te llega por SMS.</li><li>El remitente o el enlace no coinciden con la web oficial.</li></ul><p class="peq"><b>Ninguna empresa seria te pide la contraseña</b> por correo, SMS o teléfono.</p></div>
+      <div class="tarjeta"><h3>Si ya has caído</h3><ol class="pasos peq"><li>Cambia la contraseña. Cámbiala también donde uses la misma.</li><li>Activa la verificación en dos pasos.</li><li>Llama a tu banco para bloquear la tarjeta.</li><li>Pide ayuda al 017 y denuncia en la Policía Nacional (091) o en la Guardia Civil (062).</li></ol></div>
+    </div>
+    <p class="peq">Si no has caído: no pulses ni descargues nada. Marca el mensaje como spam o phishing y bórralo. Si suplantan tu perfil, guarda capturas, denúncialo en la red social y avisa a tus contactos.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Peligros de la cámara web" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Peligros de la cámara web</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="peq gris" style="font-weight:700">RIESGOS</p>
+        <ul class="lista peq"><li>Un troyano puede encender la cámara o el micrófono sin que te enteres.</li><li>Una app con permiso de cámara puede usarla.</li><li>En una videollamada se ve lo que hay detrás de ti.</li><li>Correo falso: «Te he grabado con tu cámara. Paga o lo publico». Es un engaño masivo: no pagues ni respondas.</li></ul>
+        <p class="peq gris" style="font-weight:700">MEDIDAS</p>
+        <ul class="lista peq"><li>Tapa la cámara del portátil cuando no la uses.</li><li>Fíjate en la luz de la cámara. En Android, en el punto verde de la esquina.</li><li>Revisa los permisos: <b>Configuración › Privacidad y seguridad › Cámara</b> (Windows 11).</li><li>Da el permiso «Solo mientras se usa la aplicación».</li></ul>
+      </div>
+      <img class="ico g" src="img/ia/camara.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Da solo los datos necesarios" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Da solo los datos necesarios</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Sitio</th><th>Qué puedes dar</th><th>Qué no</th></tr>
+      <tr><td>Redes sociales</td><td>Perfil privado, nombre o apodo, aficiones.</td><td>Dirección, teléfono, centro y horario, ubicación en directo, foto del DNI.</td></tr>
+      <tr><td>Foros y juegos online</td><td>Un nick que no sea tu nombre real.</td><td>Datos reales, fotos, quedar con desconocidos.</td></tr>
+      <tr><td>Tienda online con https y candado</td><td>Nombre, dirección de envío y pago seguro.</td><td>Datos que no hacen falta para la compra.</td></tr>
+      <tr><td>Concursos y promociones</td><td>Nada, si no conoces la marca.</td><td>DNI y datos bancarios.</td></tr>
+      <tr><td>Chats de IA (ChatGPT, Gemini, Copilot)</td><td>Preguntas sin datos personales.</td><td>Nombre, DNI, salud, datos bancarios.</td></tr>
+    </table>
+    <div class="caja"><span class="tt">Al registrarte</span>Mejor con correo y contraseña que con «Continuar con Google» o «Continuar con Facebook»: así la web no recibe datos de tu perfil.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Configura la privacidad de WhatsApp" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Configura la privacidad de WhatsApp</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <ol class="pasos">
+          <li>Toca <b>⋮</b> (Más opciones), arriba a la derecha.</li>
+          <li>Toca <b>Ajustes</b>.</li>
+          <li>Toca <b>Privacidad</b>.</li>
+          <li>Elige una opción y quién la ve: <b>Todos</b>, <b>Mis contactos</b>, <b>Mis contactos, excepto...</b> o <b>Nadie</b>.</li>
+        </ol>
+        <p class="peq">En iPhone: pestaña <b>Ajustes › Privacidad</b>.</p>
+        <p class="peq">Al final de Privacidad está <b>Contactos bloqueados</b>: las personas que has bloqueado. En las versiones nuevas de WhatsApp está en <b>Privacidad › Contactos</b>.</p>
+      </div>
+      <div class="maqueta-movil" data-plantilla="#t4-wa-privacidad" data-pantalla="privacidad" style="zoom:.92;justify-self:center"></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Opciones de privacidad de WhatsApp" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Qué controla cada opción</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Opción</th><th>Qué controla</th><th>Recomendado</th></tr>
+      <tr><td>Hora de últ. vez y en línea</td><td>Cuándo te conectaste por última vez.</td><td>Mis contactos o Nadie</td></tr>
+      <tr><td>Foto del perfil</td><td>Quién ve tu foto.</td><td>Mis contactos</td></tr>
+      <tr><td>Info.</td><td>La frase que sale bajo tu nombre.</td><td>Mis contactos</td></tr>
+      <tr><td>Estados</td><td>Quién ve tus estados de 24 horas.</td><td>Mis contactos</td></tr>
+      <tr><td>Grupos</td><td>Quién puede añadirte a un grupo.</td><td>Mis contactos</td></tr>
+      <tr><td>Confirmaciones de lectura</td><td>El doble check azul. Si las quitas, tampoco ves las de los demás.</td><td>A tu elección</td></tr>
+      <tr><td>Ubicación en tiempo real</td><td>Con quién compartes dónde estás.</td><td>Con nadie, salvo si hace falta</td></tr>
+    </table>
+    <p class="peq">Además: <b>Ajustes › Cuenta › Verificación en dos pasos</b>. Es un PIN de 6 cifras que WhatsApp pide si alguien intenta usar tu número en otro móvil.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: privacidad en Facebook" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Así lo pregunta el examen · pregunta 14 de la demo</p><h2>Privacidad en Facebook</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false,
+       "enunciado": "Por defecto, ¿quién puede ver lo que publicas en Facebook?",
+       "opciones": ["Solo aquellas personas a las que etiquetes en la publicación.", "Solo aquellas personas agregadas como tus amigos.", "Todo es público, cualquier persona puede ver lo que publicas.", "Cualquier persona que tenga cuenta en Facebook."], "correcta": 1,
+       "explicacion": "Si no cambias nada, tus publicaciones las ven tus amigos. Antes de publicar puedes elegir el público: Público, Amigos, Amigos excepto..., Amigos concretos o Solo yo. «Por defecto» significa «sin cambiar ninguna opción»."}
+    </script></div>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 4.2" data-seccion="4.2">
+  <div class="cab"><p class="etq">4.2 · Datos personales y privacidad</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="4.2"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Te llega este SMS: «Correos: tu paquete está retenido. Paga 1,99 € de gastos de envío en este enlace». No esperas ningún paquete. ¿Qué es?",
+       "opciones": ["Un aviso normal de Correos", "Smishing: un SMS falso para robarte los datos", "Vishing: una llamada falsa", "Publicidad personalizada por las cookies"], "correcta": 1,
+       "explicacion": "Es smishing: un SMS que se hace pasar por una empresa conocida. El enlace lleva a una web falsa que roba los datos de tu tarjeta. Bórralo y no pulses el enlace."},
+      {"tipo": "test", "enunciado": "Buscas tu nombre en Google y sale una noticia antigua sobre ti. Ya no es importante y quieres que no aparezca. ¿Qué derecho usas?",
+       "opciones": ["El derecho de autor", "El derecho al olvido", "La libertad de expresión", "Ninguno: lo que está en Internet no se puede quitar"], "correcta": 1,
+       "explicacion": "El derecho al olvido te permite pedir que borren datos tuyos o que el buscador quite el enlace. Si no te hacen caso, puedes reclamar a la AEPD."},
+      {"tipo": "simulacion", "html": "#t4-wa-privacidad",
+       "enunciado": "Haz que solo tus contactos puedan ver tu foto del perfil de WhatsApp.",
+       "instrucciones": "Toca la pantalla del móvil. Solo puedes equivocarte una vez.",
+       "explicacion": "La privacidad de WhatsApp está en ⋮ › Ajustes › Privacidad. Allí eliges quién ve tu foto, tu hora de última vez, tu info y tus estados."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 4.3 Apoyo al bienestar ======================= -->
+
+<section class="competencia" data-label="4.3 Apoyo al bienestar" data-seccion="4.3" data-deck-id="c43" data-deck-section="4.3">
+  <div class="izq">
+    <p class="n">4.3</p>
+    <h2>Apoyo al bienestar</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: cómo colocar las manos en el teclado.</p>
+    <img class="ico" src="img/ia/bienestar.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Usar el ordenador y el móvil con una postura correcta.</li>
+      <li>Cuidar la vista y el oído.</li>
+      <li>Usar el móvil con seguridad en casa, en la calle y en el coche.</li>
+      <li>Reconocer las consecuencias de pasar muchas horas con pantallas y las señales de un uso adictivo.</li>
+      <li>Saber qué son el ciberacoso, el grooming, el sexting y la sextorsión.</li>
+      <li>Saber qué hacer y a quién pedir ayuda.</li>
+    </ol>
+    <span class="estado-comp" data-comp="4.3"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Siéntate bien delante del ordenador" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Siéntate bien delante del ordenador</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <svg viewBox="0 0 980 660" role="img" aria-label="Esquema de una persona bien sentada ante el ordenador" style="width:100%;height:auto">
+        <defs><marker id="pf" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5A5873"/></marker></defs>
+        <line x1="40" y1="630" x2="940" y2="630" stroke="#E6DEE8" stroke-width="6"/>
+        <!-- mesa -->
+        <rect x="430" y="372" width="420" height="16" rx="6" fill="#C9B7C5"/><rect x="820" y="388" width="14" height="242" fill="#C9B7C5"/>
+        <!-- pantalla de perfil -->
+        <rect x="738" y="150" width="20" height="190" rx="6" fill="#1A1838"/><rect x="742" y="340" width="12" height="32" fill="#1A1838"/><rect x="712" y="362" width="72" height="10" rx="4" fill="#1A1838"/>
+        <!-- teclado -->
+        <rect x="455" y="358" width="110" height="14" rx="4" fill="#5A5873"/>
+        <!-- silla -->
+        <rect x="236" y="190" width="18" height="250" rx="9" fill="#9C8FA0"/><rect x="236" y="432" width="200" height="18" rx="9" fill="#9C8FA0"/><rect x="320" y="450" width="14" height="150" fill="#9C8FA0"/><rect x="270" y="600" width="120" height="12" rx="6" fill="#9C8FA0"/>
+        <!-- persona -->
+        <g stroke="#007A8F" stroke-linecap="round" fill="none">
+          <line x1="285" y1="250" x2="300" y2="418" stroke-width="56"/>
+          <line x1="300" y1="425" x2="470" y2="425" stroke-width="44"/>
+          <line x1="478" y1="430" x2="478" y2="612" stroke-width="36"/>
+          <line x1="292" y1="262" x2="302" y2="352" stroke-width="28"/>
+          <line x1="302" y1="356" x2="440" y2="356" stroke-width="24"/>
+        </g>
+        <path d="M466 614 L548 614 Q560 614 560 626 L560 630 L466 630 Z" fill="#00063E"/>
+        <circle cx="452" cy="356" r="14" fill="#F2C6A0"/>
+        <circle cx="298" cy="180" r="46" fill="#F2C6A0"/><path d="M252 176 Q256 128 302 130 Q338 132 344 170 Q318 150 292 158 Q270 166 266 192 Z" fill="#1A1838"/>
+        <circle cx="326" cy="176" r="5" fill="#1A1838"/>
+        <!-- línea de los ojos y distancia -->
+        <line x1="332" y1="176" x2="736" y2="176" stroke="#E861A7" stroke-width="4" stroke-dasharray="12 10"/>
+        <line x1="350" y1="104" x2="732" y2="104" stroke="#5A5873" stroke-width="3" marker-start="url(#pf)" marker-end="url(#pf)"/>
+        <text x="541" y="92" text-anchor="middle" font-family="Lexend" font-size="26" fill="#1A1838">unos 50 cm (un brazo)</text>
+        <!-- ángulos -->
+        <path d="M302 330 L326 330 L326 356" stroke="#E861A7" stroke-width="4" fill="none"/>
+        <path d="M300 398 L324 398 L324 425" stroke="#E861A7" stroke-width="4" fill="none"/>
+        <path d="M478 452 L456 452 L456 428" stroke="#E861A7" stroke-width="4" fill="none"/>
+        <g font-family="Lexend" font-size="24" fill="#1A1838">
+          <text x="726" y="216" text-anchor="end">Borde de la pantalla</text><text x="726" y="244" text-anchor="end">a la altura de los ojos</text>
+          <text x="40" y="300">Espalda</text><text x="40" y="328">apoyada</text>
+          <text x="40" y="380">Codos</text><text x="40" y="408">a 90°</text>
+          <text x="470" y="330">Muñecas rectas</text>
+          <text x="520" y="470">Rodillas a 90°</text>
+          <text x="590" y="620">Pies en el suelo</text>
+        </g>
+      </svg>
+      <ul class="lista peq">
+        <li>Pantalla a unos 50 cm, con el borde de arriba a la altura de los ojos o un poco por debajo.</li>
+        <li>Cabeza y cuello rectos. Hombros relajados.</li>
+        <li>Espalda apoyada en el respaldo.</li>
+        <li>Codos, caderas y rodillas a 90°. Pies en el suelo.</li>
+        <li><b>Muñecas rectas</b>, en línea con el antebrazo.</li>
+        <li>Portátil: súbelo con un soporte y usa teclado y ratón aparte.</li>
+        <li>Luz: la ventana a un lado de la pantalla, no detrás ni delante.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Cuida la vista y el oído" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Cuida la vista y el oído</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/vista.webp" alt=""><h3>La vista</h3><ul class="lista peq"><li>Descansa al menos 5 minutos cada hora.</li><li>Regla <b>20-20-20</b>: cada 20 minutos, mira algo a 6 metros durante 20 segundos.</li><li>Parpadea. Ajusta el brillo a la luz del lugar.</li><li>Por la noche, usa el modo nocturno o el filtro de luz azul.</li><li>Distancia: ordenador a unos 50 cm; móvil y tableta a 25-30 cm.</li></ul></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/oido.webp" alt=""><h3>El oído</h3><ul class="lista peq"><li>Volumen moderado. Si otra persona oye tu música, está demasiado alta.</li><li>No uses auriculares muchas horas seguidas.</li><li>El móvil avisa cuando el volumen puede dañar el oído.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="En casa, en la calle y en el coche" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>En casa, en la calle y en el coche</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/noche.webp" alt=""><h3>En casa</h3><p>No uses el móvil en la cama antes de dormir: la luz y las notificaciones quitan el sueño. Por la noche, déjalo fuera del dormitorio o en modo avión.</p><p>Usa mesa y silla. No pongas el portátil en las piernas muchas horas.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/calle.webp" alt=""><h3>En la calle</h3><p>No mires el móvil al andar ni al cruzar: no ves los coches ni las bicis.</p><p>Con auriculares, volumen bajo para oír el tráfico. Cuidado con quién mira tu pantalla en sitios públicos.</p></div>
+      <div class="tarjeta"><img class="ico p" style="margin:0" src="img/ia/coche.webp" alt=""><h3>En el coche</h3><p>Quien conduce no usa el móvil en la mano: ni en coche, ni en moto, bici o patinete. Es muy peligroso y la ley lo castiga con multa.</p><p>Solo manos libres o el navegador en un soporte, sin tocarlo.</p></div>
+    </div>
+    <p class="peq">Con el móvil, no dobles el cuello: súbelo a la altura de los ojos.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Muchas horas de pantalla: consecuencias" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Muchas horas de pantalla: consecuencias</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><h3>En el cuerpo</h3><ul class="lista peq"><li>Vista cansada: ojos secos, visión borrosa, dolor de cabeza.</li><li>Dolor de cuello y de espalda.</li><li>Dolor de muñeca y de mano.</li><li>Dormir menos y peor.</li><li>Moverse poco (sedentarismo).</li></ul></div>
+      <div class="tarjeta"><h3>En la mente y con los demás</h3><ul class="lista peq"><li>Estrés y ansiedad.</li><li>Menos relación cara a cara.</li><li>Peor rendimiento en los estudios.</li><li>Conductas adictivas.</li></ul></div>
+      <div class="tarjeta c-ok"><h3>Qué hacer</h3><ul class="lista peq"><li>Haz pausas.</li><li>Haz deporte.</li><li>Ten horas sin pantalla: en las comidas y la hora antes de dormir.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Uso adictivo: nomofobia, FOMO y doomscrolling" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Uso adictivo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Nomofobia</span><p>La nomofobia es la ansiedad que sientes cuando no tienes el móvil: lo olvidas, no hay cobertura o se queda sin batería.</p></div>
+        <div class="def"><span class="t">FOMO</span><p>El FOMO (del inglés <i>fear of missing out</i>, miedo a perderse algo) es la necesidad de estar siempre conectado por miedo a perderte lo que hacen los demás.</p></div>
+        <div class="def"><span class="t">Doomscrolling</span><p>El doomscrolling es pasar mucho rato leyendo noticias negativas sin poder parar.</p></div>
+      </div>
+      <img class="ico g" src="img/ia/nomofobia.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Señales de uso problemático y herramientas" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Señales y herramientas</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta c-ko"><h3>Señales de uso problemático</h3><ul class="lista peq"><li>Miras el móvil nada más despertar y justo antes de dormir.</li><li>Dejas de estudiar, dormir o quedar por estar conectado.</li><li>Te pones nervioso si no puedes conectarte.</li><li>Lo usas más tiempo del que querías.</li></ul></div>
+      <div class="tarjeta c-ok"><h3>Herramientas que ayudan</h3><ul class="lista peq"><li>Android: <b>Ajustes › Bienestar digital y controles parentales</b>: tiempo de uso, temporizadores de apps y modo descanso.</li><li>iPhone: <b>Ajustes › Tiempo de uso</b>.</li><li>Quita las notificaciones que no necesitas.</li><li>Usa el modo <b>No molestar</b>.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Ciberacoso y grooming" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Ciberacoso y grooming</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Ciberacoso</h3><p>El <b>ciberacoso</b> (o ciberbullying) es acosar a una persona de forma repetida con el móvil o Internet para hacerle daño, asustarla o humillarla.</p><p class="peq">Ejemplos: insultos y amenazas por mensaje, burlas en un grupo, difundir fotos o memes de alguien, echarle de un grupo a propósito, crear un perfil falso con su nombre.</p><p class="peq">Suele ocurrir entre compañeros. Sigue fuera del centro, también en casa.</p></div>
+      <div class="tarjeta"><h3>Grooming</h3><p>El <b>grooming</b> es cuando un adulto se gana por Internet la confianza de un menor para conseguir imágenes sexuales o un encuentro.</p><p class="peq">Cómo actúa: usa un perfil falso y dice tener tu edad; hace muchos halagos y regalos (en los juegos, monedas o skins); pide secreto; pasa a un chat privado; pide fotos y después amenaza.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Importante</span>Las dos conductas pueden ser delito. La persona que lo sufre no tiene la culpa.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Sexting y sextorsión" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Sexting y sextorsión</h2></div>
+  <div class="cuerpo">
+    <div class="cols">
+      <div class="tarjeta"><h3>Sexting</h3><p>El <b>sexting</b> es enviar fotos o vídeos sexuales de ti a otra persona, o recibir los suyos, por el móvil o Internet.</p><p class="peq">Riesgo: cuando envías una imagen, pierdes el control sobre ella. Se puede guardar, reenviar y usar para chantajear. Si alguien la difunde, la culpa es de quien la difunde.</p><p class="peq">Reenviar o publicar una imagen íntima de otra persona sin su permiso es delito, aunque te la hayan enviado a ti. Si recibes una, no la reenvíes. Bórrala y avisa a un adulto si es de un menor o se está difundiendo.</p></div>
+      <div class="tarjeta"><h3>Sextorsión</h3><p>La <b>sextorsión</b> es un chantaje: alguien amenaza con publicar imágenes sexuales tuyas si no le pagas o no le envías más.</p><p class="peq">Las imágenes pueden ser reales, montajes hechos con IA (deepfakes) o no existir: hay correos masivos que dicen «te he grabado con la cámara».</p><p class="peq"><b>No pagues ni envíes nada.</b> El chantaje no se acaba al pagar.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Qué hacer si te pasa" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Qué hacer si te pasa</h2><p class="entrada">Estos pasos sirven para el ciberacoso, el grooming, el sexting y la sextorsión.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ol class="pasos">
+        <li>No respondas ni sigas la conversación.</li>
+        <li>No pagues ni envíes nada.</li>
+        <li>Guarda pruebas: capturas de la conversación con la fecha, el nombre de usuario y los enlaces. No guardes ni reenvíes las imágenes íntimas.</li>
+        <li>Bloquea y denuncia el perfil en la app.</li>
+        <li>Cuéntaselo a un adulto de confianza: tu familia, tu tutor o el orientador del centro.</li>
+        <li>Pide ayuda o denuncia (siguiente diapositiva).</li>
+      </ol>
+      <img class="ico g" src="img/ia/ayuda-confianza.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Dónde pedir ayuda" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Dónde pedir ayuda</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta con-ico"><img src="img/ia/ayuda-telefono.webp" alt=""><h3>017 · INCIBE</h3><p>Gratis y confidencial. De 8:00 a 23:00. WhatsApp 900 116 117 y Telegram @INCIBE017.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/ayuda-chat.webp" alt=""><h3>Fundación ANAR</h3><p>Ayuda a niños y adolescentes. 900 20 20 10 o 116 111. Gratis, 24 horas. También chat en anar.org.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/ayuda-pruebas.webp" alt=""><h3>Canal prioritario de la AEPD</h3><p>Para retirar fotos o vídeos sexuales o violentos difundidos sin permiso. En aepd.es/canalprioritario.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/ayuda-policia.webp" alt=""><h3>091 · 062</h3><p>Policía Nacional y Guardia Civil, para denunciar. También la app AlertCops.</p></div>
+      <div class="tarjeta con-ico"><img src="img/ia/ayuda-emergencia.webp" alt=""><h3>112</h3><p>Emergencias.</p></div>
+      <div class="tarjeta c-ok con-ico"><img src="img/ia/ayuda-confianza.webp" alt=""><h3>Recuerda</h3><p>Pedir ayuda es lo correcto. La culpa es siempre de quien acosa o chantajea.</p></div>
+    </div>
+    <p class="peq">También: <b>900 018 018</b>, contra el acoso escolar y el ciberacoso (gratis, 24 horas). <b>016</b>, contra la violencia hacia las mujeres, también por Internet.</p>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: las manos en el teclado" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Así lo pregunta el examen · pregunta 15 de la demo</p><h2>Las manos en el teclado</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false, "imagen": "img/cyl/q15-manos-teclado.png", "imagenArriba": true,
+       "enunciado": "¿Cómo has de colocar las manos sobre el teclado del ordenador para un correcto uso?",
+       "opciones": ["1", "2", "3"], "correcta": 0,
+       "explicacion": "La muñeca debe estar recta, en línea con el antebrazo (imagen 1). Si la doblas hacia arriba o hacia abajo, se carga y con el tiempo duele. En las preguntas de postura, busca la línea recta y los ángulos de 90°."}
+    </script></div>
+    <p class="fuente">Imagen de la pregunta 15 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 4.3" data-seccion="4.3">
+  <div class="cab"><p class="etq">4.3 · Apoyo al bienestar</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="4.3"><script type="application/json">[
+      {"tipo": "test", "enunciado": "Estudias con el ordenador toda la tarde. ¿Cada cuánto tiempo descansas la vista?",
+       "opciones": ["Cada 4 horas", "Al menos 5 minutos cada hora", "Solo cuando te duelen los ojos", "Nunca, si bajas el brillo de la pantalla"], "correcta": 1,
+       "explicacion": "Descansa la vista al menos 5 minutos cada hora. Mira a lo lejos y parpadea. Así evitas la vista cansada."},
+      {"tipo": "test", "enunciado": "Ana se pone muy nerviosa cuando sale de casa sin el móvil o cuando se queda sin batería. ¿Cómo se llama esto?",
+       "opciones": ["Nomofobia", "FOMO", "Doomscrolling", "Infoxicación"], "correcta": 0,
+       "explicacion": "La nomofobia es la ansiedad por no tener el móvil. El FOMO es el miedo a perderte lo que hacen los demás en las redes."},
+      {"tipo": "emparejar", "enunciado": "Une cada situación con su nombre.",
+       "pares": [["Unos compañeros crean un grupo de WhatsApp para burlarse de Laura. Pasan memes con su foto.", "Ciberacoso"],
+                 ["Un adulto dice en un juego online que tiene 14 años. Regala monedas del juego a un niño y le pide fotos.", "Grooming"],
+                 ["Dos personas se envían fotos íntimas suyas por el móvil.", "Sexting"],
+                 ["Alguien amenaza a Pablo con publicar una foto íntima suya si no le paga 100 €.", "Sextorsión"]],
+       "explicacion": "Ciberacoso es hacer daño a alguien de forma repetida por Internet. Grooming es un adulto que engaña a un menor. Sexting es enviar imágenes sexuales propias. Sextorsión es un chantaje con esas imágenes."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= 4.4 Impacto medioambiental ======================= -->
+
+<section class="competencia" data-label="4.4 Impacto medioambiental" data-seccion="4.4" data-deck-id="c44" data-deck-section="4.4">
+  <div class="izq">
+    <p class="n">4.4</p>
+    <h2>Impacto medioambiental</h2>
+    <p class="examen">En el examen: 3 preguntas. En la demo: la etiqueta energética de los ordenadores.</p>
+    <img class="ico" src="img/ia/medioambiente.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar cómo afectan los aparatos digitales al medio ambiente.</li>
+      <li>Ahorrar energía con el ordenador, el móvil y la impresora.</li>
+      <li>Saber dónde se llevan los aparatos viejos, las pilas y los tóneres.</li>
+      <li>Reconocer la etiqueta ENERGY STAR y otras etiquetas.</li>
+    </ol>
+    <span class="estado-comp" data-comp="4.4"></span>
+  </div>
+</section>
+
+<section class="s" data-label="Las TIC también contaminan" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Impacto medioambiental</p><h2>Las TIC también contaminan</h2><p class="entrada">Las <b>TIC</b> (tecnologías de la información y la comunicación) son los ordenadores, los móviles, Internet y los servicios que usamos con ellos.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:5">
+      <div class="tarjeta sin-borde"><img class="ico p" src="img/ia/ciclo-mina.webp" alt=""><h3>1. Materiales</h3><p>Se extraen metales escasos: litio, cobalto y coltán.</p></div>
+      <div class="tarjeta sin-borde"><img class="ico p" src="img/ia/ciclo-fabrica.webp" alt=""><h3>2. Fabricación</h3><p>Fabricar un móvil gasta mucha energía y agua.</p></div>
+      <div class="tarjeta sin-borde"><img class="ico p" src="img/ia/ciclo-uso.webp" alt=""><h3>3. Uso</h3><p>Los aparatos y los centros de datos gastan electricidad.</p></div>
+      <div class="tarjeta sin-borde"><img class="ico p" src="img/ia/ciclo-residuo.webp" alt=""><h3>4. Residuos</h3><p>Los aparatos tirados sin reciclar contaminan.</p></div>
+      <div class="tarjeta sin-borde"><img class="ico p" src="img/ia/ciclo-punto-limpio.webp" alt=""><h3>5. Reciclaje</h3><p>En el punto limpio se recuperan materiales.</p></div>
+    </div>
+    <div class="caja"><span class="tt">La nube no es invisible</span>La nube, el streaming y la IA funcionan en edificios llenos de servidores (centros de datos). Gastan electricidad y agua para enfriarse. Lo más ecológico es alargar la vida de los aparatos.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Ahorra energía" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Impacto medioambiental</p><h2>Ahorra energía</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/no-imprimir.webp" alt=""><h3>No imprimas si no hace falta</h3><p>Lee en pantalla o guarda en PDF. Si imprimes, a doble cara.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/regleta.webp" alt=""><h3>Apaga al terminar</h3><p>Apaga el ordenador, la pantalla y la impresora. En reposo siguen gastando. Una regleta con interruptor ayuda.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/desenchufar.webp" alt=""><h3>Desenchufa el cargador</h3><p>Quítalo del enchufe cuando quitas el móvil.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/brillo.webp" alt=""><h3>Baja el brillo</h3><p>Y acorta el tiempo de bloqueo de la pantalla.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/modo-avion.webp" alt=""><h3>Apaga lo que no usas</h3><p>Wifi, Bluetooth y GPS. Cierra apps y pestañas que no usas.</p></div>
+      <div class="tarjeta sin-borde con-ico"><img src="img/ia/ciclo-uso.webp" alt=""><h3>Elige el aparato justo</h3><p>Una tableta gasta menos que un portátil, y un portátil menos que un ordenador de sobremesa.</p></div>
+    </div>
+    <div class="ruta-bloque"><span class="donde">Suspensión automática en Windows 11</span><div class="ruta" style="font-size:22px"><span>Configuración</span><i>›</i><span>Sistema</span><i>›</i><span>Energía y batería</span><i>›</i><span class="disp">Tiempo de espera de pantalla y suspensión</span></div></div>
+  </div>
+</section>
+
+<section class="s" data-label="Recicla los aparatos" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Impacto medioambiental</p><h2>Recicla los aparatos</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p><b>Antes de tirar:</b> repáralo o amplíalo (más memoria RAM, un disco nuevo). Si funciona, dónalo o dáselo a otra persona.</p>
+        <div class="def"><span class="t">RAEE</span><p>Los RAEE (residuos de aparatos eléctricos y electrónicos) son los aparatos de pilas o de enchufe que ya no se usan.</p></div>
+        <table class="tabla peq">
+          <tr><th>Qué</th><th>Dónde</th></tr>
+          <tr><td>Aparatos y móviles</td><td>Punto limpio. La tienda donde compras uno nuevo se queda el viejo gratis.</td></tr>
+          <tr><td>Pilas y baterías</td><td>Contenedor de pilas de tiendas y supermercados.</td></tr>
+          <tr><td>Cartuchos y tóneres</td><td>Punto limpio o recogida del vendedor.</td></tr>
+        </table>
+        <p class="peq">Antes de entregar un móvil o un ordenador: copia tus datos y bórralo todo (restablecer datos de fábrica).</p>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+        <svg viewBox="0 0 200 240" role="img" aria-label="Símbolo de contenedor tachado" style="width:240px">
+          <g fill="#1A1838"><rect x="52" y="44" width="96" height="10" rx="3"/><rect x="88" y="34" width="24" height="10" rx="3"/><path d="M60 58 H140 L132 170 H68 Z"/><circle cx="76" cy="180" r="9"/><circle cx="124" cy="180" r="9"/><rect x="40" y="206" width="120" height="16"/></g>
+          <g stroke="#1A1838" stroke-width="12" stroke-linecap="round"><line x1="34" y1="28" x2="166" y2="196"/><line x1="166" y1="28" x2="34" y2="196"/></g>
+        </svg>
+        <p class="peq" style="text-align:center">Este símbolo dice que <b>no va a la basura normal</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Etiquetas que tienes que reconocer" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Impacto medioambiental</p><h2>Etiquetas que tienes que reconocer</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta"><img src="img/cyl/energy-star.png" alt="Logotipo de ENERGY STAR" style="height:150px;object-fit:contain"><h3>ENERGY STAR</h3><p>Equipos informáticos que gastan poca energía: ordenadores, monitores e impresoras. Es un sello de Estados Unidos.</p></div>
+      <div class="tarjeta"><img src="img/cyl/escala-ue.png" alt="Escala de eficiencia energética de la A a la G" style="height:150px;object-fit:contain"><h3>Etiqueta energética de la UE</h3><p>Escala de colores de la A (verde, más eficiente) a la G (roja). Electrodomésticos, televisores y monitores.</p></div>
+      <div class="tarjeta"><img src="img/cyl/reciclaje.png" alt="Símbolo de reciclaje con tres flechas" style="height:150px;object-fit:contain"><h3>Símbolo de reciclaje</h3><p>Tres flechas en círculo: el material se puede reciclar. No habla de energía.</p></div>
+    </div>
+    <p class="peq">También existen los sellos <b>EPEAT</b> y <b>TCO Certified</b>: equipos informáticos más sostenibles (consumo, materiales y reciclaje).</p>
+    <div class="caja examen"><span class="tt">Para el examen</span>Equipos informáticos + ahorro de energía = <b>ENERGY STAR</b>.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Así lo pregunta el examen: etiqueta energética" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Así lo pregunta el examen · pregunta 16 de la demo</p><h2>La etiqueta energética</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "test", "barajar": false, "imagen": "img/cyl/q16-etiquetas-energia.png", "imagenArriba": true,
+       "enunciado": "¿Cuál de las siguientes es una etiqueta de certificación energética para dispositivos informáticos como ordenadores o monitores?",
+       "opciones": ["1", "2", "3", "4"], "correcta": 0,
+       "explicacion": "ENERGY STAR (1) es la etiqueta de los equipos informáticos que ahorran energía. La escala de la A a la G (4) es la etiqueta de la UE: sale en electrodomésticos, televisores y monitores, pero no en ordenadores. El símbolo de reciclaje (3) no habla de energía. CRC (2) era un programa del Reino Unido para empresas."}
+    </script></div>
+    <p class="fuente">Imagen de la pregunta 16 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Comprueba 4.4" data-seccion="4.4">
+  <div class="cab"><p class="etq">4.4 · Impacto medioambiental</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="4.4"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Cuál de estas acciones ahorra energía?",
+       "opciones": ["Dejar el cargador enchufado sin el móvil", "Apagar el ordenador y la impresora cuando terminas", "Poner el brillo de la pantalla al máximo", "Dejar muchas aplicaciones abiertas en segundo plano"], "correcta": 1,
+       "explicacion": "Un aparato apagado no gasta energía. El cargador enchufado, el brillo alto y las apps abiertas gastan sin necesidad."},
+      {"tipo": "test", "enunciado": "¿Qué frase sobre las TIC y el medio ambiente es correcta?",
+       "opciones": ["Lo digital no contamina porque no se toca", "Guardar archivos en la nube no gasta energía", "Los aparatos y los centros de datos gastan energía, y los aparatos viejos son residuos que contaminan", "Solo contaminan las impresoras, por el papel"], "correcta": 2,
+       "explicacion": "La nube son ordenadores en edificios que gastan electricidad y agua. Además, fabricar aparatos gasta materiales, y tirarlos sin reciclar contamina."},
+      {"tipo": "emparejar", "enunciado": "Une cada cosa con el sitio al que la llevas.",
+       "pares": [["Un móvil roto", "Punto limpio"], ["Pilas gastadas", "Contenedor de pilas de una tienda o un supermercado"], ["Papeles impresos que ya no necesitas", "Contenedor azul"], ["Un portátil antiguo que todavía funciona", "Donarlo para que lo use otra persona"]],
+       "explicacion": "Los aparatos eléctricos van al punto limpio, nunca a la basura. Las pilas tienen su propio contenedor. Si un aparato todavía funciona, lo mejor es que lo use otra persona."}
+    ]</script></div>
+  </div>
+</section>
+
+<!-- ======================= Repaso del área y cierre ======================= -->
+
+<section class="s" data-label="Resumen del tema" data-seccion="R" data-deck-section="R">
+  <div class="cab"><p class="etq">Repaso del área 4</p><h2>Resumen del tema</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas peq" style="--n:4">
+      <div class="tarjeta"><h3>4.1 Dispositivos</h3><ul class="lista peq"><li>Malware y por dónde entra.</li><li>Actualiza y pasa el antivirus.</li><li>Contraseñas largas, distintas y con verificación en dos pasos.</li><li>PIN (protege la SIM), PUK (la desbloquea), IMEI (identifica el móvil, *#06#).</li><li>Expulsa el USB antes de quitarlo.</li></ul></div>
+      <div class="tarjeta"><h3>4.2 Datos</h3><ul class="lista peq"><li>Al aceptar condiciones y cookies das permiso.</li><li>Lo que publicas se queda.</li><li>Derecho al olvido. AEPD.</li><li>Phishing (correo), smishing (SMS), vishing (llamada).</li><li>WhatsApp: ⋮ › Ajustes › Privacidad.</li><li>Facebook por defecto: amigos.</li></ul></div>
+      <div class="tarjeta"><h3>4.3 Bienestar</h3><ul class="lista peq"><li>Espalda apoyada, 90°, muñecas rectas, pantalla a 50 cm.</li><li>5 minutos de descanso cada hora.</li><li>Nunca el móvil al volante ni al cruzar.</li><li>Nomofobia y FOMO.</li><li>Ciberacoso, grooming, sexting, sextorsión: guarda pruebas, cuéntalo, 017, ANAR.</li></ul></div>
+      <div class="tarjeta"><h3>4.4 Medio ambiente</h3><ul class="lista peq"><li>Energía, residuos y materiales.</li><li>Apaga, desenchufa, no imprimas sin necesidad.</li><li>RAEE al punto limpio.</li><li>ENERGY STAR.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Test de repaso del área" data-seccion="R">
+  <div class="cab"><p class="etq">Repaso del área 4 · preguntas del curso «Soy competente digital», CyL Digital</p><h2>Test de repaso</h2></div>
+  <div class="cuerpo">
+    <div class="repaso-test"><script type="application/json">[
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/wifi_hotel.jpg", "enunciado": "Estás en la cafetería de un hotel y usas su wifi pública. ¿Qué mejora la privacidad de lo que haces en Internet?",
+       "opciones": ["Poner un bloqueo de pantalla", "Tener una copia de seguridad de los archivos del teléfono", "Usar una VPN", "Usar contraseñas seguras al entrar en las webs"], "correcta": 2,
+       "explicacion": "Una VPN (red privada virtual) cifra tu conexión. Así, en una wifi pública, otras personas no pueden ver lo que haces."},
+      {"comp": "4.1", "tipo": "test", "enunciado": "¿Qué dispositivo de los siguientes no puede infectarse con malware?",
+       "opciones": ["Un portátil con Windows", "Un ordenador de Apple", "Un móvil Android", "Todos pueden infectarse con algún tipo de malware"],
+       "imagenes": ["img/cyl/disp-a.png", "img/cyl/disp-b.png", "img/cyl/disp-c.png", null], "correcta": 3,
+       "explicacion": "Ningún sistema es inmune. Ordenadores, Mac y móviles pueden infectarse con algún tipo de malware."},
+      {"comp": "4.3", "tipo": "test", "barajar": false, "imagen": "img/cyl/postura.png", "enunciado": "¿Qué postura delante del ordenador es mejor para tu salud?",
+       "opciones": ["Las dos son igual de buenas", "La 1", "La 2", "La 1, pero sin apoyar la espalda en el respaldo"], "correcta": 1,
+       "explicacion": "En la 1, la espalda está apoyada, las piernas forman 90° y los pies tocan el suelo. En la 2, la silla está baja y la espalda, encorvada."},
+      {"comp": "4.1", "tipo": "test", "enunciado": "En el hotel te dan un usuario y una contraseña para la wifi. ¿A qué red te conectas?",
+       "opciones": ["Red A", "Red B", "Red C", "Red D"], "barajar": false,
+       "imagenes": ["img/cyl/wifi1.png", "img/cyl/wifi2.png", "img/cyl/wifi3.png", "img/cyl/wifi4.png"], "correcta": 1,
+       "explicacion": "El icono con candado indica una red protegida con contraseña. Es la del hotel. La red abierta no tiene candado, y las otras dos no tienen conexión."},
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/Imagen12.png", "enunciado": "Navegas por una web y aparece esta ventana. ¿Qué es lo más seguro?",
+       "opciones": ["No hacer caso y cerrar la página", "Escribir tus datos para recoger el premio", "Compartir el mensaje en las redes para ver si es verdad", "Descargar la aplicación que recomienda"], "correcta": 0,
+       "explicacion": "Los premios que aparecen sin motivo son un engaño para robar datos o instalar malware. Cierra la página."},
+      {"comp": "4.2", "tipo": "test", "imagen": "img/cyl/Imagen13.png", "enunciado": "Vas a escribir tus datos en una web y sale este aviso. ¿Qué haces?",
+       "opciones": ["No escribes nada y sales de la web", "Escribes los datos si la web parece de confianza", "Recargas la página hasta que desaparezca el aviso", "Descargas una extensión para forzar la conexión segura"], "correcta": 0,
+       "explicacion": "«La conexión no es privada» significa que la conexión no es segura. Sal de la web. Escribe datos solo en webs con candado, con https y sin avisos."},
+      {"comp": "4.1", "tipo": "test", "enunciado": "¿Qué forma de entrar en Facebook es más segura?",
+       "opciones": ["Contraseña: qwertyuiop1234567890", "Verificación en dos pasos", "Contraseña: 1234", "Contraseña: c@ompetenc1as"], "correcta": 1,
+       "explicacion": "La verificación en dos pasos pide una segunda prueba además de la contraseña. Si alguien sabe tu contraseña, le cuesta mucho más entrar. No des el código a nadie."},
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/version-android.png", "enunciado": "Tienes un móvil Android o un iPhone. ¿Cómo compruebas que el sistema está actualizado?",
+       "opciones": ["Buscando en la tienda una app llamada «Comprobador de actualizaciones»", "No hace falta: todos los móviles se actualizan solos siempre", "En Ajustes, en la información del dispositivo, donde sale la versión del sistema", "No se puede comprobar"], "correcta": 2,
+       "explicacion": "La versión del sistema y las actualizaciones están en los Ajustes del móvil. Por ejemplo: Ajustes › Información del teléfono."},
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/huella.png", "enunciado": "¿Qué se ve en la imagen?",
+       "opciones": ["La pantalla de desbloqueo con un patrón", "El desbloqueo con huella digital", "Un juego para entrenar la memoria", "La pantalla de desbloqueo con un PIN"], "correcta": 1,
+       "explicacion": "El dedo sobre el sensor desbloquea el móvil con la huella digital."},
+      {"comp": "4.1", "tipo": "test", "enunciado": "Un malware se extiende solo por la red a otros equipos. No va en un archivo adjunto y nadie lo abre. ¿Qué es?",
+       "opciones": ["Un virus", "Un troyano", "Un gusano", "Un keylogger"], "correcta": 2,
+       "explicacion": "El gusano se copia solo de un equipo a otro por la red. No necesita que nadie abra nada."},
+      {"comp": "4.2", "tipo": "test", "imagen": "img/cyl/abanca.jpeg", "enunciado": "Te llega este correo. ¿Qué haces?",
+       "opciones": ["Respondes cuanto antes para pedir más información", "No haces caso: es phishing, un intento de robar tus datos", "Si eres cliente del banco, entras por el enlace", "Lo reenvías a otros clientes del banco"], "correcta": 1,
+       "explicacion": "El remitente no es del banco, tiene faltas y el enlace no es oficial. Es phishing. No pulses nada y bórralo."},
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/web-maliciosa.png", "enunciado": "¿Se puede infectar el ordenador solo con visitar una web?",
+       "opciones": ["Sí, si el navegador no está actualizado y la web es maliciosa", "No, porque los navegadores bloquean todo en las webs con certificado", "No, si nunca actualizas el navegador", "No, el navegador nunca puede ser una vía de entrada"], "correcta": 0,
+       "explicacion": "Un navegador sin actualizar puede tener fallos de seguridad. Una web maliciosa los puede usar para instalar malware."},
+      {"comp": "4.1", "tipo": "test", "enunciado": "¿Qué frase sobre los antivirus es correcta?",
+       "opciones": ["Ocupan mucho espacio, mejor no tenerlos", "El mejor es siempre el más caro", "Es mejor no actualizarlos nunca", "No conviene tener dos antivirus en el mismo equipo"], "correcta": 3,
+       "explicacion": "Dos antivirus a la vez se estorban. Usa uno y mantenlo actualizado."},
+      {"comp": "4.1", "tipo": "test", "imagen": "img/cyl/imei.png", "enunciado": "Has perdido tu móvil Android. En la denuncia te piden el IMEI. ¿Dónde lo consultas?",
+       "opciones": ["En la pegatina de la caja del teléfono", "En el servicio de Google para encontrar tu móvil (Find Hub)", "Los móviles Android no tienen IMEI", "En la caja y en Find Hub: los dos sitios valen"], "correcta": 3, "barajar": false,
+       "explicacion": "El IMEI está en la caja del móvil y en el servicio de Google para encontrar tu dispositivo, que hoy se llama Find Hub."},
+      {"comp": "4.2", "tipo": "test", "imagen": "img/cyl/registro.png", "enunciado": "Te registras en un servicio nuevo. Puedes usar Google, Facebook, Apple o un correo y una contraseña. ¿Qué método usas?",
+       "opciones": ["Facebook, porque es el más seguro", "Correo y contraseña: así la web no recibe datos de tu perfil de otro servicio", "Google, para no recordar más contraseñas", "Apple, porque los iPhone no pueden infectarse"], "correcta": 1,
+       "explicacion": "Si te registras con otra cuenta, esa web puede recibir datos de tu perfil que no necesita. Con correo y contraseña das solo lo necesario."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 4" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 4</p><h2>Seguridad, bienestar y uso responsable</h2></div>
+  <div class="cuerpo" style="gap:36px">
+    <div class="tarjetas" style="--n:4">
+      <div class="tarjeta" style="color:var(--texto)"><h3>4.1</h3><p>Protección de dispositivos</p><span class="estado-comp" data-comp="4.1"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>4.2</h3><p>Datos personales y privacidad</p><span class="estado-comp" data-comp="4.2"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>4.3</h3><p>Apoyo al bienestar</p><span class="estado-comp" data-comp="4.3"></span></div>
+      <div class="tarjeta" style="color:var(--texto)"><h3>4.4</h3><p>Impacto medioambiental</p><span class="estado-comp" data-comp="4.4"></span></div>
+    </div>
+    <p>Si te falta alguna competencia, vuelve a su Comprueba y repítelo hasta acertar las 3 preguntas.</p>
+    <div class="botones"><a class="btn sec" href="../">Portada del curso</a><a class="btn ciruela" href="#c41">Volver al principio del tema</a><a class="btn sec" href="../tema5/">Tema 5 · Resolución de problemas</a></div>
+    <p class="peq" style="opacity:.85;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), CC BY-NC. Preguntas 13 a 16 de la demo de tuCertiCyL. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+<script src="sim/q13-usb.js"></script>
+<script src="sim/antivirus.js"></script>
+</body>
+</html>

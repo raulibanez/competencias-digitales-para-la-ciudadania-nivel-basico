@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema 0 · El examen tuCertiCyL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/cdc.css">
+<style>
+  /* Estilos propios del tema 0 (prefijo t0-) */
+  /* Índice: 5 apartados y el Comprueba, en 3 columnas */
+  .t0-indice { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .t0-indice a { grid-template-columns: 110px 1fr; gap: 22px; padding: 24px 26px; }
+  .t0-indice .ico { width: 110px; }
+  .t0-indice h3 { font-size: 32px; margin: 4px 0 6px; }
+  /* Nombre de área con su icono y su color */
+  .t0-area { display: flex; align-items: center; gap: 18px; color: var(--c); }
+  .t0-area img { width: 60px; height: auto; flex: none; }
+  .tabla tr.t0-total td { background: var(--area-claro); }
+  /* Cómo se aprueba: un cuadrado por pregunta (oscuro = mínimo, claro = objetivo del curso) */
+  .t0-cuadros { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); padding: 26px 32px; display: flex; flex-direction: column; gap: 12px; font-size: var(--type-caption); }
+  .t0-cuadros-tit { font-size: var(--type-small); font-weight: 700; }
+  .t0-cuadros i { display: inline-block; width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--linea); background: var(--blanco); flex: none; }
+  .t0-cuadros i.m { background: var(--ciruela); border-color: var(--ciruela); }
+  .t0-cuadros i.o { background: var(--rosa); border-color: var(--rosa); }
+  .t0-cuadros .leyenda { display: flex; flex-wrap: wrap; gap: 6px 26px; color: var(--gris); margin-bottom: 6px; }
+  .t0-cuadros .leyenda span { display: inline-flex; align-items: center; gap: 10px; }
+  .t0-cuadros .fila { display: grid; grid-template-columns: 228px 1fr 100px 78px 86px; align-items: center; gap: 8px; }
+  .t0-cuadros .fila .a { font-weight: 600; white-space: nowrap; }
+  .t0-cuadros .fila .q { display: flex; gap: 3px; }
+  .t0-cuadros .fila .n { text-align: center; font-weight: 600; }
+  .t0-cuadros .fila.cab-f { color: var(--gris); font-size: 20px; border-bottom: 2px solid var(--linea); padding-bottom: 6px; }
+  .t0-cuadros .fila.cab-f .a, .t0-cuadros .fila.cab-f .n { font-weight: 600; }
+  .t0-cuadros .total { border-top: 2px solid var(--linea); padding-top: 14px; margin-top: 4px; display: flex; flex-direction: column; gap: 12px; }
+  .t0-cuadros .barra { position: relative; height: 26px; border-radius: 6px; background: var(--linea); margin-bottom: 30px; }
+  .t0-cuadros .barra span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ciruela); border-radius: 6px; }
+  .t0-cuadros .barra b { position: absolute; top: 100%; transform: translateX(-50%); margin-top: 4px; font-size: 22px; }
+  /* Cifras grandes con su explicación */
+  .t0-cifras { display: flex; flex-direction: column; gap: 22px; }
+  .t0-cifra { display: flex; align-items: center; gap: 28px; background: var(--blanco); border-radius: var(--radio); padding: 18px 34px; box-shadow: var(--sombra); }
+  .t0-cifra .cifra { font-size: 120px; min-width: 170px; text-align: right; }
+  .t0-cifra .tx { font-size: var(--type-subtitle); font-weight: 600; line-height: 1.2; }
+  .t0-cifra-v { display: flex; flex-direction: column; gap: 6px; }
+  .t0-cifra-v .cifra { font-size: 130px; }
+  /* Captura de la demo con marcas numeradas */
+  .t0-pantalla { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: start; }
+  .t0-marcas { position: relative; width: fit-content; }
+  .t0-marcas img { display: block; height: 590px; width: auto; border-radius: 16px; border: 2px solid var(--linea); box-shadow: 0 10px 40px rgba(26, 24, 56, .16); background: #fff; }
+  .t0-m { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--ciruela); color: #fff; font: 700 24px/44px 'Lexend', sans-serif; text-align: center; box-shadow: 0 0 0 4px #fff, 0 4px 14px rgba(0, 0, 0, .3); }
+  /* Icono pequeño recortado del panel de la demo */
+  .t0-icono-panel { height: 52px; width: auto; vertical-align: middle; border-radius: 8px; border: 2px solid var(--linea); background: #fff; margin: 0 6px; }
+  /* Botón al tema siguiente sobre el fondo ciruela */
+  .t0-btn-tema { background: var(--amarillo); color: var(--texto); }
+  /* Portada: el subtítulo no llega a la ilustración */
+  .portada > .sub:not(.marca):not(.pie-credito) { max-width: 520px; }
+  /* Tablas: columnas que no se parten */
+  .t0-sin-corte td:last-child, .t0-sin-corte th:last-child { white-space: nowrap; }
+  .t0-sin-corte-1 td:first-child { white-space: nowrap; }
+  /* Reto de práctica en dos columnas: enunciado y pista a la izquierda; opciones y corrección a la derecha */
+  .t0-reto .preg { display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: row dense; column-gap: 56px; row-gap: 20px; align-content: start; }
+  .t0-reto .preg > * { grid-column: 1; }
+  .t0-reto .preg > .opciones { grid-column: 2; grid-row: 1 / span 3; align-self: start; }
+  .t0-reto .preg > .pista-pasos { grid-row: 4 / span 2; }
+  .t0-reto .preg > .botones { grid-column: 2; grid-row: 4; }
+  .t0-reto .preg > .fb { grid-column: 2; grid-row: 5; }
+  section.oscura .tarjeta.t0-fin { color: var(--texto); max-width: 620px; }
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ======================= Portada, índice y objetivos ======================= -->
+
+<section class="portada" data-label="Portada" style="background-image:url(img/portada.webp)">
+  <a class="marca" href="../">Competencias digitales para la ciudadanía · Nivel básico</a>
+  <p class="num">Tema 0</p>
+  <h1>El examen tuCertiCyL</h1>
+  <p class="sub">Qué es, cómo te apuntas y cómo es la prueba.</p>
+  <div class="datos"><span class="pill">Introducción</span><span class="pill clara">30 minutos</span><span class="pill clara">Antes de empezar el curso</span></div>
+  <p class="pista-teclas"><kbd>←</kbd><kbd>→</kbd> para moverte <span>·</span> <kbd>B</kbd> buscar <span>·</span> <kbd>P</kbd> pantalla completa</p>
+  <p class="pie-credito">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León), y en la demo del examen de tuCertiCyL. Material no oficial. Licencia CC BY-NC-SA 4.0.</p>
+</section>
+
+<section class="s" data-label="Índice">
+  <div class="cab"><p class="etq">Tema 0</p><h2>Qué vas a estudiar</h2></div>
+  <div class="cuerpo">
+    <div class="indice-comp t0-indice">
+      <a href="#c01"><img class="ico" src="img/ia/certificado.webp" alt=""><div><span class="n">0.1</span><h3>Qué es tuCertiCyL</h3></div></a>
+      <a href="#c02"><img class="ico" src="img/ia/calendario.webp" alt=""><div><span class="n">0.2</span><h3>Cómo apuntarse</h3></div></a>
+      <a href="#c03"><img class="ico" src="img/ia/examen.webp" alt=""><div><span class="n">0.3</span><h3>Cómo es el examen</h3></div></a>
+      <a href="#c04"><img class="ico" src="img/ia/certificado-qr.webp" alt=""><div><span class="n">0.4</span><h3>Después del examen</h3></div></a>
+      <a href="#c05"><img class="ico" src="img/ia/plan.webp" alt=""><div><span class="n">0.5</span><h3>Cómo usar este curso</h3></div></a>
+      <a href="#comprueba"><img class="ico" src="img/ia/consejos.webp" alt=""><div><span class="n">Al final</span><h3>Comprueba</h3><span class="estado-comp" data-comp="0"></span></div></a>
+    </div>
+    <div class="caja examen"><span class="tt">En el examen</span>Este tema no es un área del examen. Explica cómo es la prueba y cómo usar el curso. Al final hay un <b>Comprueba</b> de 3 preguntas. Tu resultado se guarda en este navegador.</div>
+  </div>
+</section>
+
+<section class="competencia" data-label="Qué vas a saber hacer">
+  <div class="izq">
+    <p class="n">0</p>
+    <h2>El examen tuCertiCyL</h2>
+    <p class="examen">Este tema no tiene preguntas en el examen. Te prepara para el día de la prueba.</p>
+    <img class="ico" src="img/ia/examen.webp" alt="">
+  </div>
+  <div class="dcha">
+    <h3>Qué vas a saber hacer</h3>
+    <ol>
+      <li>Explicar qué certifica tuCertiCyL.</li>
+      <li>Apuntarte a un examen.</li>
+      <li>Reconocer los tipos de pregunta: test, emparejar, ordenar, simulación y reto.</li>
+      <li>Saber qué necesitas para aprobar.</li>
+      <li>Usar este curso para prepararte.</li>
+    </ol>
+    <span class="estado-comp" data-comp="0"></span>
+  </div>
+</section>
+
+<!-- ======================= 0.1 Qué es tuCertiCyL ======================= -->
+
+<section class="s" data-label="tuCertiCyL" data-seccion="0.1" data-deck-id="c01" data-deck-section="0.1">
+  <div class="cab"><p class="etq">0.1 · Qué es tuCertiCyL</p><h2>tuCertiCyL</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">tuCertiCyL</span><p>tuCertiCyL es el sistema de la Junta de Castilla y León para certificar las competencias digitales de la ciudadanía.</p><p class="peq"><b>Certificar</b> es demostrar de forma oficial lo que sabes hacer. Una <b>competencia digital</b> es saber usar Internet y la tecnología para una tarea: buscar información, comunicarte, crear contenidos, protegerte o resolver problemas.</p></div>
+        <ul class="lista peq">
+          <li>Se parece a los niveles de idiomas (A1, A2, B1…), pero para el uso de Internet y la tecnología.</li>
+          <li>El certificado es oficial: lo firma la Junta de Castilla y León.</li>
+          <li>Es gratuito. Puedes examinarte desde los 14 años.</li>
+          <li>Sirve para tu currículum y para buscar trabajo.</li>
+        </ul>
+      </div>
+      <img class="ico g" src="img/ia/certificado.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="DigComp: el marco europeo" data-seccion="0.1">
+  <div class="cab"><p class="etq">0.1 · Qué es tuCertiCyL</p><h2>DigComp: el marco europeo</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2 centro">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">DigComp</span><p>DigComp es el marco europeo de competencias digitales.</p><p class="peq">Un <b>marco</b> es una lista común que dice qué tienes que saber hacer y en qué nivel.</p></div>
+        <ul class="lista">
+          <li>Lo ha hecho la Comisión Europea.</li>
+          <li>Organiza las competencias digitales en 5 áreas y 21 competencias.</li>
+          <li>Tiene 8 niveles, del 1 al 8.</li>
+          <li>El examen de tuCertiCyL sigue este marco.</li>
+        </ul>
+      </div>
+      <div class="t0-cifras">
+        <div class="t0-cifra"><span class="cifra">5</span><span class="tx">áreas</span></div>
+        <div class="t0-cifra"><span class="cifra">21</span><span class="tx">competencias</span></div>
+        <div class="t0-cifra"><span class="cifra">8</span><span class="tx">niveles</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Las 5 áreas del examen" data-seccion="0.1">
+  <div class="cab"><p class="etq">0.1 · Qué es tuCertiCyL</p><h2>Las 5 áreas del examen</h2></div>
+  <div class="cuerpo">
+    <table class="tabla">
+      <tr><th>Área</th><th>Competencias</th><th>Preguntas en el examen</th><th>Tema del curso</th></tr>
+      <tr><td><span class="t0-area" style="--c:var(--a1)"><img src="../assets/img/area-informacion.webp" alt="">1 · Búsqueda, evaluación y gestión de la información</span></td><td>3</td><td>9</td><td>Tema 1</td></tr>
+      <tr><td><span class="t0-area" style="--c:var(--a2)"><img src="../assets/img/area-comunicacion.webp" alt="">2 · Comunicación y colaboración</span></td><td>6</td><td>18</td><td>Tema 2</td></tr>
+      <tr><td><span class="t0-area" style="--c:var(--a3)"><img src="../assets/img/area-creacion.webp" alt="">3 · Creación de contenidos</span></td><td>4</td><td>12</td><td>Tema 3</td></tr>
+      <tr><td><span class="t0-area" style="--c:var(--a4)"><img src="../assets/img/area-seguridad.webp" alt="">4 · Seguridad, bienestar y uso responsable</span></td><td>4</td><td>12</td><td>Tema 4</td></tr>
+      <tr><td><span class="t0-area" style="--c:var(--a5)"><img src="../assets/img/area-problemas.webp" alt="">5 · Resolución de problemas</span></td><td>4</td><td>12</td><td>Tema 5</td></tr>
+      <tr class="t0-total"><td>Total</td><td><b>21</b></td><td><b>63</b></td><td></td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="s" data-label="Nivel básico y nivel medio" data-seccion="0.1">
+  <div class="cab"><p class="etq">0.1 · Qué es tuCertiCyL</p><h2>Nivel básico y nivel medio</h2><p class="entrada">tuCertiCyL tiene dos exámenes de competencias digitales para la ciudadanía.</p></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>Nivel básico</h3><span class="pill" style="align-self:flex-start">Es el de este curso</span><ul class="lista peq"><li>Nivel A2.</li><li>Es el nivel 2 de DigComp.</li><li>63 preguntas: 3 por cada competencia.</li><li>Para aprobar: el 50 % de cada área y el 75 % del examen.</li></ul></div>
+      <div class="tarjeta" style="border-top-color:var(--gris)"><h3>Nivel medio</h3><span class="pill clara" style="align-self:flex-start">Más difícil</span><ul class="lista peq"><li>Nivel B2.</li><li>Es el nivel 4 de DigComp.</li><li>63 preguntas: 3 por cada competencia.</li><li>Las mismas normas para aprobar.</li></ul></div>
+    </div>
+    <div class="caja"><span class="tt">Después</span>Este curso prepara el nivel básico. Cuando lo apruebes, puedes preparar el nivel medio.</div>
+  </div>
+</section>
+
+<!-- ======================= 0.2 Cómo apuntarse ======================= -->
+
+<section class="s" data-label="Crea tu cuenta y busca un examen" data-seccion="0.2" data-deck-id="c02" data-deck-section="0.2">
+  <div class="cab"><p class="etq">0.2 · Cómo apuntarse</p><h2>Crea tu cuenta y busca un examen</h2><p class="entrada">Una <b>convocatoria</b> es un examen con fecha, hora y lugar. Te apuntas en la web tucerticyl.es.</p></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1.05fr;gap:56px">
+      <ol class="pasos peq">
+        <li>Entra en tucerticyl.es y pulsa <b>Regístrate</b>. Escribe tus datos, tu DNI o NIE, tu correo y una contraseña. Activa la cuenta con el correo que te llega.</li>
+        <li>Abre el menú <b>Exámenes › Buscador de próximas convocatorias</b>.</li>
+        <li>En <b>Tipo de certificación</b>, elige «Certificación en competencias digitales para la ciudadanía: nivel básico».</li>
+        <li>En <b>Modalidad</b>, elige <b>Presencial</b>. Después elige tu <b>Provincia</b>.</li>
+        <li>Pulsa <b>Buscar</b>. Sale la lista de próximas convocatorias.</li>
+      </ol>
+      <div>
+        <figure class="foto" style="height:470px"><img src="img/capturas/buscador.png" alt="Buscador de convocatorias de tucerticyl.es con el nivel básico y la modalidad presencial elegidos"><figcaption class="credito">Buscador de convocatorias. Captura de la web tucerticyl.es (Junta de Castilla y León), 24-10-2026.</figcaption></figure>
+        <p class="fuente">Captura de la web tucerticyl.es (Junta de Castilla y León), 24-10-2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Inscríbete en una convocatoria" data-seccion="0.2">
+  <div class="cab"><p class="etq">0.2 · Cómo apuntarse</p><h2>Inscríbete en una convocatoria</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1fr;gap:56px">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <ol class="pasos peq" style="counter-reset:paso 5">
+          <li>En la lista, pulsa la convocatoria que te venga bien: mira la fecha, la hora y el centro.</li>
+          <li>Pulsa <b>Inscribirme</b>.</li>
+          <li>Entra con tu cuenta para terminar la inscripción.</li>
+        </ol>
+        <p class="peq">El <b>plazo de inscripción</b> es el último día para apuntarte. El botón <b>Ver normas</b> abre las normas del examen.</p>
+        <div class="caja aviso"><span class="tt">Si no puedes ir</span>Cancela la inscripción en tu área personal de la web antes de que acabe el plazo. Si no vas y no la cancelas, cuenta como suspenso: esperas 1 mes para volver a apuntarte.</div>
+      </div>
+      <div>
+        <figure class="foto" style="height:300px"><img src="img/capturas/convocatoria.png" alt="Página de una convocatoria de nivel básico con los botones Inscribirme y Ver normas"><figcaption class="credito">Página de una convocatoria. Captura de la web tucerticyl.es (Junta de Castilla y León), 24-10-2026.</figcaption></figure>
+        <p class="fuente">Captura de la web tucerticyl.es (Junta de Castilla y León), 24-10-2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Normas para apuntarte y examinarte" data-seccion="0.2">
+  <div class="cab"><p class="etq">0.2 · Cómo apuntarse</p><h2>Normas para apuntarte y examinarte</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <table class="tabla peq">
+        <tr><th>Norma</th><th>Qué dice</th></tr>
+        <tr><td>Edad mínima</td><td>14 años para el examen presencial. 18 años para el examen online.</td></tr>
+        <tr><td>Dónde</td><td>En un centro certificador, como los Espacios CyL Digital de las capitales de provincia. Desde los 18 años, también online.</td></tr>
+        <tr><td>Documento</td><td>Lleva tu DNI o NIE. Durante el examen está encima de la mesa, a la vista.</td></tr>
+        <tr><td>Hora</td><td>Llega al centro al menos 30 minutos antes.</td></tr>
+        <tr><td>Prohibido</td><td>Usar apuntes o aparatos como el móvil.</td></tr>
+        <tr><td>Una convocatoria por nivel</td><td>Solo puedes estar apuntado a una convocatoria de cada nivel.</td></tr>
+        <tr><td>Si suspendes o no vas</td><td>Esperas 1 mes para volver a apuntarte.</td></tr>
+      </table>
+      <img class="ico m" src="img/ia/dni.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Adaptaciones y lectura fácil" data-seccion="0.2">
+  <div class="cab"><p class="etq">0.2 · Cómo apuntarse</p><h2>Adaptaciones del examen</h2><p class="entrada">Puedes pedir más tiempo, un ordenador adaptado o preguntas accesibles.</p></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="def"><span class="t">Lectura fácil</span><p>La <b>lectura fácil</b> es una forma de escribir con frases cortas y palabras sencillas.</p><p class="peq">El examen de nivel básico tiene una versión en lectura fácil. La ha adaptado Plena inclusión Castilla y León.</p></div>
+        <div class="ruta-bloque"><span class="donde">Cómo se pide: al inscribirte o después, en tu área personal</span><div class="ruta"><span>Área personal</span><i>›</i><span>Próximos exámenes</span><i>›</i><span class="disp">Icono de accesibilidad</span></div></div>
+        <div class="caja aviso"><span class="tt">Atención</span>Pídelo al menos 1 semana antes del examen. Necesitas un documento oficial que lo justifique.</div>
+      </div>
+      <img class="ico g" src="img/ia/adaptaciones.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 0.3 Cómo es el examen ======================= -->
+
+<section class="s" data-label="63 preguntas en 90 minutos" data-seccion="0.3" data-deck-id="c03" data-deck-section="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>63 preguntas en 90 minutos</h2></div>
+  <div class="cuerpo">
+    <div class="tarjetas" style="--n:3">
+      <div class="tarjeta sin-borde t0-cifra-v"><span class="cifra">63</span><p>preguntas: 3 por cada una de las 21 competencias.</p></div>
+      <div class="tarjeta sin-borde t0-cifra-v"><span class="cifra">90</span><p>minutos: 1 hora y media.</p></div>
+      <div class="tarjeta sin-borde t0-cifra-v"><span class="cifra">85</span><p>segundos de media por pregunta: 1 minuto y 25 segundos.</p></div>
+    </div>
+    <p>En cada competencia hay:</p>
+    <div class="tarjetas" style="--n:2">
+      <div class="tarjeta"><h3>2 preguntas de conocimientos</h3><p>Son de teoría. Por ejemplo, un test.</p></div>
+      <div class="tarjeta"><h3>1 pregunta de habilidades</h3><p>Es práctica. Por ejemplo, una simulación o un reto.</p></div>
+    </div>
+    <div class="caja"><span class="tt">Cada examen es distinto</span>El programa del examen elige las preguntas al azar para cada persona.</div>
+  </div>
+</section>
+
+<section class="s" data-label="Cómo se aprueba" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>Cómo se aprueba</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1fr 1.55fr;gap:44px">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">Para aprobar</span><p>Aciertas al menos el <b>50 %</b> de las preguntas de cada área.</p><p>Y aciertas al menos el <b>75 %</b> de todas las preguntas del examen.</p></div>
+        <p class="peq">Es la norma del examen real (ficha oficial). La demo pide más: el 75 % de cada área.</p>
+        <div class="caja examen"><span class="tt">En este curso</span>El curso te prepara para acertar el 75 % en cada área. Así apruebas con las dos normas.</div>
+      </div>
+      <div class="t0-cuadros">
+        <p class="t0-cuadros-tit">Cada cuadrado es una pregunta del examen</p>
+        <div class="leyenda"><span><i class="m"></i>Mínimo para aprobar (50 %)</span><span><i class="o"></i>Objetivo del curso (75 %)</span><span><i></i>Resto</span></div>
+        <div class="fila cab-f"><span class="a">Área</span><span class="q"></span><span class="n">Preguntas</span><span class="n">Mínimo</span><span class="n">Objetivo</span></div>
+        <div class="fila"><span class="a">1 · Información</span><span class="q"><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="o"></i><i class="o"></i><i></i><i></i></span><span class="n">9</span><span class="n">5</span><span class="n">7</span></div>
+        <div class="fila"><span class="a">2 · Comunicación</span><span class="q"><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i><i></i></span><span class="n">18</span><span class="n">9</span><span class="n">14</span></div>
+        <div class="fila"><span class="a">3 · Creación</span><span class="q"><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i></span><span class="n">12</span><span class="n">6</span><span class="n">9</span></div>
+        <div class="fila"><span class="a">4 · Seguridad</span><span class="q"><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i></span><span class="n">12</span><span class="n">6</span><span class="n">9</span></div>
+        <div class="fila"><span class="a">5 · Problemas</span><span class="q"><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="m"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i><i></i></span><span class="n">12</span><span class="n">6</span><span class="n">9</span></div>
+        <div class="total">
+          <p><b>Todo el examen:</b> 63 preguntas. Tienes que acertar al menos <b>48</b> (el 75 %).</p>
+          <div class="barra" role="img" aria-label="Barra de 63 preguntas con 48 marcadas: el 75 %"><span style="width:76.19%"></span><b style="left:76.19%">48</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="La pantalla del examen" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>La pantalla del examen</h2><p class="entrada">Respondes en el orden que quieras. Puedes cambiar una respuesta, salvo en las simulaciones.</p></div>
+  <div class="cuerpo">
+    <div class="t0-pantalla">
+      <ol class="pasos peq">
+        <li><b>La pregunta.</b> Debajo, en rojo, cómo responder.</li>
+        <li><b>Marcar ☆</b>: para revisarla después.</li>
+        <li><b>Guardar</b>: guarda tu respuesta. Púlsalo siempre.</li>
+        <li><b>Tiempo</b> que te queda.</li>
+        <li><b>Preguntas respondidas.</b></li>
+        <li><b>Finalizar examen</b>: terminas y ves el resultado.</li>
+        <li><b>Panel por áreas</b>: pulsa un número para ir a esa pregunta. Las respondidas salen en rosa. La pregunta en la que estás también.</li>
+      </ol>
+      <div>
+        <div class="t0-marcas">
+          <img src="img/cyl/pantalla.png" alt="Pantalla de la pregunta 1 de la demo: la pregunta a la izquierda y el panel a la derecha">
+          <span class="t0-m" style="left:-1.5%;top:16.6%">1</span>
+          <span class="t0-m" style="left:54%;top:3.8%">2</span>
+          <span class="t0-m" style="left:25.5%;top:94.6%">3</span>
+          <span class="t0-m" style="left:73%;top:6.3%">4</span>
+          <span class="t0-m" style="left:73%;top:13.8%">5</span>
+          <span class="t0-m" style="left:78.5%;top:21.3%">6</span>
+          <span class="t0-m" style="left:73%;top:31.8%">7</span>
+        </div>
+        <p class="fuente">Pantalla de la pregunta 1 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Preguntas de test, emparejar y ordenar" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>Preguntas de test, emparejar y ordenar</h2></div>
+  <div class="cuerpo">
+    <table class="tabla peq">
+      <tr><th>Tipo</th><th>Cómo respondes</th><th>Ejemplo de la demo</th></tr>
+      <tr><td>Test de una respuesta</td><td>Eliges una opción.</td><td>Pregunta 2: ¿cuál es la fuente más fiable?</td></tr>
+      <tr><td>Test de varias respuestas</td><td>Eliges todas las correctas. El enunciado dice «puede haber más de una». A veces las opciones son imágenes.</td><td>Pregunta 1: ¿qué elementos son navegadores web?</td></tr>
+      <tr><td>Emparejar</td><td>Ordenas la segunda lista para que cada elemento quede junto a su pareja.</td><td>Pregunta 9: SMS, chat y email.</td></tr>
+      <tr><td>Ordenar</td><td>Pones los elementos en orden.</td><td>No sale en la demo. Hay una en el Comprueba de este tema.</td></tr>
+    </table>
+    <div class="cols c-3-2 centro" style="gap:48px">
+      <div>
+        <figure class="foto" style="height:250px"><img src="img/cyl/emparejar.png" alt="Pregunta de emparejar de la demo: SMS, chat y email con sus características"><figcaption class="credito">Pregunta 9 de la demo de tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+        <p class="fuente">Pregunta 9 de la demo de tuCertiCyL (Junta de Castilla y León). En la captura ya está resuelta.</p>
+      </div>
+      <div class="caja"><span class="tt">Emparejar</span>La primera lista no se mueve. Arrastra los elementos de la segunda («ORDENA ESTA LISTA»). En este curso también puedes pulsar dos elementos para cambiarlos de sitio.</div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Simulaciones" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>Simulaciones</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">Simulación</span><p>Una simulación imita una pantalla de Windows o de un programa. Haces clic como en el ordenador de verdad.</p><p class="peq">En el panel, la lleva el icono ► (play): <img class="t0-icono-panel" src="img/cyl/icono-sim.png" alt="Pregunta 13 con el icono de simulación"></p></div>
+        <ul class="lista peq">
+          <li>Puedes fallar un clic. Con el segundo clic fallado, la pregunta queda <b>anulada</b>: no cuenta.</li>
+          <li>Es la única pregunta en la que no puedes cambiar la respuesta.</li>
+          <li>No puedes usar atajos de teclado, salvo que el enunciado lo diga.</li>
+          <li>A veces también escribes un texto. Por ejemplo, una dirección de correo.</li>
+          <li>Las pantallas son de Windows 10 y de programas antiguos, como Outlook 2016.</li>
+        </ul>
+      </div>
+      <div>
+        <figure class="foto" style="height:600px"><img src="img/cyl/simulacion.png" alt="Pregunta 13 de la demo: simulación del escritorio de Windows 10 con un pendrive"><figcaption class="credito">Pregunta 13 de la demo de tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+        <p class="fuente">Pregunta 13 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Prueba una simulación" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Prueba · pregunta 13 de la demo</p><h2>Prueba una simulación</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque"><script type="application/json">
+      {"tipo": "simulacion", "sim": "q13-usb", "ancho": 960,
+       "enunciado": "Desconecta con seguridad el pendrive usb que tienes conectado en tu ordenador.",
+       "instrucciones": "Haz la tarea en la pantalla, como en un ordenador de verdad. No uses atajos de teclado. Estas pantallas son las de la demo oficial del examen (Windows 10).",
+       "explicacion": "Para quitar un USB sin perder datos, primero lo expulsas. Haz clic derecho en el icono PEN_DRIVE y elige **Expulsar**. Lo estudiarás en el tema 4."}
+    </script></div>
+    <p class="fuente">Pantallas de la pregunta 13 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Retos" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>Retos</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="def"><span class="t">Reto</span><p>Un reto es un ejercicio práctico con el ordenador. Lo resuelves con un programa, fuera del navegador.</p><p class="peq">En el panel, lo lleva el icono de un monitor: <img class="t0-icono-panel" src="img/cyl/icono-reto.png" alt="Pregunta 10 con el icono de reto"></p></div>
+        <ol class="pasos peq">
+          <li>Pulsa <b>Descargar</b> para bajar el archivo.</li>
+          <li>Minimiza el navegador. No lo cierres.</li>
+          <li>Abre el archivo con Office o LibreOffice y haz lo que pide el enunciado.</li>
+          <li>Vuelve al navegador. Escribe la respuesta o elígela entre las opciones.</li>
+          <li>Pulsa <b>Guardar</b>.</li>
+        </ol>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <figure class="foto" style="height:420px"><img src="img/cyl/reto.png" alt="Pregunta 10 de la demo: reto con una hoja de cálculo para descargar y cuatro opciones"><figcaption class="credito">Pregunta 10 de la demo de tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+          <p class="fuente">Pregunta 10 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+        </div>
+        <div class="caja ok"><span class="tt">Lo que cuenta</span>Solo cuenta el resultado, no cómo lo haces.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Prueba un reto" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Prueba · pregunta 10 de la demo</p><h2>Prueba un reto</h2></div>
+  <div class="cuerpo">
+    <div class="preg-bloque t0-reto"><script type="application/json">
+      {"tipo": "reto", "archivo": "retos/Cuentas.xlsx",
+       "enunciado": "Descárgate la siguiente hoja de cálculo, ábrela y suma la columna B en el lugar indicado. A continuación marca cuál es la cantidad resultante.",
+       "instrucciones": "Descarga el archivo y resuélvelo con Excel. No cierres el navegador. Después elige la respuesta.",
+       "pista": ["Abre el archivo con **Excel**.", "Haz clic en la celda **B20**, al lado de TOTAL.", "Escribe `=SUMA(B2:B19)` y pulsa **Intro**.", "Compara el resultado con las opciones, cifra a cifra."],
+       "opciones": ["9169024545229 €", "9169025229", "19.710.717.050,00 €", "16.654.036.564,00"], "correcta": 1, "barajar": false,
+       "explicacion": "La columna B suma 9169025229. Las otras opciones tienen otras cifras. En un reto, comprueba todas las cifras antes de elegir. Solo cuenta el resultado: también vale LibreOffice Calc."}
+    </script></div>
+    <p class="fuente">Archivo de la pregunta 10 de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+  </div>
+</section>
+
+<section class="s" data-label="Consejos para el día del examen" data-seccion="0.3">
+  <div class="cab"><p class="etq">0.3 · Cómo es el examen</p><h2>Consejos para el día del examen</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <ul class="lista">
+        <li>Llega 30 minutos antes. Lleva tu DNI o NIE.</li>
+        <li>Lee el enunciado entero antes de responder.</li>
+        <li>En las simulaciones, mira toda la pantalla antes de hacer clic.</li>
+        <li>Pulsa <b>Guardar</b> en cada pregunta. Si dudas, pulsa <b>Marcar</b> y vuelve al final.</li>
+        <li>Mira el tiempo de vez en cuando. Tienes unos 85 segundos por pregunta.</li>
+        <li>En los retos, minimiza el navegador. No lo cierres.</li>
+      </ul>
+      <img class="ico g" src="img/ia/consejos.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 0.4 Después del examen ======================= -->
+
+<section class="s" data-label="El resultado y el certificado" data-seccion="0.4" data-deck-id="c04" data-deck-section="0.4">
+  <div class="cab"><p class="etq">0.4 · Después del examen</p><h2>El resultado y el certificado</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p>Al pulsar <b>Finalizar examen</b>, ves el resultado: el porcentaje de aciertos de cada área y la nota global. <b>Apto</b> significa aprobado.</p>
+        <p class="peq gris" style="font-weight:700">SI APRUEBAS, DESCARGA TU CERTIFICADO</p>
+        <ol class="pasos peq">
+          <li>Entra en tucerticyl.es con tu cuenta.</li>
+          <li>Arriba a la derecha, pulsa tu nombre y entra en <b>Mi perfil</b>.</li>
+          <li>Busca el apartado <b>Certificados obtenidos</b>.</li>
+          <li>Pulsa el icono de la flecha hacia abajo. El certificado se descarga en PDF.</li>
+        </ol>
+        <p class="peq">Tus notas también están en tu área personal, en la pestaña <b>Exámenes realizados</b> › <b>Ver notas</b>.</p>
+      </div>
+      <div>
+        <figure class="foto" style="height:600px"><img src="img/cyl/resultado.png" alt="Pantalla de resultados de la demo: porcentaje de cada área y nota global Apto"><figcaption class="credito">Pantalla de resultados de la demo de tuCertiCyL (Junta de Castilla y León).</figcaption></figure>
+        <p class="fuente">Pantalla de resultados de la demo de tuCertiCyL (Junta de Castilla y León).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Tu certificado" data-seccion="0.4">
+  <div class="cab"><p class="etq">0.4 · Después del examen</p><h2>Tu certificado</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-2-1 centro">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <table class="tabla">
+          <tr><th>Qué tiene</th><th>Para qué sirve</th></tr>
+          <tr><td>Firma de la Junta de Castilla y León</td><td>Es un certificado oficial y electrónico, en PDF.</td></tr>
+          <tr><td>Código QR</td><td>Con la cámara del móvil, cualquiera comprueba que es auténtico y que está vigente. <b>Vigente</b> significa que no ha caducado.</td></tr>
+          <tr><td>Fecha</td><td>Caduca a los 4 años.</td></tr>
+          <tr><td>Icono de la cadena</td><td>Te da un enlace para compartirlo. Pulsa <b>Copiar enlace</b> y ponlo en tu currículum o en LinkedIn.</td></tr>
+        </table>
+        <p class="peq">También puedes comprobar un certificado en tucerticyl.es › <b>Exámenes</b> › <b>Verificar diploma</b>.</p>
+      </div>
+      <img class="ico g" src="img/ia/certificado-qr.webp" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 0.5 Cómo usar este curso ======================= -->
+
+<section class="s" data-label="Cómo está organizado el curso" data-seccion="0.5" data-deck-id="c05" data-deck-section="0.5">
+  <div class="cab"><p class="etq">0.5 · Cómo usar este curso</p><h2>Cómo está organizado el curso</h2></div>
+  <div class="cuerpo">
+    <div class="cols" style="grid-template-columns:1.3fr 1fr;gap:56px">
+      <table class="tabla peq t0-sin-corte">
+        <tr><th>Tema</th><th>Tiempo</th></tr>
+        <tr><td>Tema 0 · El examen tuCertiCyL</td><td>30 minutos</td></tr>
+        <tr><td>Tema 1 · Buscar y gestionar información</td><td>2 horas</td></tr>
+        <tr><td>Tema 2 · Comunicación y colaboración</td><td>3 horas</td></tr>
+        <tr><td>Tema 3 · Creación de contenidos</td><td>2 horas y media</td></tr>
+        <tr><td>Tema 4 · Seguridad, bienestar y uso responsable</td><td>2 horas y media</td></tr>
+        <tr><td>Tema 5 · Resolución de problemas</td><td>2 horas</td></tr>
+        <tr><td>Simulacro del examen</td><td>1 hora y media</td></tr>
+        <tr class="t0-total"><td>Total</td><td><b>Unas 14 horas</b></td></tr>
+      </table>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <p class="peq gris" style="font-weight:700">CADA COMPETENCIA TIENE</p>
+        <ol class="pasos peq">
+          <li><b>Qué vas a saber hacer</b>: lo que aprendes.</li>
+          <li><b>Explicación</b>: diapositivas con lo que entra en el examen.</li>
+          <li><b>Así lo pregunta el examen</b>: una pregunta de la demo o del mismo estilo, explicada.</li>
+          <li><b>Comprueba</b>: 3 preguntas como las del examen.</li>
+        </ol>
+        <p class="peq">Cada tema termina con un resumen y un test de repaso. Al final está el <b>simulacro</b>: un examen completo de 63 preguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" data-label="Tu plan de estudio" data-seccion="0.5">
+  <div class="cab"><p class="etq">0.5 · Cómo usar este curso</p><h2>Tu plan de estudio</h2></div>
+  <div class="cuerpo">
+    <div class="cols c-3-2">
+      <ol class="pasos">
+        <li>Haz un tema por semana, en orden.</li>
+        <li>Repite cada <b>Comprueba</b> hasta acertar las 3 preguntas.</li>
+        <li>Haz la demo oficial en tucerticyl.es/demo.</li>
+        <li>Haz el simulacro hasta acertar el 75 % en cada área.</li>
+        <li>Apúntate al examen.</li>
+      </ol>
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="tarjeta">
+          <h3>Teclas del curso</h3>
+          <p><kbd>←</kbd> <kbd>→</kbd> retroceder y avanzar</p>
+          <p><kbd>B</kbd> buscar en el tema</p>
+          <p><kbd>P</kbd> pantalla completa</p>
+          <p>La pastilla de arriba a la derecha (por ejemplo, <b>0.5</b>) te lleva al índice del tema.</p>
+        </div>
+        <div class="caja aviso"><span class="tt">Tu progreso</span>Se guarda en este navegador. Usa siempre el mismo ordenador y el mismo navegador.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= Comprueba y cierre ======================= -->
+
+<section class="s" data-label="Comprueba del tema 0" data-seccion="R" data-deck-id="comprueba" data-deck-section="R">
+  <div class="cab"><p class="etq">Tema 0 · El examen tuCertiCyL</p><h2>Comprueba lo que has aprendido</h2></div>
+  <div class="cuerpo">
+    <div class="comprueba" data-comp="0"><script type="application/json">[
+      {"tipo": "test", "enunciado": "¿Cuántas preguntas tiene el examen de nivel básico?",
+       "opciones": ["20", "21", "63", "90"], "correcta": 2,
+       "explicacion": "El examen tiene 63 preguntas: 3 por cada una de las 21 competencias. La demo tiene solo 20. Y 90 son los minutos que dura."},
+      {"tipo": "test", "enunciado": "En una simulación haces un clic en un sitio equivocado. ¿Qué pasa?",
+       "opciones": ["La pregunta queda anulada", "Puedes intentarlo una vez más", "Puedes intentarlo todas las veces que quieras", "Pasas a la pregunta siguiente"], "correcta": 1,
+       "explicacion": "En las simulaciones puedes fallar un clic. El segundo fallo anula la pregunta."},
+      {"tipo": "ordenar", "enunciado": "Ordena los pasos para apuntarte a un examen.",
+       "orden": ["Crear una cuenta en tucerticyl.es", "Entrar en el buscador de próximas convocatorias", "Elegir el nivel básico y pulsar Buscar", "Elegir una convocatoria y pulsar Inscribirme"],
+       "explicacion": "Primero creas tu cuenta. Después buscas la convocatoria: eliges el nivel básico y pulsas Buscar. Por último eliges una fecha y un centro y pulsas Inscribirme."}
+    ]</script></div>
+  </div>
+</section>
+
+<section class="s oscura" data-label="Fin del tema 0" data-seccion="R">
+  <div class="cab"><p class="etq">Fin del tema 0</p><h2>Empieza por el tema 1</h2></div>
+  <div class="cuerpo" style="gap:36px">
+    <div class="tarjeta t0-fin"><h3>Tema 0</h3><p>El examen tuCertiCyL</p><span class="estado-comp" data-comp="0"></span></div>
+    <p>Ya sabes cómo es el examen. Ahora empieza a prepararlo con el tema 1: Buscar y gestionar información.</p>
+    <div class="botones"><a class="btn t0-btn-tema" href="../tema1/">Ir al tema 1</a><a class="btn sec" href="../">Portada del curso</a><a class="btn sec" href="#c01">Volver al principio del tema</a></div>
+    <p class="peq" style="opacity:.85;margin-top:auto">Basado en el curso «Soy competente digital», de CyL Digital (Junta de Castilla y León): Creative Commons, uso no comercial, citando la fuente. Usa la demo y la web de tuCertiCyL (Junta de Castilla y León) sin fines comerciales, citando la fuente: pantallas de las preguntas 1, 9, 10 y 13 y de los resultados de la demo. Curso: CC BY-NC-SA 4.0.</p>
+  </div>
+</section>
+
+</deck-stage>
+<script src="../assets/deck-stage.js"></script>
+<script src="../assets/cdc.js"></script>
+<script src="sim/q13-usb.js"></script>
+<script>
+  // El tema 0 no tiene competencias: el motor escribe «Competencia 0 superada.» y habla de «la competencia».
+  // Aquí se cambia ese texto del resultado del Comprueba por uno que hable del tema.
+  (function () {
+    const c = document.querySelector('.comprueba[data-comp="0"]');
+    if (!c) return;
+    new MutationObserver(() => {
+      c.querySelectorAll('.cp-final .enun').forEach((p) => {
+        const t = p.textContent;
+        if (t === 'Competencia 0 superada.') p.textContent = 'Has superado el Comprueba del tema 0.';
+        else if (t.indexOf('de la competencia') >= 0) p.textContent = t.replace('las diapositivas de la competencia', 'las diapositivas del tema');
+      });
+    }).observe(c, { childList: true, subtree: true });
+  })();
+</script>
+</body>
+</html>
